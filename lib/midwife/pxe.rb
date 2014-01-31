@@ -16,29 +16,30 @@ module Midwife
   class PXE
     attr_reader :hostname, :initrd, :kernel, :kickstart
 
-    def initialize(host)
+    def initialize(host, path)
       @host = host
-      @initrd = "#{Midwife.url}/initrd.img"
-      @kernel = "#{Midwife.url}/vmlinuz"
-      @kickstart = "#{Midwife.url}/ks/#{@host.name}"
+      @path = path
+      @initrd = "http://localhost/initrd.img"
+      @kernel = "http://localhost/vmlinuz"
+      @kickstart = "http://localhost/ks/#{@host.name}"
     end
 
     def write(str)
-      File.open("#{Midwife.pxe_path}/#{@host.pxefile}", 'w') do |f|
+      File.open("#{@path}/#{@host.pxefile}", 'w') do |f|
         f.write(str)
       end
     end
 
     def default
       template = File.dirname(__FILE__) + '/erbs/pxe.localboot.erb'
-      write ERB.new(template).result(binding())
+      write ERB.new(File.read(template)).result(binding())
     end
 
     alias_method :localboot, :default
 
     def install
       template = File.dirname(__FILE__) + '/erbs/pxe.install.erb'
-      write ERB.new(template).result(binding())
+      write ERB.new(File.read(template)).result(binding())
     end
   end
 end
