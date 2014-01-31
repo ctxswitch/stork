@@ -36,6 +36,7 @@ module Midwife
   # end
 
   autoload :Config,           'midwife/config'
+  autoload :PXE,              'midwife/pxe'
   autoload :NotFound,         'midwife/exceptions'
   autoload :PermissionDenied, 'midwife/exceptions'
 end

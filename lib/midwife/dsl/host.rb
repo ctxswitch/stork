@@ -15,13 +15,14 @@
 module Midwife
   module DSL
     class Host
-      attr_reader :template, :partitions, :interfaces, :name
+      attr_reader :template, :partitions, :interfaces, :name, :pxemac
 
       def initialize(name)
         @name = name
         @template = nil
         @partitions = nil
         @interfaces = []
+        @pxemac = nil
       end
 
       def set_template(content)
@@ -36,6 +37,14 @@ module Midwife
         @interfaces << Midwife::DSL::NetworkInterface.new(device).tap do |i|
           i.instance_eval(&block) if block_given?
         end
+      end
+
+      def set_pxemac(mac)
+        @pxemac = mac
+      end
+
+      def pxefile
+        @pxemac.gsub(/[:]/,'-')
       end
 
       def emit
@@ -67,6 +76,10 @@ module Midwife
 
         def interface(device, &block)
           set_interface(device, &block)
+        end
+
+        def pxemac(mac)
+          set_pxemac(mac)
         end
       end
     end

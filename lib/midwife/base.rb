@@ -31,5 +31,13 @@ module Midwife
     def midwife
       environment['config'].midwife
     end
+
+    def url
+      environment['url']
+    end
+
+    def pxe_path
+      environment['pxe_path']
+    end
   end
 end
