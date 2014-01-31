@@ -29,6 +29,11 @@ module Midwife
     autoload :Host,             'midwife/dsl/host'
   end
 
+  module Server
+    autoload :Application,      'midwife/server/application'
+    autoload :Control,          'midwife/server/control'
+  end
+
   # module Models
   #   autoload :Domain,           'midwife/models/domain'
   #   autoload :Host,             'midwife/models/host'
@@ -37,6 +42,7 @@ module Midwife
 
   autoload :Config,           'midwife/config'
   autoload :PXE,              'midwife/pxe'
+  autoload :Commands,         'midwife/commands'
   autoload :NotFound,         'midwife/exceptions'
   autoload :PermissionDenied, 'midwife/exceptions'
 end

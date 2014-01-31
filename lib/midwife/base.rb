@@ -3,6 +3,10 @@ module Midwife
     def environment
       @_env ||= {}
     end
+
+    def env
+      ENV['MIDWIFE_ENV'] || 'development'
+    end
     
     def set_config(config)
       environment['config'] = config

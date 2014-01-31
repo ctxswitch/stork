@@ -14,4 +14,5 @@
 
 module Midwife
   VERSION = "0.0.1"
+  CODENAME = "Psychotic Hamsters"
 end
