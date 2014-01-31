@@ -1,0 +1,7 @@
+default install
+prompt 0
+timeout 1
+label install
+        kernel http://localhost/vmlinuz
+        ipappend 2
+        append initrd=http://localhost/initrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/test.local
