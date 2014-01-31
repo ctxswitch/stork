@@ -1,0 +1,6 @@
+require 'rubygems'
+require 'bundler/setup'
+require 'midwife'
+require 'minitest/spec'
+require 'minitest/autorun'
+require 'minitest/pride'

@@ -1,0 +1,26 @@
+midwife starts up and gathers kickstart templates, package groups, scripts, and partition defs
+
+then it begins reading the hosts.
+
+A host gathers:
+  * partitioning information
+  * networking information
+    - needs access to domain info
+
+
+host "n001" do
+  template   :default
+  partitions  :default
+  interface 'eth0' do
+    domain    'fortytwo.ibest.uidaho.edu'
+    bootproto :static
+    ipaddr    '192.168.142.10'
+    mac       '00:11:22:33:44:55'
+  end
+end
+
+
+the big question is do I want to preload everything.  If so i 
+have a host class that loads the packages, scripts, partitions
+and interfaces
+
