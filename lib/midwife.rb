@@ -30,6 +30,8 @@ module Midwife
     autoload :Domain,           'midwife/dsl/domain'
     autoload :Hosts,            'midwife/dsl/hosts'
     autoload :Host,             'midwife/dsl/host'
+    autoload :Distros,          'midwife/dsl/distros'
+    autoload :Distro,           'midwife/dsl/distro'
   end
 
   module Server

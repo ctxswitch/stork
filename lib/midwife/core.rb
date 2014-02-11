@@ -1,5 +1,9 @@
 module Midwife
   module Core
+    def distros
+      self.class.domains
+    end
+
     def domains
       self.class.domains
     end
@@ -17,6 +21,10 @@ module Midwife
     end
 
     module ClassMethods
+      def distros
+        @@distros ||= Midwife::DSL::Distros.build
+      end
+
       def domains
         @@domains ||= Midwife::DSL::Domains.build
       end
