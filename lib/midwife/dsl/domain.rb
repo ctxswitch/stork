@@ -15,6 +15,7 @@
 module Midwife
   module DSL
     class Domain
+      attr_reader :name, :netmask, :gateway, :nameservers
       def initialize(name)
         @name = name
         @netmask = nil
@@ -22,15 +23,15 @@ module Midwife
         @nameservers = []
       end
 
-      def netmask(arg)
+      def add_netmask(arg)
         @netmask = arg
       end
 
-      def gateway(arg)
+      def add_gateway(arg)
         @gateway = arg
       end
 
-      def nameserver(server)
+      def add_nameserver(server)
         @nameservers << server
       end
 
@@ -40,6 +41,27 @@ module Midwife
         str += " --gateway=#{@gateway}" if @gateway
         str += " --nameserver=#{@nameservers.join(',')}" unless @nameservers.empty?
         str.strip
+      end
+
+      def self.build(name, &block)
+        domain = Domain.new(name)
+        delegator = DomainDelegator.new(domain)
+        delegator.instance_eval(&block) if block_given?
+        domain
+      end
+
+      class DomainDelegator < SimpleDelegator
+        def netmask(arg)
+          add_netmask(arg)
+        end
+
+        def gateway(arg)
+          add_gateway(arg)
+        end
+
+        def nameserver(server)
+          add_nameserver(server)
+        end
       end
     end
   end

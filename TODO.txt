@@ -2,3 +2,8 @@
 * Add sinatra kickstart server and notification
 * PXE management
 * Reload without restarting service?  Sinatra caching?
+
+How to store all my hosts?  sqlite?  no made the decision for flat files.  but it makes searching difficult when 
+a single file is used for multiple hosts or using pure ruby to make multiple hosts in a single block.  Could I use a sync or index command to update database? what is chef using now?  erlang?
+
+

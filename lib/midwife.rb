@@ -13,19 +13,22 @@
 # limitations under the License.
 
 require "midwife/version"
-require "midwife/base"
+require "midwife/configuration"
+require "midwife/core"
+require "midwife/exceptions"
 require "delegate"
 require "erb"
 
 module Midwife
-  include Base
-  extend Base
   module DSL
     autoload :Builder,          'midwife/dsl/builder'
     autoload :Partition,        'midwife/dsl/partition'
-    autoload :Partitions,       'midwife/dsl/partitions'
+    autoload :PartitionScheme,  'midwife/dsl/partition_scheme'
+    autoload :Schemes,          'midwife/dsl/schemes'
     autoload :NetworkInterface, 'midwife/dsl/network_interface'
+    autoload :Domains,          'midwife/dsl/domains'
     autoload :Domain,           'midwife/dsl/domain'
+    autoload :Hosts,            'midwife/dsl/hosts'
     autoload :Host,             'midwife/dsl/host'
   end
 
@@ -40,9 +43,8 @@ module Midwife
   #   autoload :NetworkInterface, 'midwife/models/network_interface'
   # end
 
-  autoload :Config,           'midwife/config'
+  # autoload :Config,           'midwife/config'
+  # autoload :Builder,          'midwife/builder'
+  # autoload :Commands,         'midwife/commands'
   autoload :PXE,              'midwife/pxe'
-  autoload :Commands,         'midwife/commands'
-  autoload :NotFound,         'midwife/exceptions'
-  autoload :PermissionDenied, 'midwife/exceptions'
 end

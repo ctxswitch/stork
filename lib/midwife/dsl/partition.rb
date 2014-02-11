@@ -15,6 +15,8 @@
 module Midwife
   module DSL
     class Partition
+      attr_reader :path, :size, :type, :primary, :grow
+
       def initialize(path)
         @path = path
         @size = 0
@@ -23,29 +25,54 @@ module Midwife
         @grow = false
       end
 
-      def size(val)
+      def set_size(val)
         @size = val
       end
 
-      def type(val)
+      def set_type(val)
         @type = val
       end
 
-      def primary
+      def set_primary
         @primary = true
       end
 
-      def grow
+      def set_grow
         @grow = true
       end
 
       def emit
-        str = "part #{@path}"
-        str += (@size > 0 ? " --size #{@size}" : " --recommended")
-        str += " --fstype #{@type}"
-        str += " --grow" if @grow
-        str += " --asprimary" if @primary
+        str = "part #{path}"
+        str += (size > 0 ? " --size #{size}" : " --recommended")
+        str += " --fstype #{type}"
+        str += " --grow" if grow
+        str += " --asprimary" if primary
         str
+      end
+
+      def self.build(name, &block)
+        partition = Partition.new(name)
+        delegator = PartitionDelegator.new(partition)
+        delegator.instance_eval(&block) if block_given?
+        partition
+      end
+
+      class PartitionDelegator < SimpleDelegator
+        def size(val)
+          set_size(val)
+        end
+
+        def type(val)
+          set_type(val)
+        end
+
+        def primary
+          set_primary
+        end
+
+        def grow
+          set_grow
+        end
       end
     end
   end

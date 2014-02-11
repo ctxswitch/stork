@@ -1,7 +1,7 @@
 (1..10).to_a.each do |num|
   host "system#{num}.local" do
     template    'default'
-    partitions  'default'
+    scheme      'default'
     # pxemac     00:11:22:33:44:55
     interface   'eth0' do
       domain    'local'

@@ -12,24 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module Midwife
-  module DSL
-    class Builder
-      def self.from_file(klass, filename)
-        begin
-          klass.new.tap do |obj|
-            obj.instance_eval(File.read(filename), filename)
-          end
-        rescue Errno::ENOENT
-          raise NotFound.new("#{klass.to_s} builder: #{filename} is not present.")
-        end
-      end
+# module Midwife
+#   module DSL
+#     class Builder
+#       def self.from_file(klass, filename)
+#         begin
+#           klass.new.tap do |obj|
+#             obj.instance_eval(File.read(filename), filename)
+#           end
+#         rescue Errno::ENOENT
+#           raise NotFound.new("#{klass.to_s} builder: #{filename} is not present.")
+#         end
+#       end
 
-      def self.from_string(klass, content)
-        klass.new.tap do |obj|
-          obj.instance_eval(content)
-        end
-      end
-    end
-  end
-end
+#       def self.from_string(klass, content)
+#         klass.new.tap do |obj|
+#           obj.instance_eval(content)
+#         end
+#       end
+#     end
+#   end
+# end

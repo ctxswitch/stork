@@ -14,35 +14,56 @@
 
 module Midwife
   module DSL
-    class Partitions
+    class PartitionScheme
+      attr_reader :name, :clearpart, :zerombr, :partitions
       def initialize(name)
         @name = name
         @clearpart = false
+        @zerombr = false
         @partitions = []
       end
 
-      def zerombr
+      def set_zerombr
         @zerombr = true
       end
 
-      def clearpart
+      def set_clearpart
         @clearpart = true
       end
 
-      def part(name, &block)
-        @partitions << Midwife::DSL::Partition.new(name).tap do |p|
-          p.instance_eval(&block)
-        end
+      def add_partition(name, &block)
+        @partitions << Midwife::DSL::Partition.build(name, &block)
       end
 
       def emit
         str = ""
-        str += "zerombr yes\n" if @zerombr
-        str += "clearpart --all --initlabel\n" if @clearpart
-        @partitions.each do |part|
+        str += "zerombr yes\n" if zerombr
+        str += "clearpart --all --initlabel\n" if clearpart
+        partitions.each do |part|
           str += part.emit + "\n"
         end
         str
+      end
+
+      def self.build(name, &block)
+        scheme = PartitionScheme.new(name)
+        delegator = SchemeDelegator.new(scheme)
+        delegator.instance_eval(&block) if block_given?
+        scheme
+      end
+
+      class SchemeDelegator < SimpleDelegator
+        def zerombr
+          set_zerombr
+        end
+
+        def clearpart
+          set_clearpart
+        end
+
+        def part(name, &block)
+          add_partition(name, &block)
+        end
       end
     end
   end

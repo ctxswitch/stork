@@ -6,14 +6,9 @@ module Midwife
   class Commands
     def initialize(args)
       @args = args
-
       @config = Midwife::Config.new()
       @path = @config.path
       @mode = @config.mode
-      
-      # log = File.new("sinatra.log", "a")
-      # STDOUT.reopen(log)
-      # STDERR.reopen(log)
       $logger = Rack::Logger.new(STDERR)
     end
 

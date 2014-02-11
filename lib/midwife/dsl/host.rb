@@ -15,12 +15,15 @@
 module Midwife
   module DSL
     class Host
+      include Core
+
       attr_reader :template, :partitions, :interfaces, :name, :pxemac
 
       def initialize(name)
         @name = name
         @template = nil
-        @partitions = nil
+        # @partition_scheme = nil
+        # @domain = nil 
         @interfaces = []
         @pxemac = nil
       end
@@ -29,8 +32,8 @@ module Midwife
         @template = content
       end
 
-      def set_partitions(part)
-        @partitions = part
+      def set_partitions(scheme)
+        @partitions = scheme
       end
 
       def set_interface(device, &block)
@@ -41,10 +44,6 @@ module Midwife
 
       def set_pxemac(mac)
         @pxemac = mac
-      end
-
-      def pxefile
-        @pxemac.gsub(/[:]/,'-')
       end
 
       def emit
@@ -65,13 +64,15 @@ module Midwife
 
       class HostDelegator < SimpleDelegator
         def template(tmpl)
-          content = Midwife.templates[tmpl]
+          content = templates[tmpl]
+          raise Midwife::NotFound.new "Template \"#{tmpl}\" not found" unless content
           set_template(content)
         end
 
-        def partitions(part)
-          part = Midwife.partitions[part]
-          set_partitions(part)
+        def scheme(name)
+          scheme = schemes.find(name)
+          raise Midwife::NotFound.new "Scheme \"#{name}\" not found" unless scheme
+          set_partitions(scheme)
         end
 
         def interface(device, &block)

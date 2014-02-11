@@ -3,11 +3,11 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe "Midwife::DSL::NetworkInterface" do
   before :each do
     @iface = Midwife::DSL::NetworkInterface.new('eth0')
-    @domain = Midwife::DSL::Domain.new('local').tap do |d|
-      d.netmask "255.255.255.0"
-      d.gateway "192.168.0.1"
-      d.nameserver "192.168.0.254"
-      d.nameserver "192.168.0.253"
+    @domain = Midwife::DSL::Domain.build('local') do
+      netmask "255.255.255.0"
+      gateway "192.168.0.1"
+      nameserver "192.168.0.254"
+      nameserver "192.168.0.253"
     end
     @ifaceemit = "network --device=eth0 --bootproto=dhcp"
   end

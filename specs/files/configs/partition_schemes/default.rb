@@ -1,7 +1,7 @@
 ###
-### The test partitions
+### The test scheme
 ###
-partitions "default" do
+scheme "default" do
   clearpart
   zerombr
   part "/boot" do
@@ -11,7 +11,7 @@ partitions "default" do
   end
 
   part "swap" do
-    size 0
+    size 0 # zero defaults to recommended
     type "swap"
     primary
   end
@@ -23,7 +23,7 @@ partitions "default" do
   end
 end
 
-partitions "split" do
+scheme "split" do
   clearpart
   zerombr
   part "/boot" do

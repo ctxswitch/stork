@@ -24,8 +24,12 @@ module Midwife
       @kickstart = "http://localhost/ks/#{@host.name}"
     end
 
+    def pxefile
+      @host.pxemac.gsub(/[:]/,'-')
+    end
+
     def write(str)
-      File.open("#{@path}/#{@host.pxefile}", 'w') do |f|
+      File.open("#{@path}/#{pxefile}", 'w') do |f|
         f.write(str)
       end
     end

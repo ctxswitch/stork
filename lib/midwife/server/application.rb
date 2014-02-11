@@ -1,6 +1,9 @@
+require "sinatra"
+
 module Midwife
   module Server
     class Application < Sinatra::Base
+      include Midwife::Core
       configure do
         enable :logging
       end
@@ -11,24 +14,21 @@ module Midwife
       end
 
       get '/' do
-        logger.info "[#{request.ip}] GET /"
+        info "GET /"
         json_halt 200, 200, "Midwife Version #{VERSION} - #{CODENAME}"
       end
 
-      # get '/ks/:host' do |host|
-      #   logger.info "[#{request.ip}] GET /ks/#{host}"
-      #   logger.info "#{host} requested kickstart."
-      #   begin
-      #     config = settings.config
-      #     config.load(host)
-      #     kickstart = Midwife::Kickstart.new(config)
-      #     erb kickstart.view, :locals => kickstart.locals, :views => settings.kickstart_path, :content_type => "text/plain"
-      #   rescue Errno::ENOENT
-      #     json_halt_not_found
-      #   rescue JSON::ParserError
-      #     json_halt_parse_error
-      #   end
-      # end
+      get '/ks/:host' do |host|
+        info "#{host} requested kickstart"
+
+        host = hosts.find(host)
+
+        if host
+          host.emit
+        else
+          json_halt_not_found
+        end
+      end
 
       # get '/notify/:host/installed' do |host|
       #   logger.info "[#{request.ip}] GET /notify/#{host}/installed"
@@ -58,6 +58,10 @@ module Midwife
       # end
 
       helpers do
+        def info(msg)
+          logger.info "[#{request.ip}] INFO: #{msg}"
+        end
+
         def json_halt(request_status, op_status, message)
           halt request_status, {'Content-Type' => 'application/json'}, "{ \"status\":\"#{op_status}\", \"message\": \"#{message}\" }"
         end
@@ -71,7 +75,7 @@ module Midwife
         end
 
         def json_halt_not_found
-          json_halt 404, 404, "Not found"
+          json_halt 404, 404, "not found"
         end
 
         def json_halt_parse_error
