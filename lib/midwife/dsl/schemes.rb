@@ -25,10 +25,6 @@ module Midwife
         @schemes[name]
       end
 
-      def all
-        @schemes
-      end
-
       def add_scheme(name, &block)
         @schemes[name] = Midwife::DSL::PartitionScheme.build(name, &block)
       end

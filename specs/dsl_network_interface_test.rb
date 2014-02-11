@@ -1,14 +1,10 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Midwife::DSL::NetworkInterface" do
+  include Midwife::Core
   before :each do
     @iface = Midwife::DSL::NetworkInterface.new('eth0')
-    @domain = Midwife::DSL::Domain.build('local') do
-      netmask "255.255.255.0"
-      gateway "192.168.0.1"
-      nameserver "192.168.0.254"
-      nameserver "192.168.0.253"
-    end
+    @domain = domains.find('local')
     @ifaceemit = "network --device=eth0 --bootproto=dhcp"
   end
 
@@ -18,7 +14,7 @@ describe "Midwife::DSL::NetworkInterface" do
 
   it "emits ip and domain info on static" do
     @iface.ip "192.168.0.10"
-    @iface.domain @domain
+    @iface.domain 'local'
     @iface.bootproto :static
     @iface.emit.must_equal "network --device=eth0 --bootproto=static --ip=192.168.0.10 #{@domain.emit} --onboot=yes"
   end

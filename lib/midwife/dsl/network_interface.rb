@@ -15,6 +15,8 @@
 module Midwife
   module DSL
     class NetworkInterface
+      include Midwife::Core
+
       def initialize(device)
         @device = device
         @ip = nil
@@ -34,7 +36,9 @@ module Midwife
       end
 
       def domain(val)
-        @domain = val
+        d = domains.find(val)
+        # raise NotFound.new("Unable to find domain \"#{val.name}\"") unless d
+        @domain = d
       end
 
       def bootproto(val)

@@ -1,4 +1,14 @@
 ENV['RACK_ENV'] = 'test'
+
+if ENV['COVERAGE'] == "true"
+  require 'simplecov'
+  FILTER_DIRS = ['specs']
+ 
+  SimpleCov.start do
+    FILTER_DIRS.each{ |f| add_filter f }
+  end
+end
+
 require 'rubygems'
 require 'bundler/setup'
 require 'midwife'
