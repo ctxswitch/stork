@@ -4,13 +4,14 @@ describe "Midwife::PXE" do
   before :all do
     host = Midwife::DSL::Host.build "test.local" do
       pxemac "00:11:22:33:44:56"
+      distro "centos"
     end
-    @path = File.dirname(__FILE__) + '/tmp/pxeboot'
-    @pxe = Midwife::PXE.new(host, @path)
+    @path = Midwife.configuration.pxe_path
+    @pxe = Midwife::PXE.new(host)
   end
 
   after :each do
-    Dir.glob("#{@path}/*") { |file| File.unlink(file) }
+    #Dir.glob("#{@path}/*") { |file| File.unlink(file) }
   end
 
   it "creates the localboot file" do

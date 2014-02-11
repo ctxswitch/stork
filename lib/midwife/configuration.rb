@@ -9,11 +9,12 @@ module Midwife
   end
 
   class Configuration
-    attr_accessor :path, :server
+    attr_accessor :path, :server, :pxe_path
 
     def initialize
       @path = "/etc/midwife"
       @server = "localhost"
+      @pxe_path = "/var/lib/tftpboot/pxelinux.cfg"
     end
   end
 end

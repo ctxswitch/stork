@@ -14,14 +14,15 @@
 
 module Midwife
   class PXE
-    attr_reader :hostname, :initrd, :kernel, :kickstart
+    include Midwife::Core
 
-    def initialize(host, path)
+    attr_reader :initrd, :kernel, :kickstart
+
+    def initialize(host)
       @host = host
-      @path = path
-      @initrd = "http://localhost/initrd.img"
-      @kernel = "http://localhost/vmlinuz"
-      @kickstart = "http://localhost/ks/#{@host.name}"
+      @initrd = @host.distro.initrd_url
+      @kernel = @host.distro.kernel_url
+      @kickstart = "http://#{Midwife.configuration.server}/ks/#{@host.name}"
     end
 
     def pxefile
@@ -29,7 +30,7 @@ module Midwife
     end
 
     def write(str)
-      File.open("#{@path}/#{pxefile}", 'w') do |f|
+      File.open("#{Midwife.configuration.pxe_path}/#{pxefile}", 'w') do |f|
         f.write(str)
       end
     end

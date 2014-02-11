@@ -19,4 +19,5 @@ require 'minitest/pride'
 
 Midwife.configure do |config|
   config.path = File.dirname(__FILE__) + "/files/configs"
+  config.pxe_path = File.dirname(__FILE__) + '/tmp/pxeboot'
 end

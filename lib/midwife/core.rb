@@ -1,7 +1,7 @@
 module Midwife
   module Core
     def distros
-      self.class.domains
+      self.class.distros
     end
 
     def domains

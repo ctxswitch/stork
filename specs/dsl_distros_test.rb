@@ -5,7 +5,6 @@ describe "Midwife::DSL::Distros" do
     distros = Midwife::DSL::Distros.build
 
     distro = distros.find('redhat')
-    puts distros.inspect
     distro.name.must_equal "redhat"
     distro.kernel.must_equal "myredkernel"
     distro.initrd.must_equal "myredinitrd.img"

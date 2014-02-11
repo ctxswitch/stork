@@ -2,6 +2,6 @@ default install
 prompt 0
 timeout 1
 label install
-        kernel http://localhost/vmlinuz
+        kernel http://example.com/centos/mycentkernel
         ipappend 2
-        append initrd=http://localhost/initrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/test.local
+        append initrd=http://example.com/centos/mycentinitrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/test.local

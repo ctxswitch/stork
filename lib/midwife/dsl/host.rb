@@ -17,13 +17,12 @@ module Midwife
     class Host
       include Core
 
-      attr_reader :template, :partitions, :interfaces, :name, :pxemac
+      attr_reader :distro, :template, :partitions, :interfaces, :name, :pxemac
 
       def initialize(name)
         @name = name
         @template = nil
-        # @partition_scheme = nil
-        # @domain = nil 
+        @distro = nil
         @interfaces = []
         @pxemac = nil
       end
@@ -34,6 +33,10 @@ module Midwife
 
       def set_partitions(scheme)
         @partitions = scheme
+      end
+
+      def set_distro(distro)
+        @distro = distro
       end
 
       def set_interface(device, &block)
@@ -77,6 +80,12 @@ module Midwife
 
         def interface(device, &block)
           set_interface(device, &block)
+        end
+
+        def distro(name)
+          distro = distros.find(name)
+          raise Midwife::NotFound.new "Distro \"#{name}\" not found" unless distro
+          set_distro(distro)
         end
 
         def pxemac(mac)
