@@ -13,6 +13,7 @@
 # limitations under the License.
 
 require 'securerandom'
+require "json"
 
 module Midwife
   module Build
@@ -20,7 +21,7 @@ module Midwife
       include Midwife::Core
 
       attr_reader :distro, :template, :partitions, :interfaces, :name, :pxemac
-      attr_reader :run_list, :timezone, :selinux
+      attr_reader :run_list, :timezone, :selinux, :run_list
 
       def initialize(name)
         @name = name
@@ -28,10 +29,10 @@ module Midwife
         @distro = nil
         @interfaces = []
         @pxemac = nil
-        @run_list = ""
         @timezone = "America/Los_Angeles"
         @selinux = 'disabled'
         @password = ""
+        @run_list = []
       end
 
       def random_password
@@ -40,16 +41,16 @@ module Midwife
         @password ||= randstring.crypt("$6$" + salt)
       end
 
+      def set_run_list(arr)
+        @run_list |= arr
+      end
+
       def set_selinux(val)
         @selinux = val
       end
 
       def set_timezone(zone)
         @timezone = zone
-      end
-
-      def set_run_list(list)
-        @run_list = list
       end
 
       def set_template(content)
@@ -84,6 +85,11 @@ module Midwife
         end
       end
 
+      def emit_run_list
+        rl = {'run_list' => @run_list }
+        rl.to_json
+      end
+
       def self.build(name, &block)
         host = new(name)
         delegator = HostDelegator.new(host)
@@ -102,7 +108,7 @@ module Midwife
         end
 
         def run_list(list)
-          set_run_list(list.is_a?(Array)?list.join(',') : list)
+          set_run_list(list.is_a?(String)?list.split(',') : list)
         end
 
         def template(tmpl)

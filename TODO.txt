@@ -1,5 +1,1 @@
-* Reload without restarting service?  Sinatra caching?
-
-runlist
-one kickstart to rule them all
-new config options in new kickstart
+server start up and pxe management commands, possibly put the xen stuff back in (done/test tommorrow)

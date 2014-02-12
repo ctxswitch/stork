@@ -3,6 +3,12 @@ host "other1.private" do
   scheme      'default'
   # pxemac    00:11:22:33:44:56
   interface   "eth0"
+  run_list    %w{
+    recipe[sudo]
+    recipe[authentication]
+    recipe[nagios]
+    recipe[apache]
+  }
 end
 
 host "static1.private" do

@@ -21,10 +21,21 @@ module Midwife
       get '/ks/:host' do |host|
         info "#{host} requested kickstart"
 
-        host = Midwife::Build::Host.find(host)
+        h = Midwife::Build::Host.find(host)
 
-        if host
-          host.emit
+        if h
+          h.emit
+        else
+          json_halt_not_found
+        end
+      end
+
+      get '/runlist/:host' do |host|
+        info "#{host} requested runlist"
+        h = Midwife::Build::Host.find(host)
+
+        if h
+          h.emit_run_list
         else
           json_halt_not_found
         end
@@ -39,19 +50,6 @@ module Midwife
       #     p = Midwife::PXE.new(config)
       #     p.boot
       #     json_halt_ok
-      #   rescue Errno::ENOENT
-      #     json_halt_not_found
-      #   end
-      # end
-
-      # get '/runlist/:host' do |host|
-      #   logger.info "[#{request.ip}] GET /runlist/#{host}"
-      #   begin
-      #     config = settings.config
-      #     config.load(host)
-      #     run_list = config.template['run_list']
-      #     logger.info "#{host} has requested runlist: #{config.template['run_list'].inspect}"
-      #     erb :runlist, :locals => {:run_list => run_list}, :views => settings.views_path, :content_type => "application/json"
       #   rescue Errno::ENOENT
       #     json_halt_not_found
       #   end
