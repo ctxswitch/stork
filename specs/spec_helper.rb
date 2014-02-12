@@ -1,8 +1,11 @@
 ENV['RACK_ENV'] = 'test'
 
-if ENV['COVERAGE'] == "true"
+if ENV['TRAVIS']
+    require 'coveralls'
+    Coveralls.wear!
+elsif ENV['COVERAGE']
   require 'simplecov'
-  FILTER_DIRS = ['specs']
+  FILTER_DIRS = ['specs', 'vendor']
  
   SimpleCov.start do
     FILTER_DIRS.each{ |f| add_filter f }

@@ -1,4 +1,6 @@
 # Midwife
+[![Build Status](https://travis-ci.org/rlyon/midwife.png?branch=master)](https://travis-ci.org/rlyon/midwife)
+[![Coverage Status](https://coveralls.io/repos/rlyon/midwife/badge.png)](https://coveralls.io/r/rlyon/midwife)
 
 TODO: Write a gem description
 
