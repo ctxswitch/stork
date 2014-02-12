@@ -37,8 +37,7 @@ module Midwife
       def random_password
         salt = rand(36**8).to_s(36)
         randstring = SecureRandom.urlsafe_base64(40)
-        @password ||= randstring
-        @password.crypt("$6$" + salt)
+        @password ||= randstring.crypt("$6$" + salt)
       end
 
       def set_selinux(val)

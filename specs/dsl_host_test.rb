@@ -11,7 +11,10 @@ describe "Midwife::Build::Host" do
         ip        '192.168.1.100'
       end
     end
-    host.emit.must_equal File.read("specs/files/results/default1.local.ks")
+    # Get rid of the password line since it sets a random one every time
+    actual = host.emit.gsub(/^rootpw.*$/, '')
+    expected = File.read("specs/files/results/default1.local.ks").gsub(/^rootpw.*$/, '')
+    actual.must_equal expected 
   end
 
   it "emits the correct kickstart file without using a domain" do
