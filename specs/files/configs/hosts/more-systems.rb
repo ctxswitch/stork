@@ -14,3 +14,12 @@ host "static1.private" do
     ip        '192.168.1.100'
   end
 end
+
+host "default1.local" do
+  scheme    'default'
+  interface 'eth0' do
+    domain    'local'
+    bootproto :static
+    ip        '192.168.1.100'
+  end
+end

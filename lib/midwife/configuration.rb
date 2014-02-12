@@ -9,7 +9,9 @@ module Midwife
   end
 
   class Configuration
-    attr_accessor :path, :server, :pxe_path
+    attr_accessor :path, :server, :pxe_path, :chef_version, :chef_server_url
+    attr_accessor :chef_validator, :chef_validation_key, :chef_client_name
+    attr_accessor :chef_client_key, :ssh_pubkeys, :ntp_server
 
     def initialize
       @path = "/etc/midwife"
@@ -21,6 +23,8 @@ module Midwife
       @chef_validation_key = ""
       @chef_client_name = "root"
       @chef_client_key = ""
+      @ssh_pubkeys = []
+      @ntp_server = "pool.ntp.org"
     end
   end
 end

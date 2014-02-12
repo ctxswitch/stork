@@ -2,5 +2,4 @@
 
 runlist
 one kickstart to rule them all
-host timezone
 new config options in new kickstart

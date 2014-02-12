@@ -12,12 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'securerandom'
+
 module Midwife
   module Build
     class Host
       include Midwife::Core
 
       attr_reader :distro, :template, :partitions, :interfaces, :name, :pxemac
+      attr_reader :run_list, :timezone, :selinux
 
       def initialize(name)
         @name = name
@@ -25,6 +28,29 @@ module Midwife
         @distro = nil
         @interfaces = []
         @pxemac = nil
+        @run_list = ""
+        @timezone = "America/Los_Angeles"
+        @selinux = 'disabled'
+        @password = ""
+      end
+
+      def random_password
+        salt = rand(36**8).to_s(36)
+        randstring = SecureRandom.urlsafe_base64(40)
+        @password ||= randstring
+        @password.crypt("$6$" + salt)
+      end
+
+      def set_selinux(val)
+        @selinux = val
+      end
+
+      def set_timezone(zone)
+        @timezone = zone
+      end
+
+      def set_run_list(list)
+        @run_list = list
       end
 
       def set_template(content)
@@ -48,11 +74,14 @@ module Midwife
       end
 
       def emit
-        if @template
-          renderer = ERB.new(@template)
+        # Allow user to override the default template
+        unless @template
+          template = File.dirname(__FILE__) + '/../erbs/kickstart.erb'
+          renderer = ERB.new(File.read(template))
           renderer.result(binding())
         else
-          ""
+          renderer = ERB.new(@template)
+          renderer.result(binding())
         end
       end
 
@@ -64,6 +93,19 @@ module Midwife
       end
 
       class HostDelegator < SimpleDelegator
+        def selinux(val)
+          raise InvalidArgument("must be :enforcing, :disabled, or :permissive") unless [:enforcing, :disabled, :permissive].include?(val)
+          set_selinux = val.to_s
+        end
+
+        def timezone(zone)
+          set_timezone(zone)
+        end
+
+        def run_list(list)
+          set_run_list(list.is_a?(Array)?list.join(',') : list)
+        end
+
         def template(tmpl)
           content = builder.templates[tmpl]
           raise Midwife::NotFound.new "Template \"#{tmpl}\" not found" unless content
