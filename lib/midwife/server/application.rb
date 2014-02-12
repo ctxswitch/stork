@@ -64,21 +64,21 @@ module Midwife
           halt request_status, {'Content-Type' => 'application/json'}, "{ \"status\":\"#{op_status}\", \"message\": \"#{message}\" }"
         end
 
-        def json_halt_ok
-          json_halt 200, 200, "OK"
-        end
+        # def json_halt_ok
+        #   json_halt 200, 200, "OK"
+        # end
 
-        def json_halt_internal_error
-          json_halt 500, 500, "Internal error"
-        end
+        # def json_halt_internal_error
+        #   json_halt 500, 500, "Internal error"
+        # end
 
         def json_halt_not_found
           json_halt 404, 404, "not found"
         end
 
-        def json_halt_parse_error
-          json_halt 404, 404, "There was a problem parsing the configuration file"
-        end
+        # def json_halt_parse_error
+        #   json_halt 404, 404, "There was a problem parsing the configuration file"
+        # end
       end
     end
   end

@@ -20,37 +20,58 @@ describe "Midwife::Build::NetworkInterface" do
   end
 
   it "emits with noboot" do
-    @iface.set_noboot
-    @iface.emit.must_equal "#{@ifaceemit} --onboot=no"
+    iface = Midwife::Build::NetworkInterface.build('eth0') do
+      noboot
+    end
+    iface.noboot.must_equal true
+    iface.emit.must_equal "#{@ifaceemit} --onboot=no"
   end
 
   it "emits with noipv4" do
-    @iface.set_noipv4
-    @iface.emit.must_equal "#{@ifaceemit} --onboot=yes --noipv4"
+    iface = Midwife::Build::NetworkInterface.build('eth0') do
+      noipv4
+    end
+    iface.noipv4.must_equal true
+    iface.emit.must_equal "#{@ifaceemit} --onboot=yes --noipv4"
   end
 
   it "emits with noipv6" do
-    @iface.set_noipv6
-    @iface.emit.must_equal "#{@ifaceemit} --onboot=yes --noipv6"
+    iface = Midwife::Build::NetworkInterface.build('eth0') do
+      noipv6
+    end
+    iface.noipv6.must_equal true
+    iface.emit.must_equal "#{@ifaceemit} --onboot=yes --noipv6"
   end
 
   it "emits with nodefroute" do
-    @iface.set_nodefroute
-    @iface.emit.must_equal "#{@ifaceemit} --onboot=yes --nodefroute"
+    iface = Midwife::Build::NetworkInterface.build('eth0') do
+      nodefroute
+    end
+    iface.nodefroute.must_equal true
+    iface.emit.must_equal "#{@ifaceemit} --onboot=yes --nodefroute"
   end
 
   it "emits with nodns" do
-    @iface.set_nodns
-    @iface.emit.must_equal "#{@ifaceemit} --onboot=yes --nodns"
+    iface = Midwife::Build::NetworkInterface.build('eth0') do
+      nodns
+    end
+    iface.nodns.must_equal true
+    iface.emit.must_equal "#{@ifaceemit} --onboot=yes --nodns"
   end
 
   it "emits with ethtool" do
-    @iface.set_ethtool "autoneg off duplex full speed 100"
-    @iface.emit.must_equal "#{@ifaceemit} --onboot=yes --ethtool=\"autoneg off duplex full speed 100\""
+    iface = Midwife::Build::NetworkInterface.build('eth0') do
+      ethtool "autoneg off duplex full speed 100"
+    end
+    iface.ethtool.must_equal "autoneg off duplex full speed 100"
+    iface.emit.must_equal "#{@ifaceemit} --onboot=yes --ethtool=\"autoneg off duplex full speed 100\""
   end
 
   it "emits with mtu" do
-    @iface.set_mtu 1500
-    @iface.emit.must_equal "#{@ifaceemit} --onboot=yes --mtu=1500"
+    iface = Midwife::Build::NetworkInterface.build('eth0') do
+      mtu 1500
+    end
+    iface.mtu.must_equal 1500
+    iface.emit.must_equal "#{@ifaceemit} --onboot=yes --mtu=1500"
   end
 end

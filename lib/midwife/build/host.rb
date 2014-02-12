@@ -100,7 +100,7 @@ module Midwife
       class HostDelegator < SimpleDelegator
         def selinux(val)
           raise InvalidArgument("must be :enforcing, :disabled, or :permissive") unless [:enforcing, :disabled, :permissive].include?(val)
-          set_selinux = val.to_s
+          set_selinux val.to_s
         end
 
         def timezone(zone)

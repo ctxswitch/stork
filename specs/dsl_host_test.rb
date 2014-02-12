@@ -1,6 +1,20 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Midwife::Build::Host" do
+  it "should set the selinux value" do
+    host = Midwife::Build::Host.build "default1.local" do
+      selinux :enforcing
+    end
+    host.selinux.must_equal 'enforcing'
+  end
+
+  it "should set the timezone value" do
+    host = Midwife::Build::Host.build "default1.local" do
+      timezone 'Pacific/Fiji'
+    end
+    host.timezone.must_equal 'Pacific/Fiji'
+  end
+
   it "emits the default kickstart file" do
     host = Midwife::Build::Host.build "default1.local" do
       scheme      'default'

@@ -18,14 +18,14 @@ module Midwife
       include Midwife::Core
 
       attr_reader :device, :ip, :domain, :bootproto, :onboot, :noipv4
-      attr_reader :noipv6, :nodns, :nodefroute, :mtu, :ethtool
+      attr_reader :noipv6, :nodns, :nodefroute, :mtu, :ethtool, :noboot
 
       def initialize(device)
         @device = device
         @ip = nil
         @domain = nil
         @bootproto = :dhcp
-        @onboot = true
+        @noboot = false
         @noipv4 = false
         @noipv6 = false
         @nodns = false
@@ -50,7 +50,7 @@ module Midwife
       end
 
       def set_noboot
-        @onboot = false
+        @noboot = true
       end
 
       def set_noipv4
@@ -85,7 +85,7 @@ module Midwife
           str += " #{domain.emit}" if domain
         end
         # Others
-        str += " --onboot=#{onboot ? 'yes' : 'no'}"
+        str += " --onboot=#{noboot ? 'no' : 'yes'}"
         str += " --noipv4" if noipv4
         str += " --noipv6" if noipv6
         str += " --nodefroute" if nodefroute
