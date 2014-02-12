@@ -3,10 +3,7 @@ require 'fileutils'
 
 describe "Midwife::PXE" do
   before :all do
-    host = Midwife::Build::Host.build "test.local" do
-      pxemac "00:11:22:33:44:56"
-      distro "centos"
-    end
+    host = Midwife::Build::Host.find('other1.private')
     @path = Midwife.configuration.pxe_path
     FileUtils.mkdir_p @path
     @pxe = Midwife::PXE.new(host)

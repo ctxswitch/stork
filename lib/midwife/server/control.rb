@@ -7,36 +7,28 @@ module Midwife
   module Server
     class Control
       class << self
-        def start(config)
-          puts "Starting midwife kickstart server."
-          s = Midwife::Server::Application
-          s.set :config, config
-          s.set :config_path, config.path
-          s.set :views_path, config.views_path
-          s.set :hosts_path, config.hosts_path
-          s.set :templates_path, config.templates_path 
-          s.set :kickstart_path, config.kickstart_path
-          s.set :environment, config.mode
-          s.set :logging, true
-          @thin = Thin::Server.new("0.0.0.0", 9293, Midwife::Server)
+        def start
+          puts "Starting midwife server on port 9293."
+          # s = Midwife::Server::Application
+          @thin = Thin::Server.new("0.0.0.0", 9293, Midwife::Server::Application)
           @thin.tag = "Midwife #{VERSION}"
-          if Midwife.env == "production"
-            @thin.pid_file = "/tmp/midwife.pid"
-            @thin.log_file = "./log/midwife.log"
+          unless ENV['RACK_ENV'] == "test"
+            @thin.pid_file = File.dirname(__FILE__) + "/../../../tmp/midwife.pid"
+            @thin.log_file = File.dirname(__FILE__) + "/../../../log/midwife.log"
             @thin.daemonize
           end
           @thin.start
         end
 
-        def stop(config)
+        def stop
           puts "Stoping the midwife server."
-          pid_file = "/tmp/midwife.pid"
+          pid_file = File.dirname(__FILE__) + "/../../../tmp/midwife.pid"
           Thin::Server.kill(pid_file)
         end
 
-        def restart(config)
-          stop(config)
-          start(config)
+        def restart
+          stop
+          start
         end
       end
     end

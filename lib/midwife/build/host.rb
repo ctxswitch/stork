@@ -41,6 +41,18 @@ module Midwife
         @password ||= randstring.crypt("$6$" + salt)
       end
 
+      def pxe
+        @pxe ||= Midwife::PXE.new(self)
+      end
+
+      def set_localboot
+        pxe.localboot
+      end
+
+      def set_install
+        pxe.install
+      end
+
       def set_run_list(arr)
         @run_list |= arr
       end

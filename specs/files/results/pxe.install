@@ -4,4 +4,4 @@ timeout 1
 label install
         kernel http://example.com/centos/mycentkernel
         ipappend 2
-        append initrd=http://example.com/centos/mycentinitrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/test.local
+        append initrd=http://example.com/centos/mycentinitrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/other1.private
