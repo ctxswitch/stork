@@ -20,33 +20,20 @@ require "delegate"
 require "erb"
 
 module Midwife
-  module DSL
-    autoload :Builder,          'midwife/dsl/builder'
-    autoload :Partition,        'midwife/dsl/partition'
-    autoload :PartitionScheme,  'midwife/dsl/partition_scheme'
-    autoload :Schemes,          'midwife/dsl/schemes'
-    autoload :NetworkInterface, 'midwife/dsl/network_interface'
-    autoload :Domains,          'midwife/dsl/domains'
-    autoload :Domain,           'midwife/dsl/domain'
-    autoload :Hosts,            'midwife/dsl/hosts'
-    autoload :Host,             'midwife/dsl/host'
-    autoload :Distros,          'midwife/dsl/distros'
-    autoload :Distro,           'midwife/dsl/distro'
+  autoload :PXE,              'midwife/pxe'
+  autoload :Builder,          'midwife/builder'
+  
+  module Build
+    autoload :Partition,        'midwife/build/partition'
+    autoload :Scheme,           'midwife/build/scheme'
+    autoload :NetworkInterface, 'midwife/build/network_interface'
+    autoload :Domain,           'midwife/build/domain'
+    autoload :Host,             'midwife/build/host'
+    autoload :Distro,           'midwife/build/distro'
   end
 
   module Server
     autoload :Application,      'midwife/server/application'
     autoload :Control,          'midwife/server/control'
   end
-
-  # module Models
-  #   autoload :Domain,           'midwife/models/domain'
-  #   autoload :Host,             'midwife/models/host'
-  #   autoload :NetworkInterface, 'midwife/models/network_interface'
-  # end
-
-  # autoload :Config,           'midwife/config'
-  # autoload :Builder,          'midwife/builder'
-  # autoload :Commands,         'midwife/commands'
-  autoload :PXE,              'midwife/pxe'
 end

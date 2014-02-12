@@ -13,8 +13,10 @@
 # limitations under the License.
 
 module Midwife
-  module DSL
+  module Build
     class Domain
+      include Midwife::Core
+      
       attr_reader :name, :netmask, :gateway, :nameservers
       def initialize(name)
         @name = name

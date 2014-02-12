@@ -1,12 +1,12 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "Midwife::DSL::PartitionScheme" do
+describe "Midwife::Build::PartitionScheme" do
   before :each do
     @partsemit = "part /boot --size 100 --fstype ext4\npart / --size 1 --fstype ext4 --grow\n"
   end
 
   it "emits the correct kickstart lines with defaults" do
-    parts = Midwife::DSL::PartitionScheme.build('default') do
+    parts = Midwife::Build::Scheme.build('default') do
       part "/boot" do
         size 100
       end
@@ -19,7 +19,7 @@ describe "Midwife::DSL::PartitionScheme" do
   end
 
   it "emits with zerombr" do
-    parts = Midwife::DSL::PartitionScheme.build('default') do
+    parts = Midwife::Build::Scheme.build('default') do
       zerombr
       part "/boot" do
         size 100
@@ -33,7 +33,7 @@ describe "Midwife::DSL::PartitionScheme" do
   end
 
   it "emits with zerombr and clearpart" do
-    parts = Midwife::DSL::PartitionScheme.build('default') do
+    parts = Midwife::Build::Scheme.build('default') do
       zerombr
       clearpart
       part "/boot" do

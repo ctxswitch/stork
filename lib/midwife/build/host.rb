@@ -13,9 +13,9 @@
 # limitations under the License.
 
 module Midwife
-  module DSL
+  module Build
     class Host
-      include Core
+      include Midwife::Core
 
       attr_reader :distro, :template, :partitions, :interfaces, :name, :pxemac
 
@@ -40,9 +40,7 @@ module Midwife
       end
 
       def set_interface(device, &block)
-        @interfaces << Midwife::DSL::NetworkInterface.new(device).tap do |i|
-          i.instance_eval(&block) if block_given?
-        end
+        @interfaces << Midwife::Build::NetworkInterface.build(device, &block)
       end
 
       def set_pxemac(mac)
@@ -67,13 +65,13 @@ module Midwife
 
       class HostDelegator < SimpleDelegator
         def template(tmpl)
-          content = templates[tmpl]
+          content = builder.templates[tmpl]
           raise Midwife::NotFound.new "Template \"#{tmpl}\" not found" unless content
           set_template(content)
         end
 
         def scheme(name)
-          scheme = schemes.find(name)
+          scheme = Midwife::Build::Scheme.find(name)
           raise Midwife::NotFound.new "Scheme \"#{name}\" not found" unless scheme
           set_partitions(scheme)
         end
@@ -83,7 +81,7 @@ module Midwife
         end
 
         def distro(name)
-          distro = distros.find(name)
+          distro = Midwife::Build::Distro.find(name)
           raise Midwife::NotFound.new "Distro \"#{name}\" not found" unless distro
           set_distro(distro)
         end

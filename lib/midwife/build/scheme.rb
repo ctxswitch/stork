@@ -13,9 +13,12 @@
 # limitations under the License.
 
 module Midwife
-  module DSL
-    class PartitionScheme
+  module Build
+    class Scheme
+      include Midwife::Core
+
       attr_reader :name, :clearpart, :zerombr, :partitions
+      
       def initialize(name)
         @name = name
         @clearpart = false
@@ -32,7 +35,7 @@ module Midwife
       end
 
       def add_partition(name, &block)
-        @partitions << Midwife::DSL::Partition.build(name, &block)
+        @partitions << Midwife::Build::Partition.build(name, &block)
       end
 
       def emit
@@ -46,7 +49,7 @@ module Midwife
       end
 
       def self.build(name, &block)
-        scheme = PartitionScheme.new(name)
+        scheme = new(name)
         delegator = SchemeDelegator.new(scheme)
         delegator.instance_eval(&block) if block_given?
         scheme

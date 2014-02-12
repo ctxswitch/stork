@@ -15,6 +15,12 @@ module Midwife
       @path = "/etc/midwife"
       @server = "localhost"
       @pxe_path = "/var/lib/tftpboot/pxelinux.cfg"
+      @chef_version = "11.4.4"
+      @chef_server_url = "https://localhost"
+      @chef_validator = "chef-validator"
+      @chef_validation_key = ""
+      @chef_client_name = "root"
+      @chef_client_key = ""
     end
   end
 end

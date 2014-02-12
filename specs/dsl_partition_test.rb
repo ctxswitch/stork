@@ -1,13 +1,13 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "Midwife::DSL::Partition" do
+describe "Midwife::Build::Partition" do
   it "emits the correct kickstart lines with defaults" do
-    part = Midwife::DSL::Partition.build('/')
+    part = Midwife::Build::Partition.build('/')
     part.emit.must_equal "part / --recommended --fstype ext4"
   end
 
   it "emits with size and grow" do
-    part = Midwife::DSL::Partition.build('/') do
+    part = Midwife::Build::Partition.build('/') do
       grow
       size 1
     end
@@ -15,7 +15,7 @@ describe "Midwife::DSL::Partition" do
   end
 
   it "emits with asprimary" do
-    part = Midwife::DSL::Partition.build('/') do
+    part = Midwife::Build::Partition.build('/') do
       primary
     end
     part.emit.must_equal "part / --recommended --fstype ext4 --asprimary"

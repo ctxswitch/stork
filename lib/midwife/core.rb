@@ -1,48 +1,60 @@
 module Midwife
   module Core
-    def distros
-      self.class.distros
+    def builder
+      self.class.builder
     end
 
-    def domains
-      self.class.domains
-    end
+    # def distros
+    #   self.class.distros
+    # end
 
-    def schemes
-      self.class.schemes
-    end
+    # def domains
+    #   self.class.domains
+    # end
 
-    def hosts
-      self.class.hosts
-    end
+    # def schemes
+    #   self.class.schemes
+    # end
 
-    def templates
-      self.class.templates
-    end
+    # def hosts
+    #   self.class.hosts
+    # end
+
+    # def templates
+    #   self.class.templates
+    # end
 
     module ClassMethods
-      def distros
-        @@distros ||= Midwife::DSL::Distros.build
+      def builder
+        @@builder ||= Midwife::Builder.build
       end
 
-      def domains
-        @@domains ||= Midwife::DSL::Domains.build
+      def export(builder)
+        @@builder = builder
       end
 
-      def schemes
-        @@schemes ||= Midwife::DSL::Schemes.build
-      end
+      # def distros
+      #   @@distros ||= Midwife::Build::Distros.build
+      # end
 
-      def hosts
-        @@hosts ||= Midwife::DSL::Hosts.build
-      end
+      # def domains
+      #   @@domains ||= Midwife::Build::Domains.build
+      # end
 
-      def templates
-        @@templates ||= Dir.glob("#{Midwife.configuration.path}/templates/*.erb").inject({}) do |tmpls, filename|
-          name = File.basename(filename, '.erb')
-          tmpls[name] = File.read(filename)
-          tmpls
-        end
+      # def schemes
+      #   @@schemes ||= Midwife::Build::Schemes.build
+      # end
+
+      # def hosts
+      #   @@hosts ||= Midwife::Build::Hosts.build
+      # end
+
+      # def templates
+      #   # builder.templates
+      # end
+
+      def find(name)
+        builder.find(self, name)
       end
     end
 

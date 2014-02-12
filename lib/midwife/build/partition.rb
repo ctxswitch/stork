@@ -13,7 +13,7 @@
 # limitations under the License.
 
 module Midwife
-  module DSL
+  module Build
     class Partition
       attr_reader :path, :size, :type, :primary, :grow
 

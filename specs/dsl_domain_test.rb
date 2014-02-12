@@ -1,13 +1,13 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "Midwife::DSL::Domain" do
+describe "Midwife::Build::Domain" do
   it "emits the correct kickstart lines with defaults" do
-    domain = Midwife::DSL::Domain.build('test')
+    domain = Midwife::Build::Domain.build('test')
     domain.emit.must_equal ""
   end
 
   it "emits with the rest" do
-    domain = Midwife::DSL::Domain.build 'test' do
+    domain = Midwife::Build::Domain.build 'test' do
       netmask "255.255.255.0"
       gateway "192.168.0.1"
       nameserver "192.168.0.1"
@@ -16,7 +16,7 @@ describe "Midwife::DSL::Domain" do
   end
 
   it "emits with the multiple namservers" do
-    domain = Midwife::DSL::Domain.build 'test' do
+    domain = Midwife::Build::Domain.build 'test' do
       netmask "255.255.255.0"
       gateway "192.168.0.1"
       nameserver "192.168.0.254"

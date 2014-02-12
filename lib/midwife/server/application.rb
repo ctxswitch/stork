@@ -21,7 +21,7 @@ module Midwife
       get '/ks/:host' do |host|
         info "#{host} requested kickstart"
 
-        host = hosts.find(host)
+        host = Midwife::Build::Host.find(host)
 
         if host
           host.emit

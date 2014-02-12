@@ -1,6 +1,8 @@
 module Midwife
-  module DSL
+  module Build
     class Distro
+      include Midwife::Core
+
       attr_reader :name, :kernel, :initrd, :url
       
       def initialize(name)

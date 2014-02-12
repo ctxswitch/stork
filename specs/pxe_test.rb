@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Midwife::PXE" do
   before :all do
-    host = Midwife::DSL::Host.build "test.local" do
+    host = Midwife::Build::Host.build "test.local" do
       pxemac "00:11:22:33:44:56"
       distro "centos"
     end
