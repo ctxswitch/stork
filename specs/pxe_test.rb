@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/spec_helper'
+require 'fileutils'
 
 describe "Midwife::PXE" do
   before :all do
@@ -7,6 +8,7 @@ describe "Midwife::PXE" do
       distro "centos"
     end
     @path = Midwife.configuration.pxe_path
+    FileUtils.mkdir_p @path
     @pxe = Midwife::PXE.new(host)
   end
 
