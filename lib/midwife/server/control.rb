@@ -9,20 +9,21 @@ module Midwife
       class << self
         def start
           puts "Starting midwife server on port 9293."
-          # s = Midwife::Server::Application
           @thin = Thin::Server.new("0.0.0.0", 9293, Midwife::Server::Application)
           @thin.tag = "Midwife #{VERSION}"
           unless ENV['RACK_ENV'] == "test"
-            @thin.pid_file = File.dirname(__FILE__) + "/../../../tmp/midwife.pid"
-            @thin.log_file = File.dirname(__FILE__) + "/../../../log/midwife.log"
+            @thin.pid_file = Midwife.configuration.pid_file
+            @thin.log_file = Midwife.configuration.log_file
             @thin.daemonize
+          else
+            puts "Running in test mode"
           end
           @thin.start
         end
 
         def stop
           puts "Stoping the midwife server."
-          pid_file = File.dirname(__FILE__) + "/../../../tmp/midwife.pid"
+          pid_file = Midwife.configuration.pid_file
           Thin::Server.kill(pid_file)
         end
 

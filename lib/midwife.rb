@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "delegate"
+require "erb"
 require "midwife/version"
 require "midwife/configuration"
 require "midwife/core"
 require "midwife/exceptions"
-require "delegate"
-require "erb"
 
 module Midwife
   autoload :PXE,              'midwife/pxe'
