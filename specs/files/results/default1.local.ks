@@ -36,8 +36,7 @@ firewall --disabled
 ###############################################################################
 lang en_US
 keyboard us
-langsupport --default=en_US
-timezone 
+timezone America/Los_Angeles
 
 ###############################################################################
 ### SELinux

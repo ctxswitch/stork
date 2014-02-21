@@ -27,7 +27,6 @@ firewall --disabled
 ### Environment
 ###############################################################################
 lang en_US
-langsupport --default=en_US
 timezone America/Los_Angeles
 
 ###############################################################################
