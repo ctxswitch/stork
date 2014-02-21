@@ -16,6 +16,7 @@ firstboot --disable
 ###############################################################################
 ### Partitioning
 ###############################################################################
+bootloader --location=mbr
 zerombr yes
 clearpart --all --initlabel
 part /boot --size 100 --fstype ext4 --asprimary

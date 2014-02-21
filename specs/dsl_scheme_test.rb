@@ -15,7 +15,7 @@ describe "Midwife::Build::PartitionScheme" do
         grow
       end
     end
-    parts.emit.must_equal @partsemit
+    parts.emit.must_equal "bootloader --location=mbr\n#{@partsemit}"
   end
 
   it "emits with zerombr" do
@@ -29,7 +29,7 @@ describe "Midwife::Build::PartitionScheme" do
         grow
       end
     end
-    parts.emit.must_equal "zerombr yes\n#{@partsemit}"
+    parts.emit.must_equal "bootloader --location=mbr\nzerombr yes\n#{@partsemit}"
   end
 
   it "emits with zerombr and clearpart" do
@@ -44,6 +44,6 @@ describe "Midwife::Build::PartitionScheme" do
         grow
       end
     end
-    parts.emit.must_equal "zerombr yes\nclearpart --all --initlabel\n#{@partsemit}"
+    parts.emit.must_equal "bootloader --location=mbr\nzerombr yes\nclearpart --all --initlabel\n#{@partsemit}"
   end
 end

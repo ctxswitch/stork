@@ -39,7 +39,7 @@ module Midwife
       end
 
       def emit
-        str = ""
+        str = "bootloader --location=mbr\n"
         str += "zerombr yes\n" if zerombr
         str += "clearpart --all --initlabel\n" if clearpart
         partitions.each do |part|
