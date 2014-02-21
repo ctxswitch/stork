@@ -211,8 +211,8 @@ EOF
 echo
 echo "Reregistering client"
 knife client reregister default1.local -f /etc/chef/client.pem --config /root/.chef/knife.rb
-echo "Getting rid of the validation pem"
-rm /etc/chef/validation.pem
+echo "Getting rid of the root pem"
+rm /root/.chef/root.pem
 
 echo
 echo "Setting up chef first boot"
