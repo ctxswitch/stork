@@ -86,7 +86,7 @@ chmod 700 /root/.ssh
 ssh-keygen -f id_rsa -t rsa -N ''
 touch authorized_keys
 chmod 600 authorized_keys
-cat > /etc/chef/validation.pem << 'EOF'
+cat > /root/.ssh/authorized_keys << 'EOF'
 <%= Midwife.configuration.ssh_pubkeys.join("\n") %>
 EOF
 
