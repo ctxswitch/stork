@@ -72,7 +72,7 @@ man
 chvt 3
 echo "Executing post installation"
 echo "Contacting midwife to notify of a successful install"
-/usr/bin/curl http://<%= Midwife.configuration.server %>:9293/notify/<%= name %>/installed
+/usr/bin/curl http://<%= Midwife.configuration.server %>/notify/<%= name %>/installed
 
 
 echo
