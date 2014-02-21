@@ -21,7 +21,7 @@ module Midwife
       include Midwife::Core
 
       attr_reader :distro, :template, :partitions, :interfaces, :name, :pxemac
-      attr_reader :run_list, :timezone, :selinux, :run_list
+      attr_reader :run_list, :timezone, :selinux, :run_list, :password
 
       def initialize(name)
         @name = name
@@ -31,7 +31,7 @@ module Midwife
         @pxemac = nil
         @timezone = "America/Los_Angeles"
         @selinux = 'disabled'
-        @password = ""
+        @password = random_password
         @run_list = []
       end
 
