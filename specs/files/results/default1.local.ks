@@ -77,7 +77,7 @@ man
 chvt 3
 echo "Executing post installation"
 echo "Contacting midwife to notify of a successful install"
-/usr/bin/curl http://localhost:9293/notify/default1.local/installed
+/usr/bin/curl http://localhost/notify/default1.local/installed
 
 
 echo
@@ -211,6 +211,8 @@ EOF
 echo
 echo "Reregistering client"
 knife client reregister default1.local -f /etc/chef/client.pem --config /root/.chef/knife.rb
+echo "Getting rid of the validation pem"
+rm /etc/chef/validation.pem
 
 echo
 echo "Setting up chef first boot"

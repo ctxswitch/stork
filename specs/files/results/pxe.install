@@ -2,6 +2,6 @@ default install
 prompt 0
 timeout 1
 label install
-        kernel http://example.com/centos/mycentkernel
+        kernel mycentkernel
         ipappend 2
-        append initrd=http://example.com/centos/mycentinitrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/other1.private
+        append initrd=mycentinitrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/other1.private
