@@ -20,8 +20,8 @@ module Midwife
 
     def initialize(host)
       @host = host
-      @initrd = @host.distro.initrd_url
-      @kernel = @host.distro.kernel_url
+      @initrd = @host.distro.initrd
+      @kernel = @host.distro.kernel
       @kickstart = "http://#{Midwife.configuration.server}/ks/#{@host.name}"
     end
 
