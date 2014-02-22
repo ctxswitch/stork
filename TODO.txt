@@ -1,2 +1,5 @@
-server start up and pxe management commands
-possibly put the xen stuff back in (done/test tommorrow)
+1. Better error catching and handling
+2. Domain specific service definitions
+3. Create the resolv.conf file in kickstart
+4. Knife client regeneration from midwife so admin pem can stay put
+5. Read file for keys instead of having them inline in the configuration
