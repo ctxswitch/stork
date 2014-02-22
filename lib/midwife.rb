@@ -12,28 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "delegate"
-require "erb"
-require "midwife/version"
-require "midwife/configuration"
-require "midwife/core"
-require "midwife/exceptions"
+require 'delegate'
+require 'erb'
+require 'midwife/version'
+require 'midwife/configuration'
+require 'midwife/core'
+require 'midwife/exceptions'
+require 'midwife/pxe'
+require 'midwife/builder'
+require 'midwife/build/partition'
+require 'midwife/build/scheme'
+require 'midwife/build/network_interface'
+require 'midwife/build/domain'
+require 'midwife/build/host'
+require 'midwife/build/distro'
+require 'midwife/server/application'
+require 'midwife/server/control'
 
 module Midwife
-  autoload :PXE,              'midwife/pxe'
-  autoload :Builder,          'midwife/builder'
-  
-  module Build
-    autoload :Partition,        'midwife/build/partition'
-    autoload :Scheme,           'midwife/build/scheme'
-    autoload :NetworkInterface, 'midwife/build/network_interface'
-    autoload :Domain,           'midwife/build/domain'
-    autoload :Host,             'midwife/build/host'
-    autoload :Distro,           'midwife/build/distro'
-  end
-
-  module Server
-    autoload :Application,      'midwife/server/application'
-    autoload :Control,          'midwife/server/control'
-  end
 end
