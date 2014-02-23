@@ -26,6 +26,7 @@ require 'midwife/build/network_interface'
 require 'midwife/build/domain'
 require 'midwife/build/host'
 require 'midwife/build/distro'
+require 'midwife/build/chef'
 require 'midwife/server/application'
 require 'midwife/server/control'
 

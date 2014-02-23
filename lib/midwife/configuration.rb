@@ -9,9 +9,7 @@ module Midwife
   end
 
   class Configuration
-    attr_accessor :path, :server, :pxe_path, :chef_version, :chef_server_url
-    attr_accessor :chef_validator, :chef_validation_key, :chef_client_name
-    attr_accessor :chef_client_key, :ssh_pubkeys, :ntp_server, :log_file
+    attr_accessor :path, :server, :pxe_path, :authorized_keys, :ntp_server, :log_file
     attr_accessor :pid_file
 
     def initialize
@@ -20,13 +18,7 @@ module Midwife
       @pxe_path = "tmp/tftpboot/pxelinux.cfg"
       @log_file = "tmp/log/midwife.log"
       @pid_file = "tmp/run/midwife.pid"
-      @chef_version = "11.4.4"
-      @chef_server_url = "https://localhost"
-      @chef_validator = "chef-validator"
-      @chef_validation_key = ""
-      @chef_client_name = "root"
-      @chef_client_key = ""
-      @ssh_pubkeys = []
+      @authorized_keys = ""
       @ntp_server = "pool.ntp.org"
     end
 
@@ -39,6 +31,10 @@ module Midwife
       def initialize(obj)
         super
         @delegated = obj
+      end
+
+      def authorized_keys(pubfile)
+        @delegated.authorized_keys = File.read(pubfile)
       end
 
       def method_missing(meth, *args)

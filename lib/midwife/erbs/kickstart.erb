@@ -87,76 +87,7 @@ ssh-keygen -f id_rsa -t rsa -N ''
 touch authorized_keys
 chmod 600 authorized_keys
 cat > /root/.ssh/authorized_keys << 'EOF'
-<%= Midwife.configuration.ssh_pubkeys.join("\n") %>
+<%= Midwife.configuration.authorized_keys %>
 EOF
 
-echo
-echo "Setting up chef"
-cd /tmp
-curl -L https://www.opscode.com/chef/install.sh > install.sh
-chmod 700 install.sh
-
-./install.sh -v <%= Midwife.configuration.chef_version %>
-
-mkdir -p /etc/chef
-
-touch /etc/chef/validation.pem
-chmod 0644 /etc/chef/validation.pem
-
-cat > /etc/chef/validation.pem << 'EOF'
-<%= Midwife.configuration.chef_validation_key %>
-EOF
-
-echo
-echo "Adding client.rb"
-touch /etc/chef/client.rb
-chmod 644 /etc/chef/client.rb
-cat > /etc/chef/client.rb << 'EOF'
-log_level              :auto
-log_location           STDOUT
-chef_server_url        '<%= Midwife.configuration.chef_server_url %>'
-validation_client_name '<%= Midwife.configuration.chef_validator %>'
-EOF
-
-echo
-echo "Setting up .chef"
-mkdir /root/.chef
-chmod 700 /root/.chef
-
-echo
-echo "Setting up knife.rb"
-touch /root/.chef/knife.rb
-chmod 600 /root/.chef/knife.rb
-cat > /root/.chef/knife.rb << 'EOF'
-log_level                :info
-log_location             STDOUT
-node_name                '<%= Midwife.configuration.chef_client_name %>'
-client_key               '/root/.chef/<%= Midwife.configuration.chef_client_name %>.pem'
-validation_client_name   '<%= Midwife.configuration.chef_validator %>'
-validation_key           '/etc/chef/validation.pem'
-chef_server_url          '<%= Midwife.configuration.chef_server_url %>'
-cache_type               'BasicFile'
-cache_options( :path => '/root/.chef/checksums' )
-EOF
-
-echo
-echo "Setting up <%= Midwife.configuration.chef_client_name %>.pem"
-touch /root/.chef/<%= Midwife.configuration.chef_client_name %>.pem
-chmod 600 /root/.chef/<%= Midwife.configuration.chef_client_name %>.pem
-cat > /root/.chef/<%= Midwife.configuration.chef_client_name %>.pem << 'EOF'
-<%= Midwife.configuration.chef_client_key %>
-EOF
-
-echo
-echo "Reregistering client"
-knife client reregister <%= name %> -f /etc/chef/client.pem --config /root/.chef/knife.rb
-echo "Getting rid of the root pem"
-rm /root/.chef/root.pem
-
-echo
-echo "Setting up chef first boot"
-touch /etc/chef/first-boot.json
-chmod 644 /etc/chef/first-boot.json
-curl http://<%= Midwife.configuration.server %>/runlist/<%= name %> > /etc/chef/first-boot.json
-/usr/bin/chef-client -j /etc/chef/first-boot.json
-chkconfig chef-client on
+<%= bootstrap %>

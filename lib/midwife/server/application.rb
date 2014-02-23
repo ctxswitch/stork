@@ -30,16 +30,16 @@ module Midwife
         end
       end
 
-      get '/runlist/:host' do |host|
-        info "#{host} requested runlist"
-        h = Midwife::Build::Host.find(host)
+      # get '/runlist/:host' do |host|
+      #   info "#{host} requested runlist"
+      #   h = Midwife::Build::Host.find(host)
 
-        if h
-          h.emit_run_list
-        else
-          json_halt_not_found
-        end
-      end
+      #   if h
+      #     h.emit_run_list
+      #   else
+      #     json_halt_not_found
+      #   end
+      # end
 
       get '/notify/:host/installed' do |host|
         info "#{host} has notified completed install"

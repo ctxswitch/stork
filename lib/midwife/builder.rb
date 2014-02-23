@@ -2,7 +2,7 @@ module Midwife
   class Builder
     include Core
 
-    attr_reader :hosts, :schemes, :distros, :domains, :templates
+    attr_reader :hosts, :schemes, :distros, :domains, :templates, :chefs
 
     def initialize
       @hosts = {}
@@ -10,6 +10,7 @@ module Midwife
       @distros = {}
       @domains = {}
       @templates = {}
+      @chefs = {}
     end
 
     def find(klass, name)
@@ -34,6 +35,10 @@ module Midwife
 
     def add_template(name, content)
       @templates[name] = content
+    end
+
+    def add_chef(name, &block)
+      @chefs[name] = Midwife::Build::Chef.build(name, &block)
     end
 
     def self.build
@@ -76,6 +81,10 @@ module Midwife
 
       def distro(name, &block)
         add_distro(name, &block)
+      end
+
+      def chef(name, &block)
+        add_chef(name, &block)
       end
     end
   end

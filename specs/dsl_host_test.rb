@@ -19,6 +19,7 @@ describe "Midwife::Build::Host" do
     host = Midwife::Build::Host.build "default1.local" do
       scheme      'default'
       distro      'centos'
+      chef        'default'
       interface 'eth0' do
         domain    'local'
         bootproto :static

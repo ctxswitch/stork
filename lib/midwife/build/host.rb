@@ -21,7 +21,7 @@ module Midwife
       include Midwife::Core
 
       attr_reader :distro, :template, :partitions, :interfaces, :name, :pxemac
-      attr_reader :run_list, :timezone, :selinux, :run_list, :password
+      attr_reader :run_list, :timezone, :selinux, :run_list, :password, :chef
 
       def initialize(name)
         @name = name
@@ -29,6 +29,7 @@ module Midwife
         @distro = nil
         @interfaces = []
         @pxemac = nil
+        @chef = nil
         @timezone = "America/Los_Angeles"
         @selinux = 'disabled'
         @password = random_password
@@ -39,6 +40,10 @@ module Midwife
         salt = rand(36**8).to_s(36)
         randstring = SecureRandom.urlsafe_base64(40)
         @password ||= randstring.crypt("$6$" + salt)
+      end
+
+      def bootstrap
+        chef.emit(name, run_list) if chef
       end
 
       def pxe
@@ -77,6 +82,10 @@ module Midwife
         @distro = distro
       end
 
+      def set_chef(chef)
+        @chef = chef
+      end
+
       def set_interface(device, &block)
         @interfaces << Midwife::Build::NetworkInterface.build(device, &block)
       end
@@ -95,11 +104,6 @@ module Midwife
           renderer = ERB.new(@template)
           renderer.result(binding())
         end
-      end
-
-      def emit_run_list
-        rl = {'run_list' => @run_list }
-        rl.to_json
       end
 
       def self.build(name, &block)
@@ -143,6 +147,12 @@ module Midwife
           distro = Midwife::Build::Distro.find(name)
           raise Midwife::NotFound.new "Distro \"#{name}\" not found" unless distro
           set_distro(distro)
+        end
+
+        def chef(name)
+          chef = Midwife::Build::Chef.find(name)
+          raise Midwife::NotFound.new "Chef \"#{name}\" not found" unless chef
+          set_chef(chef)
         end
 
         def pxemac(mac)

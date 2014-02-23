@@ -89,3 +89,16 @@ distro "centos" do
   initrd "mycentinitrd.img"
   url "http://example.com/centos"
 end
+
+###############################################################################
+# Chefs
+###############################################################################
+chef "default" do
+  url "https://chef.example.org"
+  version "11.6.0"
+  client_name "root"
+  client_key "specs/files/snakeoil-root.pem"
+  validator_name "chef-validator"
+  validation_key "specs/files/snakeoil-validation.pem"
+  encrypted_data_bag_secret "secretkey"
+end

@@ -1,0 +1,58 @@
+echo "Installing Chef"
+
+if ! exists /usr/bin/chef-client; then
+  if exists wget; then
+    bash <(wget ${install_sh} -O -) ${version_string}
+  elif exists curl; then
+    bash <(curl -L ${install_sh}) ${version_string}
+  else
+    echo "Neither wget nor curl found. Please install one and try again." >&2
+    exit 1
+  fi
+fi
+
+<% if encrypted_data_bag_secret %>
+cat > /etc/chef/encrypted_data_bag_secret << 'EOF'
+<%= encrypted_data_bag_secret %>
+EOF
+chmod 0600 /etc/chef/encrypted_data_bag_secret
+<% end %>
+
+mkdir -p /etc/chef
+
+cat > /etc/chef/validation.pem << 'EOF'
+<%= validation_key %>
+EOF
+chmod 0644 /etc/chef/validation.pem
+
+cat > /etc/chef/client.rb << 'EOF'
+<%= config_content %>
+EOF
+chmod 644 /etc/chef/client.rb
+
+echo "Setting up knife"
+mkdir /root/.chef
+chmod 700 /root/.chef
+
+cat > /root/.chef/knife.rb << 'EOF'
+<%= knife_content %>
+EOF
+chmod 600 /root/.chef/knife.rb
+
+cat > /root/.chef/<%= client_name %>.pem << 'EOF'
+<%= client_key %>
+EOF
+chmod 600 /root/.chef/<%= client_name %>.pem
+
+echo "Reregistering client"
+knife client reregister <%= hostname %> -f /etc/chef/client.pem --config /root/.chef/knife.rb
+echo "Getting rid of the root pem"
+rm /root/.chef/root.pem
+
+cat > /etc/chef/first-boot.json << 'EOF'
+<%= first_boot_content %>
+EOF
+chmod 644 /etc/chef/first-boot.json
+
+/usr/bin/chef-client -j /etc/chef/first-boot.json
+chkconfig chef-client on
