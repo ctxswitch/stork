@@ -2,4 +2,4 @@
 2. Domain specific service definitions
 3. Create the resolv.conf file in kickstart
 4. Knife client regeneration from midwife so admin pem can stay put
-5. Read file for keys instead of having them inline in the configuration
+X. Read file for keys instead of having them inline in the configuration
