@@ -114,6 +114,8 @@ EOF
 
 echo "Installing Chef"
 
+install_sh="https://www.opscode.com/chef/install.sh"
+version_string="-v 11.6.0"
 if ! exists /usr/bin/chef-client; then
   if exists wget; then
     bash <(wget ${install_sh} -O -) ${version_string}
