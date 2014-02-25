@@ -52,7 +52,7 @@ module Midwife
         nameservers = primary_interfaces.collect{ |x| x.domain.nameservers }.flatten
 
         unless nameservers.empty?
-          str += "cat /etc/resolv.conf << 'EOF'\n"
+          str += "cat > /etc/resolv.conf << 'EOF'\n"
           nameservers.each do |nameserver|
             str += "nameserver #{nameserver}\n"
           end
