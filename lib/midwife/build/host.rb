@@ -34,6 +34,7 @@ module Midwife
         @selinux = 'disabled'
         @password = random_password
         @run_list = []
+        @search_paths = []
       end
 
       def random_password
@@ -46,14 +47,23 @@ module Midwife
         chef.emit(name, run_list) if chef
       end
 
-      # should be looking for primary
-      def resolv
+      def resolv_conf
         str = ""
-        iface = interfaces.first
-        iface.domain.nameservers.each do |ns|
-          str += "nameserver #{ns}"
+        nameservers = primary_interfaces.collect{ |x| x.domain.nameservers }.flatten
+
+        unless nameservers.empty?
+          str += "cat /etc/resolv.conf << 'EOF'\n"
+          nameservers.each do |nameserver|
+            str += "nameserver #{nameserver}\n"
+          end
+          str += "search #{@search_paths.join{' '}}\n" unless @search_paths.empty?
+          str += "EOF\n"
         end
-        str += "search #{iface.domain.name}"
+        str
+      end
+
+      def primary_interfaces
+        @primary_interfaces ||= @interfaces.keep_if{ |x| x.is_primary? }
       end
 
       def pxe
@@ -102,6 +112,10 @@ module Midwife
 
       def set_pxemac(mac)
         @pxemac = mac
+      end
+
+      def add_search_path(path)
+        @search_paths << path
       end
 
       def emit
@@ -167,6 +181,10 @@ module Midwife
 
         def pxemac(mac)
           set_pxemac(mac)
+        end
+
+        def search_path(path)
+          add_search_path(path)
         end
       end
     end

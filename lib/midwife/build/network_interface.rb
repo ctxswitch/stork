@@ -32,6 +32,11 @@ module Midwife
         @nodefroute = false
         @mtu = nil
         @ethtool = nil
+        @primary = false
+      end
+
+      def is_primary?
+        !!@primary
       end
 
       def set_ip(val)
@@ -75,6 +80,10 @@ module Midwife
 
       def set_mtu(val)
         @mtu = val
+      end
+
+      def set_primary
+        @primary = true
       end
 
       def emit
@@ -141,6 +150,10 @@ module Midwife
 
         def mtu(val)
           set_mtu(val)
+        end
+
+        def primary
+          set_primary
         end
       end
     end

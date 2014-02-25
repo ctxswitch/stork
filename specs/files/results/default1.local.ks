@@ -89,6 +89,13 @@ cat /etc/hosts << 'EOF'
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 EOF
 
+cat /etc/resolv.conf << 'EOF'
+nameserver 192.168.1.1
+nameserver 192.168.1.2
+search local
+EOF
+
+
 echo "Contacting midwife to notify of a successful install"
 /usr/bin/curl http://localhost/notify/default1.local/installed
 

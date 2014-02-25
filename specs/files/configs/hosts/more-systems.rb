@@ -4,7 +4,7 @@ host "other1.private" do
   distro      'centos'
   chef        'default'
   pxemac      '00:11:22:33:44:56'
-  interface   "eth0"
+  interface   'eth0'
   run_list    %w{
     recipe[sudo]
     recipe[authentication]
@@ -29,9 +29,11 @@ host "default1.local" do
   scheme    'default'
   distro    'centos'
   chef      'default'
+  search_path 'local'
   interface 'eth0' do
     domain    'local'
     bootproto :static
     ip        '192.168.1.100'
+    primary
   end
 end

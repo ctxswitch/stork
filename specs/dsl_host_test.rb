@@ -28,7 +28,7 @@ describe "Midwife::Build::Host" do
     end
     # Get rid of the password line since it sets a random one every time
     actual = host.emit.gsub(/^rootpw.*$/, '')
-    expected = File.read("specs/files/results/default1.local.ks").gsub(/^rootpw.*$/, '')
+    expected = File.read("specs/files/results/default.ks").gsub(/^rootpw.*$/, '')
     actual.must_equal expected 
   end
 

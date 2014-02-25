@@ -83,6 +83,8 @@ cat /etc/hosts << 'EOF'
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 EOF
 
+<%= resolv_conf %>
+
 echo "Contacting midwife to notify of a successful install"
 /usr/bin/curl http://<%= Midwife.configuration.server %>/notify/<%= name %>/installed
 
