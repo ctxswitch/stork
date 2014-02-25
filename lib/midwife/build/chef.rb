@@ -46,25 +46,26 @@ module Midwife
       end
 
       def config_content
-        str = ""
-        str += "log_level              :auto\n"
-        str += "log_location           STDOUT\n"
-        str += "chef_server_url        '#{url}'\n"
-        str += "validation_client_name '#{validator_name}'\n"
-        str
+        str = <<-CONFIG
+log_level              :auto
+log_location           STDOUT
+chef_server_url        "#{url}"
+validation_client_name "#{validator_name}"
+CONFIG
       end
 
       def knife_content
-        str = ""
-        str += "log_level                :info\n"
-        str += "log_location             STDOUT\n"
-        str += "node_name                '#{client_name}'\n"
-        str += "client_key               '/root/.chef/#{client_name}.pem'\n"
-        str += "validation_client_name   '#{validator_name}'\n"
-        str += "validation_key           '/etc/chef/validation.pem'\n"
-        str += "chef_server_url          '#{url}'\n"
-        str += "cache_type               'BasicFile'\n"
-        str += "cache_options( :path => '/root/.chef/checksums' )\n"
+        str = <<-CONFIG
+log_level                :info
+log_location             STDOUT
+node_name                "#{client_name}"
+client_key               "/root/.chef/#{client_name}.pem"
+validation_client_name   "#{validator_name}"
+validation_key           "/etc/chef/validation.pem"
+chef_server_url          "#{url}"
+cache_type               "BasicFile"
+cache_options( :path => "/root/.chef/checksums" )
+CONFIG
       end
 
       def first_boot_content

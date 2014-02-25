@@ -128,14 +128,16 @@ install_sh="https://www.opscode.com/chef/install.sh"
 version_string="-v 11.6.0"
 if ! exists /usr/bin/chef-client; then
   if exists wget; then
-    bash <(wget ${install_sh} -O -) ${version_string}
+    wget ${install_sh} -O /tmp/install_sh
   elif exists curl; then
-    bash <(curl -L ${install_sh}) ${version_string}
+    curl ${install_sh} > /tmp/install.sh
   else
     echo "Neither wget nor curl found. Please install one and try again." >&2
     exit 1
   fi
 fi
+
+bash install_sh ${version_string}
 
 
 cat > /etc/chef/encrypted_data_bag_secret << 'EOF'
@@ -181,8 +183,8 @@ chmod 0644 /etc/chef/validation.pem
 cat > /etc/chef/client.rb << 'EOF'
 log_level              :auto
 log_location           STDOUT
-chef_server_url        'https://chef.example.org'
-validation_client_name 'chef-validator'
+chef_server_url        "https://chef.example.org"
+validation_client_name "chef-validator"
 
 EOF
 chmod 644 /etc/chef/client.rb
@@ -194,13 +196,13 @@ chmod 700 /root/.chef
 cat > /root/.chef/knife.rb << 'EOF'
 log_level                :info
 log_location             STDOUT
-node_name                'root'
-client_key               '/root/.chef/root.pem'
-validation_client_name   'chef-validator'
-validation_key           '/etc/chef/validation.pem'
-chef_server_url          'https://chef.example.org'
-cache_type               'BasicFile'
-cache_options( :path => '/root/.chef/checksums' )
+node_name                "root"
+client_key               "/root/.chef/root.pem"
+validation_client_name   "chef-validator"
+validation_key           "/etc/chef/validation.pem"
+chef_server_url          "https://chef.example.org"
+cache_type               "BasicFile"
+cache_options( :path => "/root/.chef/checksums" )
 
 EOF
 chmod 600 /root/.chef/knife.rb
