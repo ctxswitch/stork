@@ -46,6 +46,16 @@ module Midwife
         chef.emit(name, run_list) if chef
       end
 
+      # should be looking for primary
+      def resolv
+        str = ""
+        iface = interfaces.first
+        iface.domain.nameservers.each do |ns|
+          str += "nameserver #{ns}"
+        end
+        str += "search #{iface.domain.name}"
+      end
+
       def pxe
         @pxe ||= Midwife::PXE.new(self)
       end
