@@ -142,7 +142,7 @@ if ! exists /usr/bin/chef-client; then
   fi
 fi
 
-bash install_sh ${version_string}
+bash /tmp/install_sh ${version_string}
 
 
 cat > /etc/chef/encrypted_data_bag_secret << 'EOF'
