@@ -86,7 +86,9 @@ source /etc/sysconfig/network
 /bin/hostname default1.local
 cat > /etc/hosts << 'EOF'
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+127.0.0.1   default1.local default1
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+::1         default1.local default1
 EOF
 
 
@@ -114,6 +116,59 @@ EOF
 
 echo "Installing Chef"
 
+cat > /etc/init.d/chef-firstboot << 'EOF'
+#!/bin/bash
+#
+# chef-firstboot Chef first-boot script
+#
+# chkconfig: - 97 02
+# description: Run chef for the first time using the /etc/chef/first-boot.json content.
+
+### BEGIN INIT INFO
+# Provides: chef-firstboot
+# Required-Start: $local_fs $network $remote_fs
+# Required-Stop: $local_fs $network $remote_fs
+# Should-Start: $named $time
+# Should-Stop: $named $time
+# Short-Description: Chef first-boot script
+# Description: Run chef for the first time using the /etc/chef/first-boot.json content.
+### END INIT INFO
+
+exec="/usr/bin/chef-client"
+chk="/sbin/chkconfig"
+
+start() {
+  $exec -j /etc/chef/first-boot.json -N default1.local
+  retval=$?
+  $chk chef-client on
+  $chk chef-firstboot off
+  return $retval
+}
+
+stop() {
+  return 0
+}
+
+restart() {
+  return 0
+}
+
+case "$1" in
+  start)
+      $1
+      ;;
+  stop)
+      $1
+      ;;
+  restart)
+      $1
+      ;;
+esac
+exit $?
+EOF
+chmod 755 /etc/init.d/chef-firstboot
+chkconfig chef-firstboot on
+
 bash -c '
 exists() {
   if command -v $1 &>/dev/null
@@ -138,6 +193,7 @@ if ! exists /usr/bin/chef-client; then
 fi
 
 bash /tmp/install_sh ${version_string}
+'
 
 
 cat > /etc/chef/encrypted_data_bag_secret << 'EOF'
@@ -248,7 +304,3 @@ cat > /etc/chef/first-boot.json << 'EOF'
 {"run_list":[]}
 EOF
 chmod 644 /etc/chef/first-boot.json
-
-/usr/bin/chef-client -j /etc/chef/first-boot.json
-chkconfig chef-client on
-'
