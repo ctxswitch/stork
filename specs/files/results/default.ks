@@ -114,6 +114,16 @@ EOF
 
 echo "Installing Chef"
 
+bash -c '
+exists() {
+  if command -v $1 &>/dev/null
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
 install_sh="https://www.opscode.com/chef/install.sh"
 version_string="-v 11.6.0"
 if ! exists /usr/bin/chef-client; then
@@ -239,4 +249,4 @@ chmod 644 /etc/chef/first-boot.json
 
 /usr/bin/chef-client -j /etc/chef/first-boot.json
 chkconfig chef-client on
-
+'
