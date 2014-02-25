@@ -76,6 +76,19 @@ man
 %post --log=/root/midwife-post.log
 chvt 3
 echo "Executing post installation"
+
+echo "Setting hostname"
+cat /etc/sysconfig/network << 'EOF'
+NETWORKING=yes
+HOSTNAME=default1.local
+EOF
+source /etc/sysconfig/network
+/bin/hostname default1.local
+cat /etc/hosts << 'EOF'
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+EOF
+
 echo "Contacting midwife to notify of a successful install"
 /usr/bin/curl http://localhost/notify/default1.local/installed
 
