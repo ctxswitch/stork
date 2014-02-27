@@ -4,3 +4,35 @@ X. Create the resolv.conf file in kickstart
 4. Knife client regeneration from midwife so admin pem can stay put
 X. Read file for keys instead of having them inline in the configuration
 6. Volume group support
+7. Possible raid support
+
+
+scheme "default" do
+  clearpart
+  zerombr
+  part "/boot" do
+    size 100
+    type "ext4"
+    primary
+  end
+
+  part "swap" do
+    size 0 # zero defaults to recommended
+    type "swap"
+    primary
+  end
+
+  part "pv.01" do
+    size 1
+    type "pv"
+    grow
+  end
+
+  volgroup "sysvg" do
+    physvol "pv.01"
+    logvol "/" do
+      name "lvroot"
+      size 2000
+    end
+  end
+end
