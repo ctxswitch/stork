@@ -13,20 +13,29 @@
 # limitations under the License.
 
 module Midwife
+  # +Core+ provides access to some basic access and find methods.  It
+  # is meant to be included into the build objects.
+  #
   module Core
+    # Access all the build objects
     def builder
       self.class.builder
     end
 
     module ClassMethods
+      # Use a class variable to store all the build objects.  In order to
+      # translate the references to objects, we need everything accessible.
       def builder
         @@builder ||= Midwife::Builder.build
       end
 
+      # This was added as a hack to ensure that the +Builder+ object did
+      # not recursivly try to call itself while evaluating the configurations
       def export(builder)
         @@builder = builder
       end
 
+      # Access to the builder find method
       def find(name)
         builder.find(self, name)
       end
