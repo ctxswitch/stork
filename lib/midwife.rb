@@ -17,7 +17,6 @@ require 'erb'
 require 'midwife/version'
 require 'midwife/configuration'
 require 'midwife/core'
-require 'midwife/exceptions'
 require 'midwife/pxe'
 require 'midwife/builder'
 require 'midwife/build/partition'
@@ -31,4 +30,6 @@ require 'midwife/server/application'
 require 'midwife/server/control'
 
 module Midwife
+  class NotFound < StandardError; end
+  class PermissionDenied < StandardError; end
 end

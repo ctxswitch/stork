@@ -13,6 +13,7 @@
 # limitations under the License.
 
 module Midwife
+  # The +Builder+ class reads in all configurations and creates hosts.
   class Builder
     include Core
 
@@ -27,30 +28,38 @@ module Midwife
       @chefs = {}
     end
 
+    # Convert a class to its lowercase name and use that to 
+    # access the attribute using the name as the key
     def find(klass, name)
       send(:"#{klass.to_s.split("::").last.downcase}s")[name]
     end
 
+    # Add a +Domain+ 
     def add_domain(name, &block)
       @domains[name] = Midwife::Build::Domain.build(name, &block)
     end
 
+    # Add a +Host+
     def add_host(name, &block)
       @hosts[name] = Midwife::Build::Host.build(name, &block)
     end
 
+    # Add a partition +Scheme+
     def add_scheme(name, &block)
       @schemes[name] = Midwife::Build::Scheme.build(name, &block)
     end
 
+    # Add a +Distro+
     def add_distro(name, &block)
       @distros[name] = Midwife::Build::Distro.build(name, &block)
     end
 
+    # Add a custom kickstart +Template+
     def add_template(name, content)
       @templates[name] = content
     end
 
+    # Add chef definition (+Chef+)
     def add_chef(name, &block)
       @chefs[name] = Midwife::Build::Chef.build(name, &block)
     end
