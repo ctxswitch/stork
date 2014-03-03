@@ -90,22 +90,27 @@ module Midwife
     end
 
     class BuilderDelegator < SimpleDelegator
+      # Add a domain
       def domain(name, &block)
         add_domain(name, &block)
       end
 
+      # Add a host
       def host(name, &block)
         add_host(name, &block)
       end
 
+      # Add a partition scheme
       def scheme(name, &block)
         add_scheme(name, &block)
       end
 
+      # Add a distro
       def distro(name, &block)
         add_distro(name, &block)
       end
 
+      # Add a chef configuration
       def chef(name, &block)
         add_chef(name, &block)
       end
