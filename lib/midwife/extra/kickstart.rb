@@ -25,6 +25,13 @@ module Kickstart
         options[name].type = opts['type'] || :string
         options[name].convert = opts['convert'] || :string
         options[name].validate = opts['validate'] || :string
+        options[name].value = nil
+
+        class_eval <<-EOS, __FILE__, __LINE__
+          def #{name}
+            options[:#{name}].value
+          end
+        EOS
       end
 
       def options
@@ -32,7 +39,7 @@ module Kickstart
       end
 
       def build(value, &block)
-        obj = new
+        obj = new(value)
         delegator = BuildDelegator.new(obj, options)
         delegator.instance_eval(&block) if block_given?
         obj
@@ -41,20 +48,23 @@ module Kickstart
       class BuildDelegator < SimpleDelegator
         def initialize(obj, options)
           @options = options
+          @delegated = obj
           super(obj)
         end
 
-        def method_missing( sym, *args, &block )
+        def method_missing( name, *args, &block )
+          sym = name.to_sym
           if @options[sym]
-            puts "hello #{args.inspect}"
+            @delegated.options[sym].value = args.first
           else
-            raise "Syntax error."
+            raise "Syntax error. #{name} is not a valid method."
           end
         end
       end
     end
 
     def initialize(*args)
+      @value = args.first
     end
 
     def command
@@ -62,7 +72,8 @@ module Kickstart
     end
 
     def value
-      self.class.get_value
+      # self.class.get_value
+      @value
     end
 
     def options
@@ -73,8 +84,9 @@ module Kickstart
       str = ""
       options.keys.sort.each do |key|
         str += "--#{key.to_s}"
-        str += "=#{options[key]} "
+        str += "=#{options[key].value} " unless options[key].type == :boolean
       end
+      str
     end
 
     def emit
