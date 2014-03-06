@@ -11,12 +11,18 @@ module Kickstart
         @command || ""
       end
 
-      def value( value )
-        @value = value
+      def value( name )
+        class_eval <<-EOS, __FILE__, __LINE__
+          def #{name}
+            @value
+          end
+        EOS
+
+        @value = name.to_sym
       end
 
       def get_value
-        @value || ""
+        @value || :default
       end
 
       def option( name, opts = {})
@@ -64,7 +70,7 @@ module Kickstart
     end
 
     def initialize(*args)
-      @value = args.first
+      @value = args.first unless args.empty?
     end
 
     def command
@@ -107,4 +113,6 @@ p = Part.build '/' do
   size 1000
 end
 
+puts p.mntpoint
 puts p.emit
+
