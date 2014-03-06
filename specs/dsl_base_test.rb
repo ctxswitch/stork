@@ -5,7 +5,7 @@ describe "Midwife::Build::Base" do
     class Test < Midwife::Build::Base
       command :hello
       value :who, required: true
-      option :when
+      option :loudly, type: :boolean
       option :where
     end
 
@@ -24,5 +24,14 @@ describe "Midwife::Build::Base" do
   it "must be invalid if the value is required and not set" do
     hello = @klass.build
     hello.valid?.must_equal false
+  end
+
+  it "must emit the correct command and options" do
+    hello = @klass.build "world" do
+       where "home"
+       loudly
+    end
+
+    hello.emit.must_equal "hello world --loudly --where=home"
   end
 end

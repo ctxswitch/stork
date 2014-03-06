@@ -31,10 +31,10 @@ module Midwife
 
         def option( name, opts = {})
           options[name] = OpenStruct.new
-          options[name].default = opts['default'] || nil
-          options[name].type = opts['type'] || :string
-          options[name].convert = opts['convert'] || :string
-          options[name].validate = opts['validate'] || :string
+          options[name].default = opts[:default] || nil
+          options[name].type = opts[:type] || :string
+          options[name].convert = opts[:convert] || :string
+          options[name].validate = opts[:validate] || :string
           options[name].value = nil
 
           class_eval <<-EOS, __FILE__, __LINE__
@@ -104,10 +104,15 @@ module Midwife
       def options_string
         str = ""
         options.keys.sort.each do |key|
-          str += " --#{key.to_s}"
-          str += "=#{options[key].value}" unless options[key].type == :boolean
+          str += "--#{key.to_s}"
+          str += case options[key].type
+          when :boolean
+            " "
+          else
+            "=#{options[key].value.to_s} "
+          end
         end
-        str
+        str.strip
       end
 
       def emit
