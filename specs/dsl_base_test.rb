@@ -6,7 +6,9 @@ describe "Midwife::Build::Base" do
       command :hello
       value :who, required: true
       option :loudly, type: :boolean
-      option :where
+      option :where, type: :string, required: true
+      option :times, type: :integer
+      option :with, type: :array
     end
 
     @klass = Test
@@ -33,5 +35,34 @@ describe "Midwife::Build::Base" do
     end
 
     hello.emit.must_equal "hello world --loudly --where=home"
+  end
+
+  it "must validate string values" do
+    hello = @klass.build "world" do
+      where "home"
+    end
+    hello.valid?.must_equal true
+
+    hello = @klass.build "world" do
+      where 1
+    end
+    hello.valid?.must_equal false
+
+    hello = @klass.build "world" do
+      where
+    end
+    hello.valid?.must_equal false
+  end
+
+  it "must validate booleans" do
+
+  end
+
+  it "must validate integers" do
+
+  end
+
+  it "must validate arrays" do
+
   end
 end

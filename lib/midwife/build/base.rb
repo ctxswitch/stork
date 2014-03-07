@@ -30,12 +30,12 @@ module Midwife
         end
 
         def option( name, opts = {})
-          options[name] = OpenStruct.new
-          options[name].default = opts[:default] || nil
-          options[name].type = opts[:type] || :string
-          options[name].convert = opts[:convert] || :string
-          options[name].validate = opts[:validate] || :string
-          options[name].value = nil
+          opt = Option.new
+          opt.default = opts[:default] || nil
+          opt.type = opts[:type] || :string
+          opt.value = nil
+          opt.required = false
+          options[name] = opt
 
           class_eval <<-EOS, __FILE__, __LINE__
             def #{name}
@@ -45,7 +45,7 @@ module Midwife
         end
 
         def options
-          @options ||= {}
+          @options ||= Options.new
         end
 
         def build(*args, &block)
@@ -65,7 +65,12 @@ module Midwife
           def method_missing( name, *args, &block )
             sym = name.to_sym
             if @options[sym]
-              @delegated.options[sym].value = args.first
+              case @options[sym].type
+              when :boolean
+                @delegated.options[sym].value = true
+              else
+                @delegated.options[sym].value = args.first
+              end
             else
               raise "Syntax error. #{name} is not a valid method."
             end
@@ -82,7 +87,8 @@ module Midwife
       end
 
       def valid?
-        errors.empty?
+        options.validate
+        errors.empty? && options.errors.empty?
       end
 
       def command
@@ -103,13 +109,15 @@ module Midwife
 
       def options_string
         str = ""
-        options.keys.sort.each do |key|
-          str += "--#{key.to_s}"
-          str += case options[key].type
-          when :boolean
-            " "
-          else
-            "=#{options[key].value.to_s} "
+        options.set do |name, option|
+          unless option.value.nil?
+            str += "--#{name.to_s}"
+            str += case option.type
+            when :boolean
+              " "
+            else
+              "=#{option.value.to_s} "
+            end
           end
         end
         str.strip
