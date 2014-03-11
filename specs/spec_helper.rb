@@ -17,6 +17,11 @@ require 'minitest/spec'
 require 'minitest/autorun'
 require 'rack/test'
 require 'minitest/pride'
+require 'minitest/given'
+
+if ENV['DEBUG']
+  require 'minitest/debugger'
+end
 
 Midwife.configure do |config|
   config.path = File.dirname(__FILE__) + "/files/configs"

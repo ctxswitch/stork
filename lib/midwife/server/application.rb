@@ -44,17 +44,6 @@ module Midwife
         end
       end
 
-      # get '/runlist/:host' do |host|
-      #   info "#{host} requested runlist"
-      #   h = Midwife::Build::Host.find(host)
-
-      #   if h
-      #     h.emit_run_list
-      #   else
-      #     json_halt_not_found
-      #   end
-      # end
-
       get '/notify/:host/installed' do |host|
         info "#{host} has notified completed install"
         h = Midwife::Build::Host.find(host)
@@ -78,20 +67,6 @@ module Midwife
           json_halt_not_found
         end
       end
-
-      # get '/notify/:host/installed' do |host|
-      #   logger.info "[#{request.ip}] GET /notify/#{host}/installed"
-      #   logger.info "#{host} has notified: install complete."
-      #   begin
-      #     config = settings.config
-      #     config.load(host)
-      #     p = Midwife::PXE.new(config)
-      #     p.boot
-      #     json_halt_ok
-      #   rescue Errno::ENOENT
-      #     json_halt_not_found
-      #   end
-      # end
 
       helpers do
         def info(msg)

@@ -37,14 +37,6 @@ module Midwife
         @nameservers << server
       end
 
-      def emit
-        str = ""
-        str += " --netmask=#{@netmask}" if @netmask
-        str += " --gateway=#{@gateway}" if @gateway
-        str += " --nameserver=#{@nameservers.join(',')}" unless @nameservers.empty?
-        str.strip
-      end
-
       def self.build(name, &block)
         domain = Domain.new(name)
         delegator = DomainDelegator.new(domain)
