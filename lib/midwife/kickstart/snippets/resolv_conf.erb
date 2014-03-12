@@ -1,0 +1,6 @@
+cat > /etc/resolv.conf << 'EOF'
+<% dns_nameservers.each do |nameserver| %>
+nameserver <%= nameserver %>
+<% end %>
+search <%= dns_search_paths.join(' ') %>
+EOF

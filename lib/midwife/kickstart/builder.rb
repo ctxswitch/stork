@@ -14,39 +14,25 @@ module Midwife
       end
 
       def render
-        unless @template
-          template = File.dirname(__FILE__) + '/../erbs/kickstart.erb'
-          renderer = ERB.new(File.read(template))
-        else
-          renderer = ERB.new(@template)
-        end
+        file = File.dirname(__FILE__) + "/templates/#{template}.ks.erb"
+        renderer = ERB.new(File.read(file))
         renderer.result(BuilderBindings.new(self).get_binding)
       end
 
       class BuilderBindings
         attr_reader :host, :domain, :scheme, :chef, :post
         def initialize(obj)
-          @host = @obj.host
-          @domain = @obj.domain
-          @scheme = @obj.scheme
-          @chef = @obj.chef
-          @post = @obj.post
+          @host = obj.host
+          @domain = obj.domain
+          @scheme = obj.scheme
+          @chef = obj.chef
+          @post = obj.post
         end
 
         def render_snippet(name)
-          template = File.dirname(__FILE__) + "/erbs/#{name}.erb"
+          template = File.dirname(__FILE__) + "/snippets/#{name}.erb"
           renderer = ERB.new(File.read(template))
           renderer.result(get_binding)
-        end
-
-        def method_missing(sym, *args)
-          # detect the snippets
-          name = sym.to_s
-          if name ~= /^snippet_.*$/
-
-          else
-            raise NoMethodError, "undefined method `#{sym}' when building kickstart"
-          end
         end
 
         def get_binding
@@ -54,55 +40,87 @@ module Midwife
         end
 
         def partitions
-          ""
+          scheme.partitions || []
         end
 
-        def interfaces
-          ""
-        end
-
-        def bootstrap
-          ""
+        def network
+          host.network || []
         end
 
         def hostname
           host.name || localhost
         end
 
+        def dns_nameservers
+          domain.nameservers || []
+        end
+
+        def dns_search_paths
+          domain.search_paths || []
+        end
+
         def ntpserver
-          ""
+          host.ntpserver
         end
 
         def authorized_keys
-          ""
+          host.authorized_keys
         end
 
-        def first_boot_content
-          ""
+        def chef_first_boot_content
+          chef.first_boot_content
         end
 
-        def client_key
-          ""
+        def chef_client_key
+          chef.client_key
         end
 
-        def knife_content
-          ""
+        def chef_client_name
+          chef.client_name
         end
 
-        def client_content
-          ""
+        def chef_knife_content
+          chef.knife_content
         end
 
-        def validation_key
-          ""
+        def chef_client_content
+          chef.client_content
         end
 
-        def encrypted_data_bag_secret
-          ""
+        def chef_validation_key
+          chef.validation_key
         end
 
-        def version
-          ""
+        def chef_encrypted_data_bag_secret
+          chef.encrypted_data_bag_secret
+        end
+
+        def chef_version
+          chef.version
+        end
+
+        def url
+          host.url
+        end
+
+        def password
+          host.password
+        end
+
+        def firewall
+          host.firewall
+        end
+
+        def timezone
+          host.timezone
+        end
+
+        def selinux
+          host.selinux
+        end
+
+        def server
+          "foobar"
         end
 
         def packages

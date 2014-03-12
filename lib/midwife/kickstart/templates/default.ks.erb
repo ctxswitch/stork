@@ -16,7 +16,7 @@ keyboard us
 <%= selinux %>
 
 <%= partitions %>
-<%= interfaces %>
+<%= network %>
 
 %packages
 <%= packages %>
@@ -24,10 +24,10 @@ keyboard us
 %post --log=/root/midwife-post.log
 chvt 3
 echo "Executing post installation"
-<%= snippet_network_config %>
-<%= snippet_etc_hosts %>
-<%= snippet_resolv_conf %>
-<%= snippet_notify %>
-<%= snippet_ntpdate %>
-<%= snippet_ssh_keys %>
-<%= snippet_bootstrap %>
+<%= render_snippet :network_config %>
+<%= render_snippet :etc_hosts %>
+<%= render_snippet :resolv_conf %>
+<%= render_snippet :notify %>
+<%= render_snippet :ntpdate %>
+<%= render_snippet :ssh_keys %>
+<%= render_snippet :bootstrap %>

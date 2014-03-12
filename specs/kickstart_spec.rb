@@ -2,6 +2,35 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
 describe "Midwife::Kickstart" do
+
+  context "Builder" do
+    it "should render without error" do
+      class StringMock
+        def method_missing(sym, *args)
+          "### < #{sym.to_s.upcase} > ###"
+        end
+      end
+
+      class ArrayMock
+        def method_missing(sym, *args)
+          ["### < #{sym.to_s.upcase} > ###"]
+        end
+      end
+
+      stringmock = StringMock.new
+      arraymock = ArrayMock.new
+      build = Midwife::Kickstart::Builder.new('default',
+        host: stringmock,
+        domain: arraymock,
+        scheme: stringmock,
+        chef: stringmock,
+        post: stringmock
+      )
+      # puts build.render
+      build.render.wont_equal ""
+    end
+  end
+
   context "Bootloader" do
     it "emits the correct kickstart lines with defaults" do
       boot = Midwife::Kickstart::Bootloader.build

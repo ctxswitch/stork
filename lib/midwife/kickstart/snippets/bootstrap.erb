@@ -64,7 +64,7 @@ exists() {
 }
 
 install_sh="https://www.opscode.com/chef/install.sh"
-version_string="-v <%= version %>"
+version_string="-v <%= chef_version %>"
 if ! exists /usr/bin/chef-client; then
   if exists wget; then
     wget ${install_sh} -O /tmp/install_sh
@@ -79,9 +79,9 @@ fi
 bash /tmp/install_sh ${version_string}
 '
 
-<% if encrypted_data_bag_secret %>
+<% if chef_encrypted_data_bag_secret %>
 cat > /etc/chef/encrypted_data_bag_secret << 'EOF'
-<%= encrypted_data_bag_secret %>
+<%= chef_encrypted_data_bag_secret %>
 EOF
 chmod 0600 /etc/chef/encrypted_data_bag_secret
 <% end %>
@@ -89,12 +89,12 @@ chmod 0600 /etc/chef/encrypted_data_bag_secret
 mkdir -p /etc/chef
 
 cat > /etc/chef/validation.pem << 'EOF'
-<%= validation_key %>
+<%= chef_validation_key %>
 EOF
 chmod 0644 /etc/chef/validation.pem
 
 cat > /etc/chef/client.rb << 'EOF'
-<%= config_content %>
+<%= chef_client_content %>
 EOF
 chmod 644 /etc/chef/client.rb
 
@@ -103,14 +103,14 @@ mkdir /root/.chef
 chmod 700 /root/.chef
 
 cat > /root/.chef/knife.rb << 'EOF'
-<%= knife_content %>
+<%= chef_knife_content %>
 EOF
 chmod 600 /root/.chef/knife.rb
 
-cat > /root/.chef/<%= client_name %>.pem << 'EOF'
-<%= client_key %>
+cat > /root/.chef/<%= chef_client_name %>.pem << 'EOF'
+<%= chef_client_key %>
 EOF
-chmod 600 /root/.chef/<%= client_name %>.pem
+chmod 600 /root/.chef/<%= chef_client_name %>.pem
 
 echo "Reregistering client"
 knife client reregister <%= hostname %> -f /etc/chef/client.pem --config /root/.chef/knife.rb
@@ -118,6 +118,6 @@ echo "Getting rid of the root pem"
 rm /root/.chef/root.pem
 
 cat > /etc/chef/first-boot.json << 'EOF'
-<%= first_boot_content %>
+<%= chef_first_boot_content %>
 EOF
 chmod 644 /etc/chef/first-boot.json
