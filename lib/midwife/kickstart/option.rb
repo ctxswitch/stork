@@ -15,7 +15,7 @@
 module Midwife
   module Kickstart
     class Option
-      attr_reader :name, :type, :required, :default_value, :boolean, :not_if
+      attr_reader :name, :type, :required, :default_value, :boolean, :not_if, :unsets
 
       def initialize(name, args = {})
         @name = name.to_s
@@ -26,6 +26,7 @@ module Midwife
         @default_value = args.has_key?(:default) ? args[:default] : nil
         @boolean = args.has_key?(:boolean) ? args[:boolean] : false
         @not_if = args.has_key?(:not_if) ? args[:not_if] : nil
+        @unsets = args.has_key?(:unsets) ? args[:unsets] : nil
         validate!
       end
 
@@ -33,8 +34,12 @@ module Midwife
         @as ? @as : @name
       end
 
+      def unset
+        @value = boolean ? false : nil
+      end
+
       def is_unset?
-        @value.nil?
+        @value.nil? || @value == false
       end
 
       def value=(value)

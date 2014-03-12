@@ -79,6 +79,30 @@ describe "Midwife::Kickstart" do
     end
   end
 
+  context "Firewall" do
+    it "emits the defaults" do
+      fw = Midwife::Kickstart::Firewall.build('eth0')
+      fw.emit.must_equal "firewall --enabled --ssh eth0"
+    end
+
+    it "emits the services" do
+      fw = Midwife::Kickstart::Firewall.build('eth0') do
+        ssh
+        smtp
+        http
+        ftp
+      end
+      fw.emit.must_equal "firewall --enabled --ssh --smtp --http --ftp eth0"
+    end
+
+    it "disables the firewall" do
+      fw = Midwife::Kickstart::Firewall.build do
+        disabled
+      end
+      fw.emit.must_equal "firewall --disabled"
+    end
+  end
+
   context "Network" do
     before :each do
       @ifaceemit = "network --device=eth0 --bootproto=dhcp"
@@ -241,6 +265,81 @@ describe "Midwife::Kickstart" do
         primary
       end
       part.emit.must_equal "part / --asprimary --recommended --fstype=ext4"
+    end
+  end
+
+  context "RootPassword" do
+    it "emits the default" do
+      rp = Midwife::Kickstart::RootPassword.build
+      rp.emit.must_equal "rootpw --lock"
+    end
+
+    it "emits a plaintext password" do
+      rp = Midwife::Kickstart::RootPassword.build('password') do
+        plaintext
+        lock false
+      end
+      rp.emit.must_equal "rootpw --plaintext password"
+    end
+
+    it "emits a crypt password" do
+      rp = Midwife::Kickstart::RootPassword.build('$6$cryptedpassword') do
+        iscrypted
+        lock false
+      end
+      rp.emit.must_equal "rootpw --iscrypted $6$cryptedpassword"
+    end
+  end
+
+  context "Selinux" do
+    it "emits defaults" do
+      sel = Midwife::Kickstart::Selinux.build
+      sel.emit.must_equal "selinux --disabled"
+    end
+
+    it "emits permissive" do
+      sel = Midwife::Kickstart::Selinux.build { permissive }
+      sel.emit.must_equal "selinux --permissive"
+    end
+
+    it "emits enforcing" do
+      sel = Midwife::Kickstart::Selinux.build { enforcing }
+      sel.emit.must_equal "selinux --enforcing"
+    end
+  end
+
+  context "Timezone" do
+    it "emits with defaults" do
+      tz = Midwife::Kickstart::Timezone.build('America/Los_Angeles')
+      tz.emit.must_equal "timezone America/Los_Angeles"
+    end
+
+    it "emits with utc" do
+      tz = Midwife::Kickstart::Timezone.build('America/Los_Angeles') { utc }
+      tz.emit.must_equal "timezone --utc America/Los_Angeles"
+    end
+
+    it "emits with nontp" do
+      tz = Midwife::Kickstart::Timezone.build('America/Los_Angeles') { nontp }
+      tz.emit.must_equal "timezone --nontp America/Los_Angeles"
+    end
+
+    it "emits with ntpservers" do
+      tz = Midwife::Kickstart::Timezone.build('America/Los_Angeles') do
+        ntpservers %w{1.time.org 2.time.org}
+      end
+      tz.emit.must_equal "timezone --ntpservers=1.time.org,2.time.org America/Los_Angeles"
+    end
+  end
+
+  context "Url" do
+    it "emits with options" do
+      url = Midwife::Kickstart::Url.build do
+        url "https://foo.example.com/install"
+        proxy "https://a:b@bar.example.com:8000"
+        noverifyssl
+      end
+      url.emit.must_equal "url --noverifyssl --proxy=https://a:b@bar.example.com:8000 --url=https://foo.example.com/install"
     end
   end
 

@@ -38,6 +38,17 @@ module Midwife
             
             def #{name}=(value)
               options[:#{name}].value = value
+
+              unsets = options[:#{name}].unsets
+              if unsets
+                if unsets.is_a?(Array)
+                  unsets.each do |opt|
+                    options[opt].unset
+                  end
+                else
+                  options[unsets].unset
+                end
+              end
             end
           EOS
         end
@@ -61,6 +72,16 @@ module Midwife
             if @options[sym]
               if @options[sym][:boolean]
                 @delegated.options[sym].value = args.empty? ? true : args.first
+                unsets = @delegated.options[sym].unsets
+                if unsets
+                  if unsets.is_a?(Array)
+                    unsets.each do |opt|
+                      @delegated.options[opt.to_sym].unset
+                    end
+                  else
+                    @delegated.options[unsets.to_sym].unset
+                  end
+                end
               else
                 @delegated.options[sym].value = args.first
               end

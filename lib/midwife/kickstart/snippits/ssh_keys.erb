@@ -1,0 +1,10 @@
+echo "Creating SSH keys"
+mkdir -p /root/.ssh
+cd /root/.ssh
+chmod 700 /root/.ssh
+ssh-keygen -f id_rsa -t rsa -N ''
+touch authorized_keys
+chmod 600 authorized_keys
+cat > /root/.ssh/authorized_keys << 'EOF'
+<%= authorized_keys %>
+EOF

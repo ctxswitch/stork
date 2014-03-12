@@ -9,20 +9,10 @@ firstboot --disable
 lang en_US
 keyboard us
 
-# put this in as a kickstart command
-# url --url <%= distro.url %>
 <%= url %>
-# put this in as a kickstart command
-# rootpw --iscrypted <%= password %>
 <%= password %>
-# put this in as a kickstart command
-# firewall --disabled
 <%= firewall %>
-# put this in as a kickstart command
-# timezone <%= timezone %>
 <%= timezone %>
-# put this in as a kickstart command
-# selinux --<%= selinux %>
 <%= selinux %>
 
 <%= partitions %>
@@ -34,48 +24,10 @@ keyboard us
 %post --log=/root/midwife-post.log
 chvt 3
 echo "Executing post installation"
-<%= snippit_network_config %>
-<%= snippit_etc_hosts %>
-<%= snippit_resolv_conf %>
-<%= snippit_notify %>
-<%= snippit_ntpdate %>
-<%= snippit_ssh_keys %>
-<%= snippit_bootstrap %>
-
-### MOVE!!!!!!!
-
-echo "Setting hostname"
-cat > /etc/sysconfig/network << 'EOF'
-NETWORKING=yes
-HOSTNAME=<%= name %>
-EOF
-source /etc/sysconfig/network
-
-/bin/hostname <%= name %>
-
-cat > /etc/hosts << 'EOF'
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-127.0.0.1   <%= name %> <%= name.split('.').first %>
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-::1         <%= name %> <%= name.split('.').first %>
-EOF
-
-echo "Contacting midwife to notify of a successful install"
-/usr/bin/curl http://<%= Midwife.configuration.server %>/notify/<%= name %>/installed
-
-echo
-echo "Synchronizing clock"
-ntpdate <%= Midwife.configuration.ntp_server %>
-
-echo
-echo "Creating SSH keys"
-mkdir -p /root/.ssh
-cd /root/.ssh
-chmod 700 /root/.ssh
-ssh-keygen -f id_rsa -t rsa -N ''
-touch authorized_keys
-chmod 600 authorized_keys
-cat > /root/.ssh/authorized_keys << 'EOF'
-<%= Midwife.configuration.authorized_keys %>
-EOF
-
+<%= snippet_network_config %>
+<%= snippet_etc_hosts %>
+<%= snippet_resolv_conf %>
+<%= snippet_notify %>
+<%= snippet_ntpdate %>
+<%= snippet_ssh_keys %>
+<%= snippet_bootstrap %>

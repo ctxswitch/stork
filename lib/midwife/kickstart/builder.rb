@@ -20,7 +20,7 @@ module Midwife
         else
           renderer = ERB.new(@template)
         end
-        renderer.result(BuilderBindings.new(self).get_binding())
+        renderer.result(BuilderBindings.new(self).get_binding)
       end
 
       class BuilderBindings
@@ -33,24 +33,76 @@ module Midwife
           @post = @obj.post
         end
 
+        def render_snippet(name)
+          template = File.dirname(__FILE__) + "/erbs/#{name}.erb"
+          renderer = ERB.new(File.read(template))
+          renderer.result(get_binding)
+        end
+
+        def method_missing(sym, *args)
+          # detect the snippets
+          name = sym.to_s
+          if name ~= /^snippet_.*$/
+
+          else
+            raise NoMethodError, "undefined method `#{sym}' when building kickstart"
+          end
+        end
+
         def get_binding
           binding
         end
 
         def partitions
-          # return partitions
+          ""
         end
 
         def interfaces
-          # return network interfaces
+          ""
         end
 
         def bootstrap
-          # return chef bootstrap script
+          ""
         end
 
         def hostname
-          # return hostname
+          host.name || localhost
+        end
+
+        def ntpserver
+          ""
+        end
+
+        def authorized_keys
+          ""
+        end
+
+        def first_boot_content
+          ""
+        end
+
+        def client_key
+          ""
+        end
+
+        def knife_content
+          ""
+        end
+
+        def client_content
+          ""
+        end
+
+        def validation_key
+          ""
+        end
+
+        def encrypted_data_bag_secret
+          ""
+        end
+
+        def version
+          ""
         end
 
         def packages

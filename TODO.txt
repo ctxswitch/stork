@@ -5,7 +5,8 @@ X. Create the resolv.conf file in kickstart
 X. Read file for keys instead of having them inline in the configuration
 6. Volume group support
 7. Possible raid support
-8. Alot of the dsl build objects have a lot of the same types of methods... Can we tease out the delgators and the set methods.
+8. Alot of the dsl build objects have a lot of the same types of methods... Can we tease out the delgators and the set methods into Core or some other object (possibly emit as well).
+9. Figure out how to test kickstart file and bootstrap scripts.
 
 scheme "default" do
   clearpart
