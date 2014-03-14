@@ -1,7 +1,7 @@
 module Midwife
   module Kickstart
     class Builder
-      attr_reader :template, :host, :domain, :scheme, :chef, :post
+      attr_reader :template, :host, :domain, :scheme, :chef, :post, :midwife
 
       def initialize(template, args = {})
         @template = template
@@ -11,6 +11,7 @@ module Midwife
         @scheme = args.has_key?(:scheme) ? args[:scheme] : nil
         @chef = args.has_key?(:chef) ? args[:chef] : nil
         @post = args.has_key?(:post) ? args[:post] : nil
+        @midwife = args.has_key?(:midwife) ? args[:midwife] : nil
       end
 
       def render
@@ -20,13 +21,14 @@ module Midwife
       end
 
       class BuilderBindings
-        attr_reader :host, :domain, :scheme, :chef, :post
+        attr_reader :host, :domain, :scheme, :chef, :post, :midwife
         def initialize(obj)
           @host = obj.host
           @domain = obj.domain
           @scheme = obj.scheme
           @chef = obj.chef
           @post = obj.post
+          @midwife = obj.midwife
         end
 
         def render_snippet(name)
@@ -60,7 +62,7 @@ module Midwife
         end
 
         def ntpserver
-          host.ntpserver
+          domain.ntpserver
         end
 
         def authorized_keys
@@ -100,7 +102,11 @@ module Midwife
         end
 
         def url
-          host.url
+          midwife.url
+        end
+
+        def server
+          midwife.server
         end
 
         def password
@@ -117,10 +123,6 @@ module Midwife
 
         def selinux
           host.selinux
-        end
-
-        def server
-          "foobar"
         end
 
         def packages

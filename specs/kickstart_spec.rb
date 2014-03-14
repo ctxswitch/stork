@@ -24,9 +24,9 @@ describe "Midwife::Kickstart" do
         domain: arraymock,
         scheme: stringmock,
         chef: stringmock,
-        post: stringmock
+        post: stringmock,
+        midwife: stringmock
       )
-      # puts build.render
       build.render.wont_equal ""
     end
   end
