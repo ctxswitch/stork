@@ -22,6 +22,18 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+## Runing the kickstart validation tests
+
+    $ brew install python
+    $ pip install virtualenv
+    $ virtualenv ks-validator
+    $ cd ks-validator
+    $ source bin/activate
+    $ pip install pycurl
+    $ pip install urlgrabber
+    $ git clone git://git.fedorahosted.org/git/pykickstart.git
+    $ python setup.py install
+
 ## Contributing
 
 1. Fork it
@@ -29,3 +41,19 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+### Seting up for the kickstart validation tests
+
+To run the kickstart validation tests on your local system, you
+will need an install of python.  I'm using 2.7, I don't know if
+it makes a difference.  On Mac use homebrew or macports to avoid
+using the system python which is bound to be really, really old.
+On Linux you can use your favorite package manager.
+
+Once python has been installed, run
+
+    $ rake validator:setup
+
+This will create the directories that you need, set up a virtual
+environment and get everything ready for the integration tests.
+

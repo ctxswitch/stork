@@ -17,15 +17,15 @@ module Midwife
     class Builder
       attr_reader :template, :host, :domain, :scheme, :chef, :post, :midwife
 
-      def initialize(template, args = {})
+      def initialize(host, template="default")
         @template = template
         # Should pick up defaults from configurations
-        @host = args.has_key?(:host) ? args[:host] : nil
-        @domain = args.has_key?(:domain) ? args[:domain] : nil
-        @scheme = args.has_key?(:scheme) ? args[:scheme] : nil
-        @chef = args.has_key?(:chef) ? args[:chef] : nil
-        @post = args.has_key?(:post) ? args[:post] : nil
-        @midwife = args.has_key?(:midwife) ? args[:midwife] : nil
+        @host = host
+        @domain = host.domain
+        @scheme = host.scheme
+        @chef = host.chef
+        @post = nil
+        @midwife = host.midwife
       end
 
       def render

@@ -5,28 +5,84 @@ describe "Midwife::Kickstart" do
 
   context "Builder" do
     it "should render without error" do
-      class StringMock
+      class HostMock
+        def template
+          "default"
+        end
+
+        def pxemac
+          "00:11:22:33:44:55"
+        end
+
+        def timezone
+          "America/Los_Angeles"
+        end
+
+        def selinux
+          :disabled
+        end
+
+        def password
+          OpenStruct.new
+        end
+        
+        def distro
+          OpenStruct.new
+        end
+
+        def chef
+          OpenStruct.new
+        end
+
+        def domain
+          OpenStruct.new
+        end
+
+        def net
+          OpenStruct.new
+        end
+
+        def scheme
+          OpenStruct.new
+        end
+
+        def distro
+          OpenStruct.new
+        end
+
+        def midwife
+          OpenStruct.new
+        end
+
         def method_missing(sym, *args)
           "### < #{sym.to_s.upcase} > ###"
         end
       end
 
-      class ArrayMock
-        def method_missing(sym, *args)
-          ["### < #{sym.to_s.upcase} > ###"]
-        end
-      end
+      # class ObjectMock < OpenStruct
+      #   def method_missing(sym, *args)
+      #     "### < #{sym.to_s.upcase} > ###"
+      #   end
+      # end
 
-      stringmock = StringMock.new
-      arraymock = ArrayMock.new
-      build = Midwife::Kickstart::Builder.new('default',
-        host: stringmock,
-        domain: arraymock,
-        scheme: stringmock,
-        chef: stringmock,
-        post: stringmock,
-        midwife: stringmock
-      )
+      # class StringMock
+      #   def method_missing(sym, *args)
+      #     "### < #{sym.to_s.upcase} > ###"
+      #   end
+      # end
+
+      # class ArrayMock
+      #   def method_missing(sym, *args)
+      #     ["### < #{sym.to_s.upcase} > ###"]
+      #   end
+      # end
+
+      # stringmock = StringMock.new
+      # arraymock = ArrayMock.new
+      hostmock = HostMock.new
+
+      build = Midwife::Kickstart::Builder.new(hostmock)
+      # puts build.render
       build.render.wont_equal ""
     end
   end
