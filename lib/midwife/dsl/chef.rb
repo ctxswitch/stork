@@ -5,10 +5,10 @@ module Midwife
       string :version
       string :url
       string :client_name
-      string :client_key
+      file :client_key
       string :run_list
       string :validator_name
-      string :validation_key
+      file :validation_key
       string :encrypted_data_bag_secret
     end
   end

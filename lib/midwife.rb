@@ -54,4 +54,5 @@ require 'midwife/kickstart/url'
 module Midwife
   class NotFound < StandardError; end
   class PermissionDenied < StandardError; end
+  class FileNotFound < StandardError; end
 end

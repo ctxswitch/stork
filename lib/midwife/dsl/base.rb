@@ -45,7 +45,7 @@ module Midwife
           @multis ||= []
         end
 
-        def filepath(sym, args={})
+        def file(sym, args={})
           file_attribute(sym)
         end
 
@@ -83,7 +83,7 @@ module Midwife
           types[sym] = type
         end
 
-        def filepath_attribute(sym)
+        def file_attribute(sym)
           create_file_accessors(sym)
           attributes << sym
           types[sym] = String
@@ -167,8 +167,8 @@ module Midwife
             end
 
             def #{name.to_s}=(value)
-              unless @value.is_a?(String)
-                raise SyntaxError, "#{name} expected a `String' value, `#{value.class}' found"
+              unless value.is_a?(String)
+                raise SyntaxError, "#{name} expected a `String' value, ` + value.class + ' found"
               end
 
               unless File.exists?(value)

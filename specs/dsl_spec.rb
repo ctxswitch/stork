@@ -100,9 +100,9 @@ describe "Midwife::DSL" do
         chef "chef.example.com" do
           version           "11.4.4"
           client_name       "root"
-          client_key        "client.key"
+          client_key        "./specs/files/snakeoil-root.pem"
           validator_name    "validator"
-          validation_key    "validation.key"
+          validation_key    "./specs/files/snakeoil-validation.pem"
           encrypted_data_bag_secret "mysecret"
         end
 
@@ -163,9 +163,9 @@ describe "Midwife::DSL" do
       @chef = Midwife::DSL::Chef.build('chef.example.com') do
         version           "11.4.4"
         client_name       "root"
-        client_key        "client.key"
+        client_key        "./specs/files/snakeoil-root.pem"
         validator_name    "validator"
-        validation_key    "validation.key"
+        validation_key    "./specs/files/snakeoil-validation.pem"
         encrypted_data_bag_secret "mysecret"
       end
 
