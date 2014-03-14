@@ -16,10 +16,7 @@ require 'delegate'
 require 'erb'
 require 'midwife/version'
 require 'midwife/configuration'
-
-# require 'midwife/core'
 require 'midwife/pxe'
-
 require 'midwife/dsl/base'
 require 'midwife/dsl/distro'
 require 'midwife/dsl/chef'
@@ -28,7 +25,6 @@ require 'midwife/dsl/scheme'
 require 'midwife/dsl/domain'
 require 'midwife/dsl/net'
 require 'midwife/dsl/host'
-
 require 'midwife/kickstart/builder'
 require 'midwife/kickstart/option'
 require 'midwife/kickstart/command'
@@ -42,14 +38,6 @@ require 'midwife/kickstart/root_password'
 require 'midwife/kickstart/selinux'
 require 'midwife/kickstart/timezone'
 require 'midwife/kickstart/url'
-
-# require 'midwife/build/scheme'
-# require 'midwife/build/domain'
-# require 'midwife/build/host'
-# require 'midwife/build/distro'
-# require 'midwife/build/chef'
-# require 'midwife/server/application'
-# require 'midwife/server/control'
 
 module Midwife
   class NotFound < StandardError; end
