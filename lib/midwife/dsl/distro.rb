@@ -16,8 +16,11 @@ module Midwife
   module DSL
     class Distro
       include Base
+      # The url to the distribution installation directory
       string :url
+      # The kernel file name.  Used to populate the PXE file for a network install
       string :kernel
+      # The ramdisk file name.  Used to populate the PXE file for a network install
       string :initrd
     end
   end

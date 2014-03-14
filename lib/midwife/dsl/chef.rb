@@ -16,13 +16,23 @@ module Midwife
   module DSL
     class Chef
       include Base
+      # The chef version that will be installed on the client
       string :version
+      # The url for the chef server (not the install).  i.e.
+      # https://chef.example.com:4000
       string :url
+      # The chef client name.  Not the name of the server, this is a
+      # small hack to set up knife to do a reregister.  Mostly laziness
+      # on my part when dealing with my cluster.  It should be an admin
+      # client.
       string :client_name
+      # The pem file for the client
       file :client_key
-      string :run_list
+      # Validator name
       string :validator_name
+      # Validation pem file
       file :validation_key
+      # Your secret for encrypted databags
       string :encrypted_data_bag_secret
     end
   end

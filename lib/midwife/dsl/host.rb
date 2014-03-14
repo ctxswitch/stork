@@ -17,16 +17,26 @@ module Midwife
     class Host
       include Base
       allow_objects :distro, :scheme, :net, :chef
+      # Overrides to the default kickstart template
       string :template
-      string :name
+      # The mac that is used for pxebooting
       string :pxemac
+      # The timezone.  Must be IANA tzdata compliant
       string :timezone
+      # Set selinux.  Valid symbols are :enforcing, :permissive, or :disabled
       symbol :selinux
+      # Your system password
       string :password
+      # The initial runlist for the client.  Will be added to the 
+      # firstboot file
       array :run_list
+      # The chef configuration to use
       chef :chef
+      # Network interfaces
       net :net, multi: true
+      # Partitioning scheme to use
       scheme :scheme
+      # Linux distro
       distro :distro
     end
   end

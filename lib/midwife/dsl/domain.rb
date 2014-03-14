@@ -15,10 +15,15 @@
 module Midwife
   module DSL
     class Domain
+      # Should really split this into subnets
       include Base
+      # NTP servers
       string :ntpserver, multi: true
+      # The domain netmask
       string :netmask
+      # The gateway for a domain
       string :gateway
+      # Nameservers
       string :nameserver, multi: true
     end
   end
