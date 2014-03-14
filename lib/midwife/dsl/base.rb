@@ -1,3 +1,17 @@
+# Copyright 2012, Rob Lyon
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 module Midwife
   module DSL
     module Base
@@ -9,9 +23,9 @@ module Midwife
         def classes
           @classes ||= Midwife::DSL.constants.select { |c| 
             Class === Midwife::DSL.const_get(c) 
-            }.map { |c|
-              c.downcase
-            }
+          }.map { |c|
+            c.downcase
+          }
         end
 
         def clear
@@ -62,7 +76,7 @@ module Midwife
         end
 
         def integer(sym, args={})
-          attribute(sym, [Integer], args)
+          attribute(sym, [Fixnum], args)
         end
 
         def boolean(sym, args={})
@@ -73,10 +87,10 @@ module Midwife
           multi = args.has_key?(:multi) ? args[:multi] : false
 
           if multi
-            create_multi_accessors(sym)
+            create_multi_accessors(sym, type)
             multis << sym
           else
-            create_accessors(sym)
+            create_accessors(sym, type)
           end
 
           attributes << sym
@@ -120,7 +134,7 @@ module Midwife
                 obj = Midwife::DSL.const_get(sym.capitalize).find(name)
               end
             else
-              obj = args.first
+              obj = args.first || true
             end
 
             if @delegated.class.multis.include?(sym)
@@ -132,30 +146,34 @@ module Midwife
         end
 
       private
-        def create_accessors(name)
+        def create_accessors(name, type)
           class_eval <<-EOS, __FILE__, __LINE__
             def #{name.to_s}
               @#{name.to_s}
             end
 
             def #{name.to_s}=(value)
+              unless #{type}.include?(value.class)
+                raise TypeError, "#{name} expected a `#{type.join('|')}' value, " + value.class.to_s + " found"
+              end
+
               @#{name.to_s} = value
             end
           EOS
         end
 
-        def create_multi_accessors(name)
+        def create_multi_accessors(name, type)
           class_eval <<-EOS, __FILE__, __LINE__
             def #{name.to_s}s
               @#{name.to_s}s ||= []
             end
 
             def add_#{name.to_s}(value)
-              #{name.to_s}s << value
-            end
+              unless #{type}.include?(value.class)
+                raise TypeError, "#{name} expected a `#{type.join('|')}' value, " + value.class.to_s + " found"
+              end
 
-            def #{name.to_s}
-              #{name.to_s}s.first
+              #{name.to_s}s << value
             end
           EOS
         end

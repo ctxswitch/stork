@@ -3,17 +3,6 @@
 ###############################################################################
 # Domains
 ###############################################################################
-# The private domain
-domain "private" do
-  netmask "255.255.255.0"
-end
-
-# The test domain
-domain "test" do
-  netmask "255.255.255.192"
-end
-
-# The local domain
 domain "local" do
   netmask "255.255.255.0"
   gateway "192.168.1.1"
@@ -24,31 +13,7 @@ end
 ###############################################################################
 # Partition Schemes
 ###############################################################################
-# The all in one scheme
-scheme "default" do
-  clearpart
-  zerombr
-  part "/boot" do
-    size 100
-    type "ext4"
-    primary
-  end
-
-  part "swap" do
-    size 0 # zero defaults to recommended
-    type "swap"
-    primary
-  end
-
-  part "/" do
-    size 1
-    type "ext4"
-    grow
-  end
-end
-
-# Split out home
-scheme "split" do
+scheme "home" do
   clearpart
   zerombr
   part "/boot" do
@@ -78,12 +43,6 @@ end
 ###############################################################################
 # Distros
 ###############################################################################
-distro "redhat" do
-  kernel "myredkernel"
-  initrd "myredinitrd.img"
-  url "http://example.com/redhat"
-end
-
 distro "centos" do
   kernel "mycentkernel"
   initrd "mycentinitrd.img"

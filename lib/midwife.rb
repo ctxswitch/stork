@@ -18,7 +18,7 @@ require 'midwife/version'
 require 'midwife/configuration'
 
 # require 'midwife/core'
-# require 'midwife/pxe'
+require 'midwife/pxe'
 
 require 'midwife/dsl/base'
 require 'midwife/dsl/distro'

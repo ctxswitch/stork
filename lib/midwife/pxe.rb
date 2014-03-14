@@ -14,23 +14,23 @@
 
 module Midwife
   class PXE
-    include Midwife::Core
+    attr_reader :initrd, :kernel, :kickstart, :path, :hostname, :mac
 
-    attr_reader :initrd, :kernel, :kickstart
-
-    def initialize(host)
-      @host = host
-      @initrd = @host.distro.initrd
-      @kernel = @host.distro.kernel
-      @kickstart = "http://#{Midwife.configuration.server}/ks/#{@host.name}"
+    def initialize(server, path, hostname, mac, kernel, initrd)
+      @host = hostname
+      @initrd = initrd
+      @kernel = kernel
+      @path = path
+      @mac = mac
+      @kickstart = "http://#{server}/ks/#{hostname}"
     end
 
     def pxefile
-      @host.pxemac.gsub(/[:]/,'-')
+      @mac.gsub(/[:]/,'-')
     end
 
     def write(str)
-      File.open("#{Midwife.configuration.pxe_path}/#{pxefile}", 'w') do |f|
+      File.open("#{path}/#{pxefile}", 'w') do |f|
         f.write(str)
       end
     end

@@ -2,6 +2,6 @@ default install
 prompt 0
 timeout 1
 label install
-        kernel mycentkernel
+        kernel vmlinuz
         ipappend 2
-        append initrd=mycentinitrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/other1.private
+        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/example.com
