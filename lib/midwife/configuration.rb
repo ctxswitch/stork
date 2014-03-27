@@ -13,6 +13,70 @@
 # limitations under the License.
 
 module Midwife
+  class Configuration
+    attr_accessor :etc
+    attr_accessor :hosts_path
+    attr_accessor :snippets_path
+    attr_accessor :layouts_path
+    attr_accessor :networks_path
+    attr_accessor :distros_path
+    attr_accessor :kickstarts_path
+    attr_accessor :authorized_keys_file
+    attr_accessor :var
+    attr_accessor :pxe_path
+    attr_accessor :log_file
+    attr_accessor :tmp
+    attr_accessor :pid_file
+    attr_accessor :server
+    attr_accessor :port
+    attr_accessor :bind
+    attr_accessor :timezone
+
+    def initialize
+      @etc = "/etc/midwife"
+      @hosts_path = etc + "/hosts"
+      @snippets_path = etc + "/snippets"
+      @layouts_path = etc + "/layouts"
+      @networks_path = etc + "/networks"
+      @authorized_keys_file = etc + "/keys/authorized_keys"
+      @distros_path = etc + "/distros"
+      @kickstarts_path = etc + "/kickstarts"
+
+      @var = "/var"
+      @pxe_path = var + "/lib/tftpboot/pxelinux.cfg"
+      @log_file = var + "/log/midwife.log"
+
+      @tmp = "/tmp"
+      @pid_file = tmp + "/midwife.pid"
+
+      @server = "localhost"
+      @port = 4000
+      @bind = "0.0.0.0"
+      @timezone = "America/Los_Angeles"
+    end
+
+    def self.from_file(filename)
+      config = new
+      delegator = ConfigDelegator.new(config)
+      delegator.instance_eval(File.read(filename), filename)
+      config
+    end
+
+    class ConfigDelegator
+      def initialize(obj)
+        @delegated = obj
+      end
+
+      # def authorized_keys_file(pubfile)
+      #   @delegated.authorized_keys = File.read(pubfile)
+      # end
+
+      def method_missing(meth, *args)
+        @delegated.send("#{meth.to_s}=", *args)
+      end
+    end
+  end
+
   class << self
     attr_accessor :configuration
   end
@@ -20,40 +84,5 @@ module Midwife
   def self.configure
     self.configuration ||= Configuration.new
     yield(configuration)
-  end
-
-  class Configuration
-    attr_accessor :path, :server, :pxe_path, :authorized_keys, :ntp_server, :log_file
-    attr_accessor :pid_file
-
-    def initialize
-      @path = "/etc/midwife"
-      @server = "localhost"
-      @pxe_path = "tmp/tftpboot/pxelinux.cfg"
-      @log_file = "tmp/log/midwife.log"
-      @pid_file = "tmp/run/midwife.pid"
-      @authorized_keys = ""
-      @ntp_server = "pool.ntp.org"
-    end
-
-    def from_file(filename)
-      delegator = ConfigDelegator.new(self)
-      delegator.instance_eval(File.read(filename), filename)
-    end
-
-    class ConfigDelegator < SimpleDelegator
-      def initialize(obj)
-        super
-        @delegated = obj
-      end
-
-      def authorized_keys(pubfile)
-        @delegated.authorized_keys = File.read(pubfile)
-      end
-
-      def method_missing(meth, *args)
-        @delegated.send("#{meth.to_s}=", *args)
-      end
-    end
   end
 end

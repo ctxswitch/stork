@@ -1,5 +1,0 @@
-path                  './specs/files/configs'
-pxe_path              './tmp/pxeboot'
-log_file              './tmp/midwife.log'
-pid_file              './tmp/midwife.pid'
-authorized_keys       './specs/files/fake.pub'

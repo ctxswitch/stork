@@ -37,3 +37,5 @@ scheme "default" do
     end
   end
 end
+
+Need to figure out where options are going???  I need them to hold the value, but they hold alot of static information that is given before instantiation.  Can we dup? Can we split it up and have the value seperate?

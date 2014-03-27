@@ -12,8 +12,8 @@ log/
 lib/bundler/man
 pkg
 rdoc
-spec/reports
-test/tmp
-test/version_tmp
+specs/reports
+specs/tmp
+specs/version_tmp
 tmp
 .DS_Store

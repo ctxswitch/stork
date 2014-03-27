@@ -1,39 +1,68 @@
-# Copyright 2012, Rob Lyon
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 module Midwife
   module DSL
     class Chef
-      include Base
-      # The chef version that will be installed on the client
-      string :version
-      # The url for the chef server (not the install).  i.e.
-      # https://chef.example.com:4000
-      string :url
-      # The chef client name.  Not the name of the server, this is a
-      # small hack to set up knife to do a reregister.  Mostly laziness
-      # on my part when dealing with my cluster.  It should be an admin
-      # client.
-      string :client_name
-      # The pem file for the client
-      file :client_key
-      # Validator name
-      string :validator_name
-      # Validation pem file
-      file :validation_key
-      # Your secret for encrypted databags
-      string :encrypted_data_bag_secret
+      attr_reader :name
+      attr_accessor :url
+      attr_accessor :version
+      attr_accessor :client_key
+      attr_accessor :client_name
+      attr_accessor :validator_name
+      attr_accessor :validation_key
+      attr_accessor :encrypted_data_bag_secret
+
+      def initialize(name)
+        @name = name
+        @url = nil
+        @version = nil
+        @client_key = nil
+        @client_name = nil
+        @validator_name = nil
+        @validation_key = nil
+        @encrypted_data_bag_secret = nil
+      end
+
+      def self.build(name, &block)
+        chef = new(name)
+        delegator = ChefDelegator.new(chef)
+        delegator.instance_eval(&block)
+        chef
+      end
+
+      class ChefDelegator
+        def initialize(obj)
+          @delegated = obj
+        end
+
+        def url(value)
+          @delegated.url = value
+        end
+
+        def version(value)
+          @delegated.version = value
+        end
+
+        def client_key(value)
+          @delegated.client_key = File.read(value)
+        end
+
+        def client_name(value)
+          @delegated.client_name = value
+        end
+
+        def validator_name(value)
+          @delegated.validator_name = value
+        end
+
+        def validation_key(value)
+          @delegated.validation_key = File.read(value)
+        end
+
+        def encrypted_data_bag_secret(value)
+          @delegated.encrypted_data_bag_secret = value
+        end
+      end
+
+      alias_method :id, :name
     end
   end
 end

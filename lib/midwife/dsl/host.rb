@@ -1,43 +1,142 @@
-# Copyright 2012, Rob Lyon
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 module Midwife
   module DSL
     class Host
-      include Base
-      allow_objects :distro, :scheme, :net, :chef
-      # Overrides to the default kickstart template
-      string :template
-      # The mac that is used for pxebooting
-      string :pxemac
-      # The timezone.  Must be IANA tzdata compliant
-      string :timezone
-      # Set selinux.  Valid symbols are :enforcing, :permissive, or :disabled
-      symbol :selinux
-      # Your system password
-      string :password
-      # The initial runlist for the client.  Will be added to the 
-      # firstboot file
-      array :run_list
-      # The chef configuration to use
-      chef :chef
-      # Network interfaces
-      net :net, multi: true
-      # Partitioning scheme to use
-      scheme :scheme
-      # Linux distro
-      distro :distro
+      attr_reader :name
+      attr_accessor :layout
+      attr_accessor :template
+      attr_accessor :chef
+      attr_accessor :pxemac
+      attr_accessor :pre_snippets
+      attr_accessor :post_snippets
+      attr_accessor :interfaces
+      attr_accessor :distro
+      attr_accessor :timezone
+      attr_accessor :firewall
+      attr_accessor :password
+      attr_accessor :selinux
+      attr_accessor :packages
+
+      def initialize(name)
+        @name = name
+        @layout = "default"
+        @template = "default"
+        @chef = nil
+        @pxemac = nil
+        @pre_snippets = []
+        @post_snippets = []
+        @interfaces = []
+        @distro = nil
+        # Should be from the config
+        @timezone = Timezone.new("America/Los_Angeles")
+        @firewall = Firewall.new
+        @password = Password.new
+        @selinux = "enforcing"
+        @packages = default_packages
+      end
+
+      def default_packages
+        %w{
+          @core
+          curl
+          openssh-clients
+          openssh-server
+          finger
+          pciutils
+          yum
+          at
+          acpid
+          vixie-cron
+          cronie-noanacron
+          crontabs
+          logrotate
+          ntp
+          ntpdate
+          tmpwatch
+          rsync
+          mailx
+          which
+          wget
+          man
+        }
+      end
+
+      def self.build(collection, name, &block)
+        host = new(name)
+        delegator = HostDelegator.new(collection, host)
+        delegator.instance_eval(&block) if block_given?
+        host
+      end
+
+      class HostDelegator
+        def initialize(collection, obj)
+          @collection = collection
+          @delegated = obj
+        end
+
+        def layout(value, &block)
+          if block_given?
+            @delegated.layout = Layout.build(value, &block)
+          else
+            @delegated.layout = @collection.layouts.get(value)
+          end
+        end
+
+        def template(value)
+          @delegated.layout = value
+        end
+
+        def chef(value, &block)
+          if block_given?
+            @delegated.chef = Chef.build(value, &block)
+          else
+            @delegated.chef = @collection.chefs.get(value)
+          end
+        end
+
+        def pxemac(value)
+          @delegated.pxemac = value
+        end
+
+        def pre_snippet(value)
+          @delegated.pre_snippets << @collection.snippets.get(value)
+        end
+
+        def post_snippet(value)
+          @delegated.post_snippets << @collection.snippets.get(value)
+        end
+
+        def interface(value, &block)
+          @delegated.interfaces << Interface.build(@collection, value, &block)
+        end
+
+        def distro(value, &block)
+          if block_given?
+            @delegated.distro = Distro.build(value, &block)
+          else
+            @delegated.distro = @collection.distros.get(value)
+          end
+        end
+
+        def firewall(&block)
+          unless block_given?
+            raise SyntaxError, "Firewall requires a block"
+          end
+          @delegated.firewall = Firewall.build(&block)
+        end
+
+        def password(&block)
+          unless block_given?
+            raise SyntaxError, "Password requires a block"
+          end
+          @delegated.password = Password.build(&block)
+        end
+
+        def selinux(value)
+          @delegated.selinux = value.to_s
+        end
+      end
+
+      alias_method :id, :name
     end
   end
 end
