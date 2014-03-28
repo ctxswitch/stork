@@ -27,7 +27,7 @@ if ! [ -f "./ksvalidator/bin/activate" ] ; then
   exit 1
 fi
 
-pushd ksvalidator
+cd ksvalidator
 source bin/activate
 
 # fi
