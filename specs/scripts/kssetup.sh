@@ -1,6 +1,11 @@
 #!/bin/sh
 
-pip install virtualenv
+if ! [ "x${TRAVIS}" == "x" ] ; then
+  sudo pip install virtualenv
+else
+  pip install virtualenv
+fi
+
 echo "Creating virtual environment: ksvalidator"
 virtualenv ksvalidator
 cd ksvalidator
