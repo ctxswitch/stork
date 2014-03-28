@@ -18,6 +18,7 @@ require 'minitest/autorun'
 require 'rack/test'
 require 'minitest/pride'
 require 'minitest/given'
+require 'open3'
 
 if ENV['DEBUG']
   require 'minitest/debugger'

@@ -34,7 +34,7 @@ namespace :server do
   end
 end
 
-namespace :validator do
+namespace :ksvalidator do
   desc 'Set up the validation directories and environment.'
   task :setup do
     spath = File.join(File.dirname(__FILE__), 'specs', 'scripts', 'kssetup.sh')
@@ -48,4 +48,3 @@ namespace :validator do
     system("rm -rf #{vpath}")
   end
 end
-

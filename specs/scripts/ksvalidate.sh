@@ -16,10 +16,10 @@ if ! [ "x${TRAVIS}" == "x" ] ; then
   pushd pykickstart
   python setup.py install
   popd
-  
+
 else
   if ! [ -f "./ksvalidator/bin/activate" ] ; then
-    echo "Please run 'rake ksvalidate:setup' to ensure that the virtual"
+    echo "Please run 'rake ksvalidator:setup' to ensure that the virtual"
     echo "environment is set up before running the integration tests or set"
     echo "NOVALIDATE before you run"
     exit 1

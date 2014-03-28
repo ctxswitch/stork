@@ -1,0 +1,123 @@
+echo "Installing Chef"
+
+cat > /etc/init.d/chef-firstboot << 'EOF'
+#!/bin/bash
+#
+# chef-firstboot Chef first-boot script
+#
+# chkconfig: - 97 02
+# description: Run chef for the first time using the /etc/chef/first-boot.json content.
+
+### BEGIN INIT INFO
+# Provides: chef-firstboot
+# Required-Start: $local_fs $network $remote_fs
+# Required-Stop: $local_fs $network $remote_fs
+# Should-Start: $named $time
+# Should-Stop: $named $time
+# Short-Description: Chef first-boot script
+# Description: Run chef for the first time using the /etc/chef/first-boot.json content.
+### END INIT INFO
+
+exec="/usr/bin/chef-client"
+chk="/sbin/chkconfig"
+
+start() {
+  $exec -j /etc/chef/first-boot.json -N <%= hostname %>
+  retval=$?
+  $chk chef-client on
+  $chk chef-firstboot off
+  return $retval
+}
+
+stop() {
+  return 0
+}
+
+restart() {
+  return 0
+}
+
+case "$1" in
+  start)
+      $1
+      ;;
+  stop)
+      $1
+      ;;
+  restart)
+      $1
+      ;;
+esac
+exit $?
+EOF
+chmod 755 /etc/init.d/chef-firstboot
+chkconfig chef-firstboot on
+
+bash -c '
+exists() {
+  if command -v $1 &>/dev/null
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+install_sh="https://www.opscode.com/chef/install.sh"
+version_string="-v <%= chef_version %>"
+if ! exists /usr/bin/chef-client; then
+  if exists wget; then
+    wget ${install_sh} -O /tmp/install_sh
+  elif exists curl; then
+    curl ${install_sh} > /tmp/install.sh
+  else
+    echo "Neither wget nor curl found. Please install one and try again." >&2
+    exit 1
+  fi
+fi
+
+bash /tmp/install_sh ${version_string}
+'
+
+<% if chef_encrypted_data_bag_secret %>
+cat > /etc/chef/encrypted_data_bag_secret << 'EOF'
+<%= chef_encrypted_data_bag_secret %>
+EOF
+chmod 0600 /etc/chef/encrypted_data_bag_secret
+<% end %>
+
+mkdir -p /etc/chef
+
+cat > /etc/chef/validation.pem << 'EOF'
+<%= chef_validation_key %>
+EOF
+chmod 0644 /etc/chef/validation.pem
+
+cat > /etc/chef/client.rb << 'EOF'
+<%= chef_client_content %>
+EOF
+chmod 644 /etc/chef/client.rb
+
+echo "Setting up knife"
+mkdir /root/.chef
+chmod 700 /root/.chef
+
+cat > /root/.chef/knife.rb << 'EOF'
+<%= chef_knife_content %>
+EOF
+chmod 600 /root/.chef/knife.rb
+
+cat > /root/.chef/<%= chef_client_name %>.pem << 'EOF'
+<%= chef_client_key %>
+EOF
+chmod 600 /root/.chef/<%= chef_client_name %>.pem
+
+echo "Reregistering client"
+knife client reregister <%= hostname %> -f /etc/chef/client.pem --config /root/.chef/knife.rb
+echo "Getting rid of the root pem"
+rm /root/.chef/root.pem
+
+cat > /etc/chef/first-boot.json << 'EOF'
+<%= chef_first_boot_content %>
+EOF
+chmod 644 /etc/chef/first-boot.json

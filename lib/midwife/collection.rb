@@ -15,14 +15,5 @@ module Midwife
       @distros = Midwife::Collections::Distro.new
       @snippets = Midwife::Collections::Snippet.new
     end
-
-    def reset
-      @hosts = []
-      @layouts = []
-      @networks = []
-      @chefs = []
-      @distros = []
-      @snippets = []
-    end
   end
 end
