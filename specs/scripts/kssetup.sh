@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 echo "Starting setup"
-if [ "${TRAVIS}" == "true" ] ; then
+if [ "$TRAVIS" = "true" ] ; then
   sudo ip install pycurl
   sudo pip install urlgrabber
   git clone git://git.fedorahosted.org/git/pykickstart.git
