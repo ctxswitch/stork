@@ -2,27 +2,27 @@
 [![Build Status](https://travis-ci.org/rlyon/midwife.png?branch=master)](https://travis-ci.org/rlyon/midwife)
 [![Coverage Status](https://coveralls.io/repos/rlyon/midwife/badge.png)](https://coveralls.io/r/rlyon/midwife)
 
-TODO: Write a gem description
+Midwife is a kickstart generation tool and server for CentOS and Redhat systems.  
+It aims to fill the gap in the deployment of bare metal systems that current tools
+provide.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'midwife'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+Installation using rubygems:
 
     $ gem install midwife
 
+Install the latest version from the github:
+
+    $ git clone https://github.com/rlyon/midwife.git
+
 ## Usage
 
-TODO: Write usage instructions here
+#### TODO: Write usage instructions here
 
 ## Contributing
+
+### Grab the source and make a branch
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -48,3 +48,6 @@ Once python has been installed, run
 This will create the directories that you need, set up a virtual
 environment and get everything ready for the integration tests.
 
+### Run the tests to see if it breaks
+
+    $ rake test
