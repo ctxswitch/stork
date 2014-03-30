@@ -26,7 +26,6 @@ require 'midwife/collections/host'
 require 'midwife/collections/layout'
 require 'midwife/collections/network'
 require 'midwife/collections/snippet'
-
 require 'midwife/collection'
 
 require 'midwife/dsl/chef'
@@ -46,6 +45,8 @@ require 'midwife/dsl/host'
 require 'midwife/kickstart'
 require 'midwife/builder'
 require 'midwife/pxe'
+require 'midwife/server/application'
+require 'midwife/server/control'
 
 # require 'midwife/pxe'
 # require 'midwife/dsl'

@@ -17,7 +17,6 @@ require "sinatra"
 module Midwife
   module Server
     class Application < Sinatra::Base
-      include Midwife::Core
       configure do
         enable :logging
       end
@@ -35,10 +34,10 @@ module Midwife
       get '/ks/:host' do |host|
         info "#{host} requested kickstart"
 
-        h = Midwife::Build::Host.find(host)
+        h = settings.hosts.get(host)
 
         if h
-          h.emit
+          ks = Midwife::Kickstart.new(h.template, h)
         else
           json_halt_not_found
         end
@@ -46,7 +45,7 @@ module Midwife
 
       get '/notify/:host/installed' do |host|
         info "#{host} has notified completed install"
-        h = Midwife::Build::Host.find(host)
+        h = settings.hosts.get(host)
 
         if h
           h.set_localboot
@@ -58,7 +57,7 @@ module Midwife
 
       get '/notify/:host/install' do |host|
         info "install requested for #{host}"
-        h = Midwife::Build::Host.find(host)
+        h = settings.hosts.get(host)
 
         if h
           h.set_install

@@ -1,28 +1,24 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-echo "Installing packages"
-if ! [ "$TRAVIS" == "true" ] ; then
-  sudo pip install virtualenv
+echo "Starting setup"
+if [ "$TRAVIS" = "true" ] ; then
+  sudo ip install pycurl
+  sudo pip install urlgrabber
+  git clone git://git.fedorahosted.org/git/pykickstart.git
+  cd pykickstart
+  sudo python setup.py install
 else
   pip install virtualenv
-fi
-
-echo "Creating virtual environment: ksvalidator"
-virtualenv ksvalidator
-cd ksvalidator
-echo "Activating!!!"
-source bin/activate
-
-if ! [ "$TRAVIS" == "true" ] ; then
-  sudo pip install pycurl
-  sudo pip install urlgrabber
-else
+  echo "Creating virtual environment: ksvalidator"
+  virtualenv ksvalidator
+  cd ksvalidator
+  echo "Activating!!!"
+  source bin/activate
+  echo "Installing packages"
   pip install pycurl
   pip install urlgrabber
+  git clone git://git.fedorahosted.org/git/pykickstart.git
+  cd pykickstart
+  python setup.py install
 fi
-
-git clone git://git.fedorahosted.org/git/pykickstart.git
-cd pykickstart
-python setup.py install
-
 echo "Setup complete"

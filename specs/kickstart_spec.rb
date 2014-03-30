@@ -92,6 +92,8 @@ describe "Midwife::Kickstart" do
         output = (stdout.readlines + stderr.readlines).join
         assert_equal(0, exit_status, output)
       end
+
+      File.unlink('specs/tmp/output.ks')
     end
   end
 end
