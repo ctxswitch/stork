@@ -107,7 +107,7 @@ describe "Midwife::Configuration" do
   end
 
   it "should load from file" do
-    config = Midwife::Configuration.from_file(File.dirname(__FILE__) + "/files/configs/midwife/test.rb")
+    config = Midwife::Configuration.from_file("./specs/files/configs/midwife/opt.rb")
     config.etc.must_equal "/opt/etc/midwife"
     config.hosts_path.must_equal "/opt/etc/midwife/hosts"
     config.layouts_path.must_equal "/opt/etc/midwife/layouts"

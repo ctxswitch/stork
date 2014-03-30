@@ -24,8 +24,6 @@ if ENV['DEBUG']
   require 'minitest/debugger'
 end
 
-# Midwife.configure do |config|
-#   config.path = File.dirname(__FILE__) + "/files/configs"
-#   config.pxe_path = File.dirname(__FILE__) + '/tmp/pxeboot'
-#   config.authorized_keys = File.read(File.dirname(__FILE__) + '/files/fake.pub')
-# end
+def configuration
+  @configuration ||= Midwife::Configuration.from_file('./specs/files/configs/midwife/test.rb')
+end

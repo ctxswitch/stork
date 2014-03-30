@@ -45,8 +45,8 @@ describe "Chef" do
   end
 
   it "should build" do
-    ckey = File.dirname(__FILE__) + "/files/configs/keys/snakeoil-root.pem"
-    vkey = File.dirname(__FILE__) + "/files/configs/keys/snakeoil-validation.pem"
+    ckey = "./specs/files/configs/keys/snakeoil-root.pem"
+    vkey = "./specs/files/configs/keys/snakeoil-validation.pem"
 
     chef = Midwife::DSL::Chef.build("test") do
       url "https://chef.example.org"

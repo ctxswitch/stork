@@ -1,6 +1,7 @@
 #!/bin/sh
 
-if ! [ "x${TRAVIS}" == "x" ] ; then
+echo "Installing packages"
+if ! [ "$TRAVIS" == "true" ] ; then
   sudo pip install virtualenv
 else
   pip install virtualenv
@@ -12,9 +13,14 @@ cd ksvalidator
 echo "Activating!!!"
 source bin/activate
 
-echo "Installing packages"
-pip install pycurl
-pip install urlgrabber
+if ! [ "$TRAVIS" == "true" ] ; then
+  sudo pip install pycurl
+  sudo pip install urlgrabber
+else
+  pip install pycurl
+  pip install urlgrabber
+fi
+
 git clone git://git.fedorahosted.org/git/pykickstart.git
 cd pykickstart
 python setup.py install

@@ -50,8 +50,8 @@ describe "Midwife::DSL::Host" do
   end
 
   it "must build inline" do
-    ckey = File.dirname(__FILE__) + "/files/configs/keys/snakeoil-root.pem"
-    vkey = File.dirname(__FILE__) + "/files/configs/keys/snakeoil-validation.pem"
+    ckey = "./specs/files/configs/keys/snakeoil-root.pem"
+    vkey = "./specs/files/configs/keys/snakeoil-validation.pem"
 
     host = Midwife::DSL::Host.build Midwife::Collection.new, "example.org" do
       template "mytemplate"
@@ -148,8 +148,8 @@ describe "Midwife::DSL::Host" do
   end
 
   it "must build with collections" do
-    ckey = File.dirname(__FILE__) + "/files/configs/keys/snakeoil-root.pem"
-    vkey = File.dirname(__FILE__) + "/files/configs/keys/snakeoil-validation.pem"
+    ckey = "./specs/files/configs/keys/snakeoil-root.pem"
+    vkey = "./specs/files/configs/keys/snakeoil-validation.pem"
     collection = Midwife::Collection.new
 
     distro = Midwife::DSL::Distro.build("centos") do
@@ -202,7 +202,7 @@ describe "Midwife::DSL::Host" do
       nameserver "192.168.1.252"
     end
 
-    snip = Midwife::DSL::Snippet.new(File.dirname(__FILE__) + '/files/configs/snippets/default.erb')
+    snip = Midwife::DSL::Snippet.new(File.dirname(__FILE__) + '/files/configs/snippets/noop.erb')
 
     collection.distros.add(distro)
     collection.layouts.add(layout)
@@ -218,8 +218,8 @@ describe "Midwife::DSL::Host" do
       layout "default"
       chef "default"
 
-      pre_snippet "default"
-      post_snippet "default"
+      pre_snippet "noop"
+      post_snippet "noop"
 
       interface "eth0" do
         bootproto :static
@@ -263,9 +263,9 @@ describe "Midwife::DSL::Host" do
     interface.netmask.must_equal "255.255.255.0"
     interface.gateway.must_equal "192.168.1.1"
     interface.nameservers.must_equal ["192.168.1.253", "192.168.1.252"]
-    host.post_snippets[0].name.must_equal "default"
+    host.post_snippets[0].name.must_equal "noop"
     host.post_snippets[0].content.must_equal "# Default Snippet\n"
-    host.pre_snippets[0].name.must_equal "default"
+    host.pre_snippets[0].name.must_equal "noop"
     host.pre_snippets[0].content.must_equal "# Default Snippet\n"
   end
 end

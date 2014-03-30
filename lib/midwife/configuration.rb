@@ -67,10 +67,6 @@ module Midwife
         @delegated = obj
       end
 
-      # def authorized_keys_file(pubfile)
-      #   @delegated.authorized_keys = File.read(pubfile)
-      # end
-
       def method_missing(meth, *args)
         @delegated.send("#{meth.to_s}=", *args)
       end
