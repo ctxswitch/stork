@@ -34,10 +34,11 @@ module Midwife
       get '/ks/:host' do |host|
         info "#{host} requested kickstart"
 
-        h = settings.hosts.get(host)
+        h = hosts.get(host)
 
         if h
           ks = Midwife::Kickstart.new(h.template, h)
+          ks.render
         else
           json_halt_not_found
         end
@@ -45,10 +46,10 @@ module Midwife
 
       get '/notify/:host/installed' do |host|
         info "#{host} has notified completed install"
-        h = settings.hosts.get(host)
+        h = hosts.get(host)
 
         if h
-          h.set_localboot
+          set_localboot(h)
           json_halt_ok
         else
           json_halt_not_found
@@ -57,10 +58,10 @@ module Midwife
 
       get '/notify/:host/install' do |host|
         info "install requested for #{host}"
-        h = settings.hosts.get(host)
+        h = hosts.get(host)
 
         if h
-          h.set_install
+          set_install(h)
           json_halt_ok
         else
           json_halt_not_found
@@ -68,6 +69,38 @@ module Midwife
       end
 
       helpers do
+        def hosts
+          @hosts ||= settings.collection.hosts
+        end
+
+        def midwife
+          @midwife ||= settings.midwife
+        end
+
+        def set_localboot(host)
+          pxe = Midwife::PXE.new(
+            midwife.server,
+            midwife.pxe_path,
+            host.name,
+            host.pxemac,
+            host.distro.kernel,
+            host.distro.image
+          )
+          pxe.localboot
+        end
+
+        def set_install(host)
+          pxe = Midwife::PXE.new(
+            midwife.server,
+            midwife.pxe_path,
+            host.name,
+            host.pxemac,
+            host.distro.kernel,
+            host.distro.image
+          )
+          pxe.install
+        end
+
         def info(msg)
           logger.info "[#{request.ip}] INFO: #{msg}"
         end
@@ -80,17 +113,17 @@ module Midwife
           json_halt 200, 200, "OK"
         end
 
-        # def json_halt_internal_error
-        #   json_halt 500, 500, "Internal error"
-        # end
+        def json_halt_internal_error
+          json_halt 500, 500, "Internal error"
+        end
 
         def json_halt_not_found
           json_halt 404, 404, "not found"
         end
 
-        # def json_halt_parse_error
-        #   json_halt 404, 404, "There was a problem parsing the configuration file"
-        # end
+        def json_halt_parse_error
+          json_halt 404, 404, "There was a problem parsing the configuration file"
+        end
       end
     end
   end

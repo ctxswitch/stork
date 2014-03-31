@@ -5,7 +5,7 @@ module Midwife
       attr_reader :content
 
       def initialize(path)
-        @name = File.basename(path, '.erb')
+        @name = File.basename(path, '.ks.erb')
         @content = read_content(path)
       end
 

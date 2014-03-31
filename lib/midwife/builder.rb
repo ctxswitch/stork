@@ -26,7 +26,6 @@ module Midwife
       delegator = BuilderDelegator.new(builder)
       delegator.snippets(configuration.snippets_path)
       delegator.templates(configuration.templates_path)
-      puts configuration.chefs_path
       [ configuration.distros_path,
         configuration.chefs_path,
         configuration.networks_path,

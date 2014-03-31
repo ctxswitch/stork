@@ -7,7 +7,7 @@ module Midwife
     end
 
     def render
-      renderer = ERB.new(File.read(@template))
+      renderer = ERB.new(@template.content)
       renderer.result(KickstartBindings.new(self, @host).get_binding)
     end
 
@@ -26,7 +26,8 @@ module Midwife
         lines = []
         lines << "%pre"
         host.pre_snippets.each do |snippet|
-          lines << snippet.name
+          # Render me!!!
+          lines << snippet.content
         end
         lines << "%end"
         lines.join("\n")
@@ -37,7 +38,8 @@ module Midwife
         lines << "%post --log=/root/midwife-post.log"
         lines << "chvt 3"
         host.post_snippets.each do |snippet|
-          lines << snippet.name
+          # Render me!!!
+          lines << snippet.content
         end
         lines << "%end"
         lines.join("\n")

@@ -82,7 +82,11 @@ module Midwife
         end
 
         def template(value)
-          @delegated.layout = value
+          template = @collection.templates.get(value)
+          unless template
+            raise SyntaxError, "The #{value} template was not found"
+          end
+          @delegated.template = template
         end
 
         def chef(value, &block)
@@ -98,11 +102,19 @@ module Midwife
         end
 
         def pre_snippet(value)
-          @delegated.pre_snippets << @collection.snippets.get(value)
+          snippet = @collection.snippets.get(value)
+          unless snippet
+            raise SyntaxError, "The #{value} snippet was not found"
+          end
+          @delegated.pre_snippets << snippet
         end
 
         def post_snippet(value)
-          @delegated.post_snippets << @collection.snippets.get(value)
+          snippet = @collection.snippets.get(value)
+          unless snippet
+            raise SyntaxError, "The #{value} snippet was not found"
+          end
+          @delegated.pre_snippets << snippet
         end
 
         def interface(value, &block)

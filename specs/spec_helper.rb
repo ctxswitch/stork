@@ -26,3 +26,7 @@ end
 def configuration
   @configuration ||= Midwife::Configuration.from_file('./specs/files/configs/midwife/test.rb')
 end
+
+def collection
+  @collection ||= Midwife::Builder.load(configuration).collection
+end
