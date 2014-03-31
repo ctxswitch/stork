@@ -6,6 +6,7 @@ module Midwife
     attr_reader :chefs
     attr_reader :distros
     attr_reader :snippets
+    attr_reader :templates
 
     def initialize
       @hosts = Midwife::Collections::Host.new
@@ -14,6 +15,7 @@ module Midwife
       @chefs = Midwife::Collections::Chef.new
       @distros = Midwife::Collections::Distro.new
       @snippets = Midwife::Collections::Snippet.new
+      @templates = Midwife::Collections::Template.new
     end
   end
 end

@@ -32,8 +32,8 @@ describe "Midwife::Configuration" do
   end
 
   it "should respond to kickstarts_path accessors" do
-    Midwife::Configuration.new.must_respond_to :kickstarts_path
-    Midwife::Configuration.new.must_respond_to :kickstarts_path=
+    Midwife::Configuration.new.must_respond_to :templates_path
+    Midwife::Configuration.new.must_respond_to :templates_path=
   end
 
   it "should respond to authorized_keys_file accessors" do

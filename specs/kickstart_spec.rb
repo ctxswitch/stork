@@ -80,7 +80,7 @@ describe "Midwife::Kickstart" do
       testpath = File.join(File.dirname(__FILE__), 'tmp')
       kspath = File.join(File.dirname(__FILE__), 'tmp', 'output.ks')
 
-      template = File.dirname(__FILE__) + "/files/configs/kickstarts/default.ks.erb"
+      template = File.dirname(__FILE__) + "/files/configs/templates/default.ks.erb"
       ks = Midwife::Kickstart.new(template, @host)
 
       file = File.open('specs/tmp/output.ks', 'w')

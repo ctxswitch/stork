@@ -21,41 +21,73 @@ module Midwife
       @collection = Midwife::Collection.new
     end
 
-    def host(name, &block)
-      @collection.hosts.add(
-        Midwife::DSL::Host.build(collection, name, &block)
-      )
+    def self.load(configuration)
+      builder = Builder.new(configuration)
+      delegator = BuilderDelegator.new(builder)
+      delegator.snippets(configuration.snippets_path)
+      delegator.templates(configuration.templates_path)
+      puts configuration.chefs_path
+      [ configuration.distros_path,
+        configuration.chefs_path,
+        configuration.networks_path,
+        configuration.layouts_path,
+        configuration.hosts_path ].each do |path|
+        Dir.glob(path + "/*.rb") do |file|
+          delegator.instance_eval(File.read(file))
+        end
+      end
+      builder
     end
 
-    def layout(name, &block)
-      @collection.layouts.add(
-        Midwife::DSL::Layout.build(name, &block)
-      )
-    end
+    class BuilderDelegator
+      def initialize(obj)
+        @delegated = obj
+      end
 
-    def network(name, &block)
-      @collection.networks.add(
-        Midwife::DSL::Network.build(name, &block)
-      )
-    end
-
-    def chef(name, &block)
-      @collection.chefs.add(
-        Midwife::DSL::Chef.build(name, &block)
-      )
-    end
-
-    def distro(name, &block)
-      @collection.distros.add(
-        Midwife::DSL::Distro.build(name, &block)
-      )
-    end
-
-    def snippets
-      Dir.glob(@configuration.snippets_path + "/*.erb") do |file|
-        @collection.snippets.add(
-          Midwife::DSL::Snippet.new(file)
+      def host(name, &block)
+        @delegated.collection.hosts.add(
+          Midwife::DSL::Host.build(@delegated.collection, name, &block)
         )
+      end
+
+      def layout(name, &block)
+        @delegated.collection.layouts.add(
+          Midwife::DSL::Layout.build(name, &block)
+        )
+      end
+
+      def network(name, &block)
+        @delegated.collection.networks.add(
+          Midwife::DSL::Network.build(name, &block)
+        )
+      end
+
+      def chef(name, &block)
+        @delegated.collection.chefs.add(
+          Midwife::DSL::Chef.build(name, &block)
+        )
+      end
+
+      def distro(name, &block)
+        @delegated.collection.distros.add(
+          Midwife::DSL::Distro.build(name, &block)
+        )
+      end
+
+      def templates(path)
+        Dir.glob(path + "/*.erb") do |file|
+          @delegated.collection.templates.add(
+            Midwife::DSL::Template.new(file)
+          )
+        end
+      end
+
+      def snippets(path)
+        Dir.glob(path + "/*.erb") do |file|
+          @delegated.collection.snippets.add(
+            Midwife::DSL::Snippet.new(file)
+          )
+        end
       end
     end
   end

@@ -20,7 +20,8 @@ module Midwife
     attr_accessor :layouts_path
     attr_accessor :networks_path
     attr_accessor :distros_path
-    attr_accessor :kickstarts_path
+    attr_accessor :templates_path
+    attr_accessor :chefs_path
     attr_accessor :authorized_keys_file
     attr_accessor :var
     attr_accessor :pxe_path
@@ -40,7 +41,8 @@ module Midwife
       @networks_path = etc + "/networks"
       @authorized_keys_file = etc + "/keys/authorized_keys"
       @distros_path = etc + "/distros"
-      @kickstarts_path = etc + "/kickstarts"
+      @templates_path = etc + "/templates"
+      @chefs_path = etc + "/chefs"
 
       @var = "/var"
       @pxe_path = var + "/lib/tftpboot/pxelinux.cfg"

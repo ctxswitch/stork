@@ -7,6 +7,10 @@ module Midwife
         @objects = objs
       end
 
+      def size
+        @objects.size
+      end
+
       def add(*objs)
         objs.each do |obj|
           validate(obj)
