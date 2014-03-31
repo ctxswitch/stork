@@ -45,14 +45,14 @@ module Midwife
 
         def partition(value, &block)
           unless block_given?
-            raise "Need a block dude!"
+            raise SyntaxError, "A block is required for partition"
           end
           @delegated.partitions << Partition.build(value, &block)
         end
 
         def volume_group(value, options={}, &block)
           unless block_given?
-            raise "Need a block dude!"
+            raise SyntaxError, "A block is required for volume_group"
           end
           @delegated.volume_groups << VolumeGroup.build(value, options, &block)
         end

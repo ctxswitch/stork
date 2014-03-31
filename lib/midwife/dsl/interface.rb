@@ -98,7 +98,7 @@ module Midwife
         end
 
         def search_path(value)
-          @delegated.nameservers << value
+          @delegated.search_paths << value
         end
 
         def network(value)

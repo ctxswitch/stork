@@ -49,6 +49,46 @@ describe "Midwife::DSL::Host" do
     Midwife::DSL::Host.new("example.org").must_respond_to :distro=
   end
 
+  it "must raise an error if the template is not found" do
+    proc {
+      host = Midwife::DSL::Host.build collection, "example.org" do
+        template "invalid"
+      end
+    }.must_raise(SyntaxError)
+  end
+
+  it "must raise an error if the snippet is not found for pre" do
+    proc {
+      host = Midwife::DSL::Host.build collection, "example.org" do
+        pre_snippet "invalid"
+      end
+    }.must_raise(SyntaxError)
+  end
+
+  it "must raise an error if the snippet is not found for post" do
+    proc {
+      host = Midwife::DSL::Host.build collection, "example.org" do
+        post_snippet "invalid"
+      end
+    }.must_raise(SyntaxError)
+  end
+
+  it "must raise an error if a block is not passed to firewall" do
+    proc {
+      host = Midwife::DSL::Host.build collection, "example.org" do
+        firewall
+      end
+    }.must_raise(SyntaxError)
+  end
+
+  it "must raise an error if a block is not passed to password" do
+    proc {
+      host = Midwife::DSL::Host.build collection, "example.org" do
+        password
+      end
+    }.must_raise(SyntaxError)
+  end
+
   it "must build inline" do
     ckey = "./specs/files/configs/keys/snakeoil-root.pem"
     vkey = "./specs/files/configs/keys/snakeoil-validation.pem"

@@ -24,6 +24,26 @@ describe "Midwife::DSL::Layout" do
     Midwife::DSL::Layout.new('test').must_respond_to :partitions=
   end
 
+  it "requires a block for partition during build" do
+    proc {
+      layout = Midwife::DSL::Layout.build('test') do
+        zerombr
+        clearpart
+        part '/'
+      end
+    }.must_raise(SyntaxError)
+  end
+
+  it "requires a block for volume_group during build" do
+    proc {
+      layout = Midwife::DSL::Layout.build('test') do
+        zerombr
+        clearpart
+        volgroup 'hello'
+      end
+    }.must_raise(SyntaxError)
+  end
+
   it "must build with inline partitions" do
     layout = Midwife::DSL::Layout.build('test') do
       zerombr

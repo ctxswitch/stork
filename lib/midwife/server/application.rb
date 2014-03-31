@@ -122,20 +122,20 @@ module Midwife
           json_halt 200, 200, "OK"
         end
 
-        def json_halt_internal_error
-          content_type :json
-          json_halt 500, 500, "Internal error"
-        end
+        # def json_halt_internal_error
+        #   content_type :json
+        #   json_halt 500, 500, "Internal error"
+        # end
 
         def json_halt_not_found
           content_type :json
           json_halt 404, 404, "not found"
         end
 
-        def json_halt_parse_error
-          content_type :json
-          json_halt 404, 404, "There was a problem parsing the configuration file"
-        end
+        # def json_halt_parse_error
+        #   content_type :json
+        #   json_halt 404, 404, "There was a problem parsing the configuration file"
+        # end
       end
     end
   end

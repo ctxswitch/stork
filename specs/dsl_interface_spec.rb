@@ -69,6 +69,19 @@ describe "Midwife::DSL::Interface" do
     Midwife::DSL::Interface.new('eth0').must_respond_to :nameservers=
   end
 
+  it "should respond to the search_paths accessors" do
+    Midwife::DSL::Interface.new('eth0').must_respond_to :search_paths
+    Midwife::DSL::Interface.new('eth0').must_respond_to :search_paths=
+  end
+
+  it "should raise a syntax error if the network is not found" do
+    proc {
+      iface = Midwife::DSL::Interface.build(collection, 'eth0') do
+        network 'invalid'
+      end
+    }.must_raise(SyntaxError)
+  end
+
   it "should build without a network definition" do
     collection = Midwife::Collection.new
     iface = Midwife::DSL::Interface.build(collection, 'eth0') do
@@ -85,6 +98,7 @@ describe "Midwife::DSL::Interface" do
       gateway "192.168.1.1"
       nameserver "192.168.1.253"
       nameserver "192.168.1.252"
+      search_path "example.org"
     end
     iface.device.must_equal "eth0"
     iface.ethtool.must_equal "ethtool args"
@@ -99,6 +113,7 @@ describe "Midwife::DSL::Interface" do
     iface.netmask.must_equal "255.255.0.0"
     iface.gateway.must_equal "192.168.1.1"
     iface.nameservers.must_equal ["192.168.1.253", "192.168.1.252"]
+    iface.search_paths.must_equal ["example.org"]
   end
 
   it "should build with a network definition" do
@@ -108,6 +123,7 @@ describe "Midwife::DSL::Interface" do
       gateway "192.168.1.1"
       nameserver "192.168.1.253"
       nameserver "192.168.1.252"
+      search_path "example.org"
     end
     collection.networks.add(net)
 
@@ -136,5 +152,6 @@ describe "Midwife::DSL::Interface" do
     iface.netmask.must_equal "255.255.0.0"
     iface.gateway.must_equal "192.168.1.1"
     iface.nameservers.must_equal ["192.168.1.253", "192.168.1.252"]
+    iface.search_paths.must_equal ["example.org"]
   end
 end

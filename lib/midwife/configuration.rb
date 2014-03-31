@@ -75,12 +75,12 @@ module Midwife
     end
   end
 
-  class << self
-    attr_accessor :configuration
-  end
+  # class << self
+  #   attr_accessor :configuration
+  # end
 
-  def self.configure
-    self.configuration ||= Configuration.new
-    yield(configuration)
-  end
+  # def self.configure
+  #   self.configuration ||= Configuration.new
+  #   yield(configuration)
+  # end
 end

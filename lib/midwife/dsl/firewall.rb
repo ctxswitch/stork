@@ -11,7 +11,7 @@ module Midwife
       attr_accessor :ftp
 
       def initialize
-        @enabled = false
+        @enabled = true
         @trusted_devices = []
         @ports_allowed = []
         @ssh = true

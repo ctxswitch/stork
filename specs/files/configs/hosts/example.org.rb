@@ -26,11 +26,11 @@ host "server.example.org" do
   post_snippet   "ntp"
   post_snippet   "resolv-conf"
   post_snippet   "chef-bootstrap"
+  post_snippet   "chef-reconfigure"
   post_snippet   "notify"
 
   run_list %w{ role[base] recipe[apache] }
 end
-
 
 # OR
 
