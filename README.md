@@ -1,6 +1,7 @@
 # Midwife
 [![Build Status](https://travis-ci.org/rlyon/midwife.png?branch=master)](https://travis-ci.org/rlyon/midwife)
 [![Coverage Status](https://coveralls.io/repos/rlyon/midwife/badge.png)](https://coveralls.io/r/rlyon/midwife)
+[![Code Climate](https://codeclimate.com/github/rlyon/midwife.png)](https://codeclimate.com/github/rlyon/midwife)
 
 Midwife is a kickstart generation tool and server for CentOS and Redhat systems.  
 It aims to fill the gap in the deployment of bare metal systems that current tools
