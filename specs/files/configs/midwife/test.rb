@@ -14,5 +14,5 @@ tmp                     "./specs/tmp"
 pid_file                "./specs/tmp/midwife.pid"
 server                  "midwife.example.org"
 port                    5000
-bind                    "192.168.1.250"
+bind                    "0.0.0.0"
 timezone                "America/New_York"

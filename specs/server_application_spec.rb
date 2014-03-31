@@ -21,7 +21,7 @@ describe "Midwife::Server::Application" do
   end
 
   it "should output the kickstart file for a valid host" do
-    get '/ks/example.org'
+    get '/ks/server.example.org'
     message = "foo"
     last_response.body.wont_equal "{ \"status\":\"404\", \"message\": \"not found\" }"
   end
@@ -33,7 +33,7 @@ describe "Midwife::Server::Application" do
   end
 
   it "should notify of a completed install" do
-    get '/notify/example.org/installed'
+    get '/notify/server.example.org/installed'
     last_response.body.must_equal "{ \"status\":\"200\", \"message\": \"OK\" }"
     File.read("./specs/tmp/pxeboot/00-11-22-33-44-55").must_equal File.read("./specs/files/results/pxe.localboot")
   end
@@ -44,7 +44,7 @@ describe "Midwife::Server::Application" do
   end
 
   it "should notify of an install request" do
-    get '/notify/example.org/install'
+    get '/notify/server.example.org/install'
     last_response.body.must_equal "{ \"status\":\"200\", \"message\": \"OK\" }"
     File.read("./specs/tmp/pxeboot/00-11-22-33-44-55").must_equal File.read("./specs/files/results/pxe.install")
   end

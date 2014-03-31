@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Midwife::Kickstart" do
   before(:each) do
-    @host = collection.hosts.get("example.org")
+    @host = collection.hosts.get("server.example.org")
   end
 
   %w{ RHEL5 RHEL6 RHEL7 }.each do |ver|
@@ -14,7 +14,7 @@ describe "Midwife::Kickstart" do
       kspath = File.join(File.dirname(__FILE__), 'tmp', 'output.ks')
 
       template = File.dirname(__FILE__) + "/files/configs/templates/default.ks.erb"
-      ks = Midwife::Kickstart.new(@host.template, @host)
+      ks = Midwife::Kickstart.new(@host, configuration)
 
       file = File.open('specs/tmp/output.ks', 'w')
       file.write(ks.render)

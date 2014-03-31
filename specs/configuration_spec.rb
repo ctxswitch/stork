@@ -101,7 +101,7 @@ describe "Midwife::Configuration" do
     config.tmp.must_equal "/tmp"
     config.pid_file.must_equal "/tmp/midwife.pid"
     config.server.must_equal "localhost"
-    config.port.must_equal 4000
+    config.port.must_equal 9293
     config.bind.must_equal "0.0.0.0"
     config.timezone.must_equal "America/Los_Angeles"
   end

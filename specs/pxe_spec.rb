@@ -5,7 +5,7 @@ describe "Midwife::PXE" do
   before :all do
     @path = File.dirname(__FILE__) + '/tmp/pxeboot'
     FileUtils.mkdir_p @path
-    @pxe = Midwife::PXE.new('midwife.example.org', @path, 'example.org', '00:11:22:33:44:55', 'vmlinuz', 'initrd.img')
+    @pxe = Midwife::PXE.new('midwife.example.org', @path, 'server.example.org', '00:11:22:33:44:55', 'vmlinuz', 'initrd.img')
   end
 
   after :each do

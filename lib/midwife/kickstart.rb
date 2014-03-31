@@ -1,21 +1,22 @@
 module Midwife
   class Kickstart
-    def initialize(template, host, config=nil)
-      @template = template
+    def initialize(host, configuration=nil)
+      @template = host.template
       @host = host
-      @config = config
+      @configuration = configuration
     end
 
     def render
       renderer = ERB.new(@template.content)
-      renderer.result(KickstartBindings.new(self, @host).get_binding)
+      renderer.result(KickstartBindings.new(@configuration, @host).get_binding)
     end
 
     class KickstartBindings
       attr_reader :host
 
-      def initialize(binder, host)
+      def initialize(configuration, host)
         @host = host
+        @configuration = configuration
       end
 
       def get_binding
@@ -27,7 +28,8 @@ module Midwife
         lines << "%pre"
         host.pre_snippets.each do |snippet|
           # Render me!!!
-          lines << snippet.content
+          renderer = ERB.new(snippet.content, nil, '-')
+          lines << renderer.result(SnippetBindings.new(@configuration, host).get_binding)
         end
         lines << "%end"
         lines.join("\n")
@@ -39,7 +41,8 @@ module Midwife
         lines << "chvt 3"
         host.post_snippets.each do |snippet|
           # Render me!!!
-          lines << snippet.content
+          renderer = ERB.new(snippet.content, nil, '-')
+          lines << renderer.result(SnippetBindings.new(@configuration, host).get_binding)
         end
         lines << "%end"
         lines.join("\n")
@@ -173,6 +176,52 @@ module Midwife
 
       def packages
         host.packages.join("\n")
+      end
+    end
+
+    class SnippetBindings
+      attr_reader :host
+
+      def initialize(configuration, host)
+        @host = host
+        @configuration = configuration
+      end
+
+      def get_binding
+        binding
+      end
+
+      def chef
+        host.chef
+      end
+
+      def authorized_keys
+        File.read(@configuration.authorized_keys_file)
+      end
+
+      def first_boot_content
+        run_list = {'run_list' => host.run_list }
+        run_list.to_json
+      end
+
+      def nameservers
+        host.interfaces.collect{ |x| x.nameservers }.uniq.flatten
+      end
+
+      def search_paths
+        host.interfaces.collect{ |x| x.search_paths }.uniq.flatten
+      end
+
+      def midwife_server
+        @configuration.server
+      end
+
+      def midwife_port
+        @configuration.port
+      end
+
+      def midwife_bind
+        @configuration.bind
       end
     end
   end

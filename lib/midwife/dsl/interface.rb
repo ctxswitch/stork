@@ -14,6 +14,7 @@ module Midwife
       attr_accessor :netmask
       attr_accessor :gateway
       attr_accessor :nameservers
+      attr_accessor :search_paths
 
       def initialize(device)
         @device = device
@@ -28,6 +29,7 @@ module Midwife
         @netmask = nil
         @gateway = nil
         @nameservers = []
+        @search_paths = []
       end
 
       def static?
@@ -95,6 +97,10 @@ module Midwife
           @delegated.nameservers << value
         end
 
+        def search_path(value)
+          @delegated.nameservers << value
+        end
+
         def network(value)
           net = @collection.networks.get(value)
           unless net
@@ -104,6 +110,7 @@ module Midwife
           @delegated.netmask = net.netmask
           @delegated.gateway = net.gateway
           @delegated.nameservers = net.nameservers
+          @delegated.search_paths = net.search_paths
         end
       end
     end

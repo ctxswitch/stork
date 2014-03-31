@@ -52,7 +52,7 @@ module Midwife
       @pid_file = tmp + "/midwife.pid"
 
       @server = "localhost"
-      @port = 4000
+      @port = 9293
       @bind = "0.0.0.0"
       @timezone = "America/Los_Angeles"
     end

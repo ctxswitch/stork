@@ -19,6 +19,8 @@ module Midwife
     class Application < Sinatra::Base
       configure do
         enable :logging
+        mime_type :plain, 'text/plain'
+        mime_type :json, 'application/json'
       end
 
       before do
@@ -37,7 +39,8 @@ module Midwife
         h = hosts.get(host)
 
         if h
-          ks = Midwife::Kickstart.new(h.template, h)
+          ks = Midwife::Kickstart.new(h, midwife)
+          content_type :plain
           ks.render
         else
           json_halt_not_found
@@ -66,6 +69,10 @@ module Midwife
         else
           json_halt_not_found
         end
+      end
+
+      not_found do
+        json_halt_not_found
       end
 
       helpers do
@@ -106,22 +113,27 @@ module Midwife
         end
 
         def json_halt(request_status, op_status, message)
+          content_type :json
           halt request_status, {'Content-Type' => 'application/json'}, "{ \"status\":\"#{op_status}\", \"message\": \"#{message}\" }"
         end
 
         def json_halt_ok
+          content_type :json
           json_halt 200, 200, "OK"
         end
 
         def json_halt_internal_error
+          content_type :json
           json_halt 500, 500, "Internal error"
         end
 
         def json_halt_not_found
+          content_type :json
           json_halt 404, 404, "not found"
         end
 
         def json_halt_parse_error
+          content_type :json
           json_halt 404, 404, "There was a problem parsing the configuration file"
         end
       end

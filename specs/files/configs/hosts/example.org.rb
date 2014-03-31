@@ -1,5 +1,5 @@
 # Config for example.org
-host "example.org" do
+host "server.example.org" do
   template    "default"
   chef        "default"
   pxemac      "00:11:22:33:44:55"
@@ -21,7 +21,10 @@ host "example.org" do
 
   pre_snippet    "setup"
   post_snippet   "ntp"
+  post_snippet   "resolv-conf"
   post_snippet   "chef-bootstrap"
+
+  run_list %w{ role[base] recipe[apache] }
 end
 
 

@@ -47,15 +47,15 @@ OptionParser.new do |opts|
 end.parse!
 
 # Read in the configuration
-Midwife.configure do |config|
-  config.from_file(options.config)
-end
+puts options.config
+configuration = Midwife::Configuration.from_file(options.config)
+collection = Midwife::Builder.load(configuration).collection
 
 case options.command
 when :start
-  Midwife::Server::Control.start
+  Midwife::Server::Control.start(configuration, collection)
 when :stop
-  Midwife::Server::Control.stop
+  Midwife::Server::Control.stop(configuration, collection)
 when :restart
-  Midwife::Server::Control.restart
+  Midwife::Server::Control.restart(configuration, collection)
 end

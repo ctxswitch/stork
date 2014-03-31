@@ -1,2 +1,2 @@
 echo "Synchronizing clock"
-ntpdate <%= ntpserver %>
+ntpdate <%= host.timezone.ntpservers.first %>

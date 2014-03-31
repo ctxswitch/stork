@@ -20,31 +20,32 @@ require 'thin'
 module Midwife
   module Server
     class Control
-      class << self
-        def start
-          puts "Starting midwife server on port 9293."
-          @thin = Thin::Server.new("0.0.0.0", 9293, Midwife::Server::Application)
-          @thin.tag = "Midwife #{VERSION}"
-          unless ENV['RACK_ENV'] == "test"
-            @thin.pid_file = Midwife.configuration.pid_file
-            @thin.log_file = Midwife.configuration.log_file
-            @thin.daemonize
-          else
-            puts "Running in test mode"
-          end
-          @thin.start
-        end
+      def self.start(configuration, collection)
+        puts "Starting midwife server on port #{configuration.port}."
+        app = Midwife::Server::Application
+        app.set :collection, collection
+        app.set :midwife, configuration
 
-        def stop
-          puts "Stoping the midwife server."
-          pid_file = Midwife.configuration.pid_file
-          Thin::Server.kill(pid_file)
+        @thin = Thin::Server.new(configuration.bind, configuration.port, app)
+        @thin.tag = "Midwife #{VERSION}"
+        unless ENV['RACK_ENV'] == "test"
+          @thin.pid_file = configuration.pid_file
+          @thin.log_file = configuration.log_file
+          @thin.daemonize
+        else
+          puts "Running in test mode"
         end
+        @thin.start
+      end
 
-        def restart
-          stop
-          start
-        end
+      def self.stop(configuration, collection)
+        puts "Stoping the midwife server."
+        Thin::Server.kill(configuration.pid_file)
+      end
+
+      def self.restart(configuration, collection)
+        stop(configuration, collection)
+        start(configuration, collection)
       end
     end
   end

@@ -5,12 +5,14 @@ module Midwife
       attr_accessor :netmask
       attr_accessor :gateway
       attr_accessor :nameservers
+      attr_accessor :search_paths
 
       def initialize(name)
         @name = name
         @netmask = nil
         @gateway = nil
         @nameservers = []
+        @search_paths = []
       end
 
       def self.build(name, &block)
@@ -35,6 +37,10 @@ module Midwife
 
         def nameserver(value)
           @delegated.nameservers << value
+        end
+
+        def search_path(value)
+          @delegated.search_paths << value
         end
       end
 

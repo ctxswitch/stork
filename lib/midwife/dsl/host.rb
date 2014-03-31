@@ -15,6 +15,7 @@ module Midwife
       attr_accessor :password
       attr_accessor :selinux
       attr_accessor :packages
+      attr_accessor :run_list
 
       def initialize(name)
         @name = name
@@ -32,6 +33,7 @@ module Midwife
         @password = Password.new
         @selinux = "enforcing"
         @packages = default_packages
+        @run_list = []
       end
 
       def default_packages
@@ -114,7 +116,7 @@ module Midwife
           unless snippet
             raise SyntaxError, "The #{value} snippet was not found"
           end
-          @delegated.pre_snippets << snippet
+          @delegated.post_snippets << snippet
         end
 
         def interface(value, &block)
@@ -145,6 +147,15 @@ module Midwife
 
         def selinux(value)
           @delegated.selinux = value.to_s
+        end
+
+        def run_list(value)
+          if value.is_a?(String)
+            list = value.split(",")
+          else
+            list = value
+          end
+          @delegated.run_list |= list
         end
       end
 

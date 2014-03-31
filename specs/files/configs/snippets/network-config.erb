@@ -1,0 +1,7 @@
+echo "Setting hostname"
+cat > /etc/sysconfig/network << 'EOF'
+NETWORKING=yes
+HOSTNAME=<%= host.name %>
+EOF
+source /etc/sysconfig/network
+/bin/hostname <%= host.name %>
