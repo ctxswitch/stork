@@ -6,8 +6,9 @@ require 'rack/test'
 include Rack::Test::Methods
 
 def app
+  b = Midwife::Builder.load(configuration)
   a = Midwife::Server::Application
-  a.set :hosts, []
+  a.set :hosts, b.collection.hosts
   a
 end
 
@@ -18,11 +19,11 @@ describe "Midwife::Server::Application" do
     last_response.body.must_equal message
   end
 
-  # it "should output the kickstart file for a valid host" do
-  #   get '/ks/example.org'
-  #   message = File.read("specs/files/results/other1.private.ks")
-  #   last_response.body.must_equal message
-  # end
+  it "should output the kickstart file for a valid host" do
+    get '/ks/example.org'
+    message = File.read("specs/files/results/other1.private.ks")
+    last_response.body.must_equal message
+  end
   #
   # it "should output the kickstart file for a valid host" do
   #   get '/ks/default1.local'
