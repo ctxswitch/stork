@@ -85,19 +85,15 @@ module Midwife
         end
 
         def set_localboot(host)
-          pxe = Midwife::PXE.new(
-            midwife.server,
-            midwife.pxe_path,
-            host.name,
-            host.pxemac,
-            host.distro.kernel,
-            host.distro.image
-          )
-          pxe.localboot
+          pxe(host).localboot
         end
 
         def set_install(host)
-          pxe = Midwife::PXE.new(
+          pxe(host).install
+        end
+
+        def pxe(host)
+          Midwife::PXE.new(
             midwife.server,
             midwife.pxe_path,
             host.name,
@@ -105,7 +101,6 @@ module Midwife
             host.distro.kernel,
             host.distro.image
           )
-          pxe.install
         end
 
         def info(msg)
