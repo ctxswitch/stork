@@ -98,11 +98,6 @@ cat > /etc/chef/client.rb << 'EOF'
 EOF
 chmod 644 /etc/chef/client.rb
 
-cat > /root/.chef/<%= chef.client_name %>.pem << 'EOF'
-<%= chef.client_key %>
-EOF
-chmod 600 /root/.chef/<%= chef.client_name %>.pem
-
 cat > /etc/chef/first-boot.json << 'EOF'
 <%= first_boot_content %>
 EOF

@@ -2,6 +2,11 @@ echo "Setting up knife"
 mkdir /root/.chef
 chmod 700 /root/.chef
 
+cat > /root/.chef/<%= chef.client_name %>.pem << 'EOF'
+<%= chef.client_key %>
+EOF
+chmod 600 /root/.chef/<%= chef.client_name %>.pem
+
 cat > /root/.chef/knife.rb << 'EOF'
 <%= chef.knife_content %>
 EOF
