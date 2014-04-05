@@ -24,28 +24,11 @@ module Midwife
       end
 
       def pre_snippets
-        lines = []
-        lines << "%pre"
-        host.pre_snippets.each do |snippet|
-          # Render me!!!
-          renderer = ERB.new(snippet.content, nil, '-')
-          lines << renderer.result(SnippetBindings.new(@configuration, host).get_binding)
-        end
-        lines << "%end"
-        lines.join("\n")
+        render_snippets(host.pre_snippets)
       end
 
       def post_snippets
-        lines = []
-        lines << "%post --log=/root/midwife-post.log"
-        lines << "chvt 3"
-        host.post_snippets.each do |snippet|
-          # Render me!!!
-          renderer = ERB.new(snippet.content, nil, '-')
-          lines << renderer.result(SnippetBindings.new(@configuration, host).get_binding)
-        end
-        lines << "%end"
-        lines.join("\n")
+        render_snippets(host.post_snippets)
       end
 
       def url
@@ -177,6 +160,19 @@ module Midwife
 
       def packages
         host.packages.join("\n")
+      end
+      
+    private
+      def render_snippets(snippets)
+        lines = []
+        lines << "%pre"
+        snippets.each do |snippet|
+          # Render me!!!
+          renderer = ERB.new(snippet.content, nil, '-')
+          lines << renderer.result(SnippetBindings.new(@configuration, host).get_binding)
+        end
+        lines << "%end"
+        lines.join("\n")
       end
     end
 
