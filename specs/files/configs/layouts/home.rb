@@ -8,7 +8,7 @@ layout "home" do
   end
 
   part "swap" do
-    size 0
+    recommended
     type "swap"
     primary
   end

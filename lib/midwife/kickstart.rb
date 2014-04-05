@@ -126,6 +126,7 @@ module Midwife
       def layout
         layout = host.layout
         lines = []
+        lines << "bootloader --location mbr"
         lines << "zerombr" if layout.zerombr
         lines << "clearpart --all --initlabel" if layout.clearpart
         lines << partitions
