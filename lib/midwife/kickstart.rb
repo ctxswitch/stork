@@ -28,7 +28,7 @@ module Midwife
       end
 
       def post_snippets
-        render_snippets(:post, host.post_snippets)
+        render_snippets(:post, host.post_snippets, "/root/midwife-post.log")
       end
 
       def url
@@ -174,9 +174,11 @@ module Midwife
       end
 
     private
-      def render_snippets(type, snippets)
+      def render_snippets(type, snippets, log=nil)
         lines = []
-        lines << "%#{type}"
+        str = "%#{type}"
+        str += " --log=#{log}" if log
+        lines << str
         snippets.each do |snippet|
           # Render me!!!
           renderer = ERB.new(snippet.content, nil, '-')
