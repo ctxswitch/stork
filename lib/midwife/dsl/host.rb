@@ -16,6 +16,7 @@ module Midwife
       attr_accessor :selinux
       attr_accessor :packages
       attr_accessor :run_list
+      attr_accessor :repos
 
       def initialize(name)
         @name = name
@@ -34,6 +35,7 @@ module Midwife
         @selinux = "enforcing"
         @packages = default_packages
         @run_list = []
+        @repos = []
       end
 
       def default_packages
@@ -156,6 +158,10 @@ module Midwife
             list = value
           end
           @delegated.run_list |= list
+        end
+
+        def repo(name, args = {})
+          @delegated.repos << Repo.new(name, args)
         end
       end
 

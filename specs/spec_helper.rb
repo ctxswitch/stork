@@ -6,7 +6,7 @@ if ENV['TRAVIS']
 elsif ENV['COVERAGE']
   require 'simplecov'
   SimpleCov.start do
-    ['specs', 'vendor'].each{ |f| add_filter f }
+    ['specs', 'vendor', 'lib/midwife/server/control.rb'].each{ |f| add_filter f }
   end
 end
 

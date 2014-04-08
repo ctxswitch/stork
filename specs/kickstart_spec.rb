@@ -7,8 +7,6 @@ describe "Midwife::Kickstart" do
 
   %w{ RHEL5 RHEL6 RHEL7 }.each do |ver|
     it "should generate valid kickstart configurations for #{ver}" do
-      # skip("pending")
-
       ksvalidate = File.join(File.dirname(__FILE__), 'scripts', 'ksvalidate.sh')
       testpath = File.join(File.dirname(__FILE__), 'tmp')
       kspath = File.join(File.dirname(__FILE__), 'tmp', 'output.ks')

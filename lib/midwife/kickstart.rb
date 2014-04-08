@@ -137,6 +137,17 @@ module Midwife
         lines.join("\n")
       end
 
+      def repos
+        lines = []
+        host.repos.each do |repo|
+          str = "repo --name #{repo.name}"
+          str += " --baseurl=#{repo.baseurl}" if repo.baseurl
+          str += " --mirrorlist=#{repo.mirrorlist}" if repo.mirrorlist
+          lines << str
+        end
+        lines.join("\n")
+      end
+
       def volume_groups
         # Emit volume groups
         vgs = host.layout.volume_groups
@@ -161,7 +172,7 @@ module Midwife
       def packages
         host.packages.join("\n")
       end
-      
+
     private
       def render_snippets(snippets)
         lines = []

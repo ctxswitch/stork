@@ -42,6 +42,7 @@ require 'midwife/dsl/password'
 require 'midwife/dsl/timezone'
 require 'midwife/dsl/snippet'
 require 'midwife/dsl/template'
+require 'midwife/dsl/repo'
 require 'midwife/dsl/host'
 
 require 'midwife/kickstart'

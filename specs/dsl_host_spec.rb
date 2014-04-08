@@ -49,6 +49,16 @@ describe "Midwife::DSL::Host" do
     Midwife::DSL::Host.new("example.org").must_respond_to :distro=
   end
 
+  it "must respond to the run_list accessors" do
+    Midwife::DSL::Host.new("example.org").must_respond_to :run_list
+    Midwife::DSL::Host.new("example.org").must_respond_to :run_list=
+  end
+
+  it "must respond to the repos accessors" do
+    Midwife::DSL::Host.new("example.org").must_respond_to :repos
+    Midwife::DSL::Host.new("example.org").must_respond_to :repos=
+  end
+
   it "must raise an error if the template is not found" do
     proc {
       host = Midwife::DSL::Host.build collection, "example.org" do
@@ -96,6 +106,9 @@ describe "Midwife::DSL::Host" do
     host = Midwife::DSL::Host.build collection, "example.org" do
       template "default"
       pxemac "00:11:22:33:44:55"
+
+      repo 'updates'
+      repo 'foo', baseurl: 'http://foo.com'
 
       distro "centos" do
         kernel "vmlinuz"
