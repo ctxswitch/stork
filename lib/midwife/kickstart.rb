@@ -24,11 +24,11 @@ module Midwife
       end
 
       def pre_snippets
-        render_snippets(host.pre_snippets)
+        render_snippets(:pre, host.pre_snippets)
       end
 
       def post_snippets
-        render_snippets(host.post_snippets)
+        render_snippets(:post, host.post_snippets)
       end
 
       def url
@@ -174,9 +174,9 @@ module Midwife
       end
 
     private
-      def render_snippets(snippets)
+      def render_snippets(type, snippets)
         lines = []
-        lines << "%pre"
+        lines << "%#{type}"
         snippets.each do |snippet|
           # Render me!!!
           renderer = ERB.new(snippet.content, nil, '-')
