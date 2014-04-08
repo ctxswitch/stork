@@ -107,7 +107,6 @@ describe "Midwife::DSL::Host" do
       template "default"
       pxemac "00:11:22:33:44:55"
 
-      repo 'updates'
       repo 'foo', baseurl: 'http://foo.com'
 
       distro "centos" do

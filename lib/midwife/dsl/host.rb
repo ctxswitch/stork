@@ -163,6 +163,10 @@ module Midwife
         def repo(name, args = {})
           @delegated.repos << Repo.new(name, args)
         end
+
+        def package(name)
+          @delegated.packages << name
+        end
       end
 
       alias_method :id, :name

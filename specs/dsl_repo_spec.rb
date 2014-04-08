@@ -2,27 +2,33 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Midwife::DSL::Repo" do
   it "must create a repo" do
-    Midwife::DSL::Repo.new('updates').must_be_instance_of Midwife::DSL::Repo
+    Midwife::DSL::Repo.new('updates', baseurl: "foo").must_be_instance_of Midwife::DSL::Repo
   end
 
   it "must respond to name" do
-    Midwife::DSL::Repo.new('updates').must_respond_to :name
-    Midwife::DSL::Repo.new('updates').name.must_equal 'updates'
+    Midwife::DSL::Repo.new('updates', baseurl: "foo").must_respond_to :name
+    Midwife::DSL::Repo.new('updates', baseurl: "foo").name.must_equal 'updates'
   end
 
   it "must respond to the baseurl accessors" do
-    Midwife::DSL::Repo.new('updates').must_respond_to :baseurl
-    Midwife::DSL::Repo.new('updates').must_respond_to :baseurl=
+    Midwife::DSL::Repo.new('updates', baseurl: "foo").must_respond_to :baseurl
+    Midwife::DSL::Repo.new('updates', baseurl: "foo").must_respond_to :baseurl=
   end
 
   it "must respond to the mirrorlist accessors" do
-    Midwife::DSL::Repo.new('updates').must_respond_to :mirrorlist
-    Midwife::DSL::Repo.new('updates').must_respond_to :mirrorlist=
+    Midwife::DSL::Repo.new('updates', baseurl: "foo").must_respond_to :mirrorlist
+    Midwife::DSL::Repo.new('updates', baseurl: "foo").must_respond_to :mirrorlist=
   end
 
   it "must only let either baseurl or mirrorlist" do
     proc {
       Midwife::DSL::Repo.new 'updates', baseurl: 'foo', mirrorlist: 'foo'
+    }.must_raise(SyntaxError)
+  end
+
+  it "must require either baseurl or mirrorlist" do
+    proc {
+      Midwife::DSL::Repo.new 'updates'
     }.must_raise(SyntaxError)
   end
 

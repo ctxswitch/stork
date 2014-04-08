@@ -10,8 +10,12 @@ module Midwife
         @baseurl = args.has_key?(:baseurl) ? args[:baseurl] : nil
         @mirrorlist = args.has_key?(:mirrorlist) ? args[:mirrorlist] : nil
 
+        unless baseurl || mirrorlist
+          raise SyntaxError, "One of baseurl or mirrorlist must be specified."
+        end
+
         if baseurl && mirrorlist
-          raise SyntaxError, "You may use only baseurl or mirrorlist but not both"
+          raise SyntaxError, "You may use only baseurl or mirrorlist but not both."
         end
       end
 

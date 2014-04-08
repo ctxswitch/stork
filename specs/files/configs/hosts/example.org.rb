@@ -5,6 +5,8 @@ host "server.example.org" do
   pxemac      "00:11:22:33:44:55"
   layout      "home"
   distro      "centos"
+  repo        "whamcloud-client", baseurl: "http://yum.example.com/eln/x86_64"
+  package     "foo"
 
 
   interface "eth0" do

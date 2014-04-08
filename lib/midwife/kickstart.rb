@@ -140,7 +140,7 @@ module Midwife
       def repos
         lines = []
         host.repos.each do |repo|
-          str = "repo --name #{repo.name}"
+          str = "repo --name=#{repo.name}"
           str += " --baseurl=#{repo.baseurl}" if repo.baseurl
           str += " --mirrorlist=#{repo.mirrorlist}" if repo.mirrorlist
           lines << str
