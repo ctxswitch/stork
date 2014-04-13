@@ -1,6 +1,7 @@
 module Stork
   class Builder
     attr_reader :collection
+    attr_reader :configuration
 
     def initialize(configuration)
       @configuration = configuration
@@ -31,7 +32,7 @@ module Stork
 
       def host(name, &block)
         @delegated.collection.hosts.add(
-          Objects::Host.build(@delegated.collection, name, &block)
+          Objects::Host.build(@delegated.configuration, @delegated.collection, name, &block)
         )
       end
 

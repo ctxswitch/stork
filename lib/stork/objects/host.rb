@@ -2,6 +2,7 @@ module Stork
   module Objects
     class Host
       attr_reader :name
+      attr_reader :configuration
       attr_accessor :layout
       attr_accessor :template
       attr_accessor :chef
@@ -18,7 +19,8 @@ module Stork
       attr_accessor :run_list
       attr_accessor :repos
 
-      def initialize(name)
+      def initialize(configuration, name)
+        @configuration = configuration
         @name = name
         @layout = "default"
         @template = "default"
@@ -28,8 +30,7 @@ module Stork
         @post_snippets = []
         @interfaces = []
         @distro = nil
-        # Should be from the config
-        @timezone = Timezone.new("America/Los_Angeles")
+        @timezone = Timezone.new(configuration.timezone)
         @firewall = Firewall.new
         @password = Password.new
         @selinux = "enforcing"
@@ -64,8 +65,12 @@ module Stork
         }
       end
 
-      def self.build(collection, name, &block)
-        host = new(name)
+      def deploy
+        Stork::Deploy::Kickstart.new(self, configuration)
+      end
+
+      def self.build(configuration, collection, name, &block)
+        host = new(configuration, name)
         delegator = HostDelegator.new(collection, host)
         delegator.instance_eval(&block) if block_given?
         host

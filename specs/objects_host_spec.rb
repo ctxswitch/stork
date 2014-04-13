@@ -2,66 +2,66 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Stork::Objects::Host" do
   it "must create a host" do
-    Stork::Objects::Host.new("example.org").must_be_instance_of Stork::Objects::Host
+    Stork::Objects::Host.new(configuration, "example.org").must_be_instance_of Stork::Objects::Host
   end
 
   it "must respond to the name method" do
-    Stork::Objects::Host.new("example.org").must_respond_to :name
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :name
   end
 
   it "must respond to the layout accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :layout
-    Stork::Objects::Host.new("example.org").must_respond_to :layout=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :layout
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :layout=
   end
 
   it "must respond to the template accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :template
-    Stork::Objects::Host.new("example.org").must_respond_to :template=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :template
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :template=
   end
 
   it "must respond to the chef accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :chef
-    Stork::Objects::Host.new("example.org").must_respond_to :chef=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :chef
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :chef=
   end
 
   it "must respond to the pxemac accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :pxemac
-    Stork::Objects::Host.new("example.org").must_respond_to :pxemac=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :pxemac
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :pxemac=
   end
 
   it "must respond to the pre_snippets accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :pre_snippets
-    Stork::Objects::Host.new("example.org").must_respond_to :pre_snippets=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :pre_snippets
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :pre_snippets=
   end
 
   it "must respond to the post_snippets accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :post_snippets
-    Stork::Objects::Host.new("example.org").must_respond_to :post_snippets=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :post_snippets
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :post_snippets=
   end
 
   it "must respond to the interfaces accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :interfaces
-    Stork::Objects::Host.new("example.org").must_respond_to :interfaces=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :interfaces
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :interfaces=
   end
 
   it "must respond to the distro accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :distro
-    Stork::Objects::Host.new("example.org").must_respond_to :distro=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :distro
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :distro=
   end
 
   it "must respond to the run_list accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :run_list
-    Stork::Objects::Host.new("example.org").must_respond_to :run_list=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :run_list
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :run_list=
   end
 
   it "must respond to the repos accessors" do
-    Stork::Objects::Host.new("example.org").must_respond_to :repos
-    Stork::Objects::Host.new("example.org").must_respond_to :repos=
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :repos
+    Stork::Objects::Host.new(configuration, "example.org").must_respond_to :repos=
   end
 
   it "must raise an error if the template is not found" do
     proc {
-      host = Stork::Objects::Host.build collection, "example.org" do
+      host = Stork::Objects::Host.build configuration, collection, "example.org" do
         template "invalid"
       end
     }.must_raise(SyntaxError)
@@ -69,7 +69,7 @@ describe "Stork::Objects::Host" do
 
   it "must raise an error if the snippet is not found for pre" do
     proc {
-      host = Stork::Objects::Host.build collection, "example.org" do
+      host = Stork::Objects::Host.build configuration, collection, "example.org" do
         pre_snippet "invalid"
       end
     }.must_raise(SyntaxError)
@@ -77,7 +77,7 @@ describe "Stork::Objects::Host" do
 
   it "must raise an error if the snippet is not found for post" do
     proc {
-      host = Stork::Objects::Host.build collection, "example.org" do
+      host = Stork::Objects::Host.build configuration, collection, "example.org" do
         post_snippet "invalid"
       end
     }.must_raise(SyntaxError)
@@ -85,7 +85,7 @@ describe "Stork::Objects::Host" do
 
   it "must raise an error if a block is not passed to firewall" do
     proc {
-      host = Stork::Objects::Host.build collection, "example.org" do
+      host = Stork::Objects::Host.build configuration, collection, "example.org" do
         firewall
       end
     }.must_raise(SyntaxError)
@@ -93,7 +93,7 @@ describe "Stork::Objects::Host" do
 
   it "must raise an error if a block is not passed to password" do
     proc {
-      host = Stork::Objects::Host.build collection, "example.org" do
+      host = Stork::Objects::Host.build configuration, collection, "example.org" do
         password
       end
     }.must_raise(SyntaxError)
@@ -103,7 +103,7 @@ describe "Stork::Objects::Host" do
     ckey = "./specs/keys/snakeoil-root.pem"
     vkey = "./specs/keys/snakeoil-validation.pem"
 
-    host = Stork::Objects::Host.build collection, "example.org" do
+    host = Stork::Objects::Host.build configuration, collection, "example.org" do
       template "default"
       pxemac "00:11:22:33:44:55"
 

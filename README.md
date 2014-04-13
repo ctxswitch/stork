@@ -1,7 +1,7 @@
 # Midwife
-[![Build Status](https://travis-ci.org/rlyon/midwife.png?branch=master)](https://travis-ci.org/rlyon/midwife)
-[![Coverage Status](https://coveralls.io/repos/rlyon/midwife/badge.png)](https://coveralls.io/r/rlyon/midwife)
-[![Code Climate](https://codeclimate.com/github/rlyon/midwife.png)](https://codeclimate.com/github/rlyon/midwife)
+[![Build Status](https://travis-ci.org/rlyon/stork.png?branch=master)](https://travis-ci.org/rlyon/stork)
+[![Coverage Status](https://coveralls.io/repos/rlyon/stork/badge.png)](https://coveralls.io/r/rlyon/stork)
+[![Code Climate](https://codeclimate.com/github/rlyon/stork.png)](https://codeclimate.com/github/rlyon/stork)
 
 Midwife is a kickstart generation tool and server for CentOS and Redhat systems.  
 It aims to fill the gap in the deployment of bare metal systems that current tools
@@ -11,15 +11,47 @@ provide.
 
 Installation using rubygems:
 
-    $ gem install midwife
+    $ gem install stork
 
 Install the latest version from the github:
 
-    $ git clone https://github.com/rlyon/midwife.git
+    $ git clone https://github.com/rlyon/stork.git
 
 ## Usage
 
-#### TODO: Write usage instructions here
+### Control the server
+storkctl start restart stop [options]
+
+### Query
+stork host list
+stork host search [query]
+stork host localboot [name]
+stork host install [name]
+stork host show [name]
+
+stork chef list
+stork chef search
+stork chek show [name]
+
+stork distro list
+stork distro search
+stork distro show [name]
+
+stork layout list
+stork layout search
+stork layout show [name] 
+
+stork network list
+stork network search
+stork network show
+
+stork snippet list
+stork snippet search
+stork snippet show [name]
+
+stork template list
+stork template search
+stork template show [name]
 
 ## Contributing
 
@@ -34,15 +66,17 @@ Install the latest version from the github:
 ### Seting up for the kickstart validation tests
 
 To run the kickstart validation tests on your local system, you
-will need an install of python.  I'm using 2.7, I don't know if
-it makes a difference.  On Mac use homebrew or macports to avoid
-using the system python which is bound to be really, really old.
-On Linux you can use your favorite package manager.
+will need to install python and the python virtualenv module.  
+I'm currently using 2.7, and I don't know if it makes a difference.  
+On Linux you can use your favorite package manager if by some chance 
+your distribution didn't come with it installed.  On Mac use homebrew 
+or macports to avoid using the system python which is bound to be 
+a very old version.
 
     $ brew install python
     $ pip install virtualenv
 
-Once python has been installed, run
+Once python and virtualenv has been installed, run
 
     $ rake validator:setup
 

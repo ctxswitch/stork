@@ -31,7 +31,7 @@ require 'stork/deploy/kickstart'
 require 'stork/pxe'
 
 require 'stork/server/application'
-# require 'stork/server/control'
+require 'stork/server/control'
 
 module Stork
 end
