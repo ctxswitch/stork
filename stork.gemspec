@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 4.7.3"
   spec.add_development_dependency "rack-test"
   spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "coveralls"
   spec.add_development_dependency "minitest-given"
   spec.add_development_dependency "minitest-debugger"
 end
