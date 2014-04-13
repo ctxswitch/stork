@@ -1,6 +1,32 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "Stork::Collections::Base" do
+describe "Stork::Collections" do
+  it "should be created" do
+    Stork::Collections.new.must_be_instance_of Stork::Collections
+  end
+
+  it "responds to the hosts method" do
+    Stork::Collections.new.must_respond_to :hosts
+  end
+
+  it "responds to the layouts method" do
+    Stork::Collections.new.must_respond_to :layouts
+  end
+
+  it "responds to the networks method" do
+    Stork::Collections.new.must_respond_to :networks
+  end
+
+  it "responds to the chefs method" do
+    Stork::Collections.new.must_respond_to :chefs
+  end
+
+  it "responds to the distros method" do
+    Stork::Collections.new.must_respond_to :distros
+  end
+end
+
+describe "Stork::Collection::Base" do
   it "should be emumerable" do
     Stork::Collection::Base.included_modules.must_include Enumerable
   end
