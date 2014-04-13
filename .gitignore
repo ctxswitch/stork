@@ -17,4 +17,5 @@ specs/tmp
 specs/version_tmp
 specs/ksvalidator
 tmp
+test*
 .DS_Store

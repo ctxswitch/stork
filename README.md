@@ -4,8 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/rlyon/stork.png)](https://codeclimate.com/github/rlyon/stork)
 
 Stork is a kickstart generation tool and server for CentOS and Redhat systems.  
-It aims to fill the gap in the deployment of bare metal systems that current tools
-provide.
+It aims to fill the gap in the bare metal systems deployment that many of the other tools for cloud and virtual systems excel at.
 
 ## Installation
 
@@ -23,6 +22,8 @@ Install the latest version from the github:
     storkctl start restart stop [options]
 
 ### Query
+    stork sync
+
     stork host list
     stork host search [query]
     stork host localboot [name]
