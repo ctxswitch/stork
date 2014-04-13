@@ -1,19 +1,10 @@
 module Stork
   class Configuration
-    attr_accessor :etc
+    attr_accessor :path
     attr_accessor :bundle_path
-    attr_accessor :hosts_path
-    attr_accessor :snippets_path
-    attr_accessor :layouts_path
-    attr_accessor :networks_path
-    attr_accessor :distros_path
-    attr_accessor :templates_path
-    attr_accessor :chefs_path
     attr_accessor :authorized_keys_file
-    attr_accessor :var
     attr_accessor :pxe_path
     attr_accessor :log_file
-    attr_accessor :tmp
     attr_accessor :pid_file
     attr_accessor :server
     attr_accessor :port
@@ -21,21 +12,13 @@ module Stork
     attr_accessor :timezone
 
     def initialize
-      @etc                  = "/etc/stork"
-      @bundle_path          = etc + "/bundle"
-      @hosts_path           = bundle_path + "/hosts"
-      @snippets_path        = bundle_path + "/snippets"
-      @layouts_path         = bundle_path + "/layouts"
-      @networks_path        = bundle_path + "/networks"
-      @authorized_keys_file = bundle_path + "/keys/authorized_keys"
-      @distros_path         = bundle_path + "/distros"
-      @templates_path       = bundle_path + "/templates"
-      @chefs_path           = bundle_path + "/chefs"
+      @path                 = "/etc/stork"
+      @authorized_keys_file = path + "/authorized_keys"
+      @bundle_path          = path + "/bundles"
 
-      @var                  = "/var"
-      @pxe_path             = var + "/lib/tftpboot/pxelinux.cfg"
-      @log_file             = var + "/log/stork.log"
-      @pid_file             = var + "/run/stork.pid"
+      @pxe_path             = "/var/lib/tftpboot/pxelinux.cfg"
+      @log_file             = "/var/log/stork.log"
+      @pid_file             = "/var/run/stork.pid"
 
       @server               = "localhost"
       @port                 = 9293
@@ -43,10 +26,38 @@ module Stork
       @timezone             = "America/Los_Angeles"
     end
 
-    def to_small
+    def hosts_path
+      bundle_path + "/hosts"
+    end
+
+    def snippets_path
+      bundle_path + "/snippets"
+    end
+
+    def layouts_path
+      bundle_path + "/layouts"
+    end
+
+    def networks_path
+      bundle_path + "/networks"
+    end
+
+    def distros_path
+      bundle_path + "/distros"
+    end
+
+    def templates_path
+      bundle_path + "/templates"
+    end
+
+    def chefs_path
+      bundle_path + "/chefs"
+    end
+
+    def to_file
       <<-EOS
 # Stork configuration file"
-etc                     "#{etc}"
+path                    "#{path}"
 bundle_path             "#{bundle_path}"
 authorized_keys_file    "#{authorized_keys_file}"
 pxe_path                "#{pxe_path}"
@@ -69,7 +80,7 @@ timezone                "#{timezone}"
         delegator = ConfigDelegator.new(config)
         delegator.instance_eval(File.read(filename), filename)
       else
-        File.open(filename, 'w') { |file| file.write(config.to_s) }
+        File.open(filename, 'w') { |file| file.write(config.to_file) }
       end
       config
     end

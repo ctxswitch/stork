@@ -1,4 +1,5 @@
 require "bundler/gem_tasks"
+require "rake/testtask"
 
 task default: :test
 
@@ -12,13 +13,13 @@ namespace :ksvalidator do
   desc 'Set up the validation directories and environment.'
   task :setup do
     spath = File.join(File.dirname(__FILE__), 'specs', 'scripts', 'kssetup.sh')
-    vpath = File.join(File.dirname(__FILE__), 'specs', 'tmp')
+    vpath = File.join(File.dirname(__FILE__), 'specs')
     puts "Setting up in #{vpath}"
     system("mkdir -p #{vpath} ; cd #{vpath} ; sh #{spath}")
   end
 
   task :clean do
-    vpath = File.join(File.dirname(__FILE__), 'specs', 'tmp', 'ksvalidator')
-    system("rm -rf #{vpath}")
+    vpath = File.join(File.dirname(__FILE__), 'specs', 'ksvalidator')
+    FileUtils.rm_rf(Dir.glob("#{vpath}/*"))
   end
 end

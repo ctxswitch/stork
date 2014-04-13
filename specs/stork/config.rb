@@ -1,9 +1,9 @@
 # Stork configuration file"
-etc                     "./specs/stork"
+path                    "./specs/stork"
 bundle_path             "./specs/stork/bundles"
 authorized_keys_file    "./specs/stork/authorized_keys"
 pxe_path                "./specs/tmp/pxeboot"
-log_file                "./specs/tmp/log"
+log_file                "./specs/tmp/stork.log"
 pid_file                "./specs/tmp/stork.pid"
 server                  "localhost"
 port                    5000
