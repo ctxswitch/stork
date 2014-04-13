@@ -1,0 +1,104 @@
+echo "Installing Chef"
+
+cat > /etc/init.d/chef-firstboot << 'EOF'
+#!/bin/bash
+#
+# chef-firstboot Chef first-boot script
+#
+# chkconfig: - 97 02
+# description: Run chef for the first time using the /etc/chef/first-boot.json content.
+
+### BEGIN INIT INFO
+# Provides: chef-firstboot
+# Required-Start: $local_fs $network $remote_fs
+# Required-Stop: $local_fs $network $remote_fs
+# Should-Start: $named $time
+# Should-Stop: $named $time
+# Short-Description: Chef first-boot script
+# Description: Run chef for the first time using the /etc/chef/first-boot.json content.
+### END INIT INFO
+
+exec="/usr/bin/chef-client"
+chk="/sbin/chkconfig"
+
+start() {
+  $exec -j /etc/chef/first-boot.json -N <%= host.name %>
+  retval=$?
+  $chk chef-client on
+  $chk chef-firstboot off
+  return $retval
+}
+
+stop() {
+  return 0
+}
+
+restart() {
+  return 0
+}
+
+case "$1" in
+  start)
+      $1
+      ;;
+  stop)
+      $1
+      ;;
+  restart)
+      $1
+      ;;
+esac
+exit $?
+EOF
+chmod 755 /etc/init.d/chef-firstboot
+chkconfig chef-firstboot on
+
+bash -c '
+exists() {
+  if command -v $1 &>/dev/null
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+install_sh="https://www.opscode.com/chef/install.sh"
+version_string="-v <%= chef.version %>"
+if ! exists /usr/bin/chef-client; then
+  if exists wget; then
+    wget ${install_sh} -O /tmp/install_sh
+  elif exists curl; then
+    curl ${install_sh} > /tmp/install.sh
+  else
+    echo "Neither wget nor curl found. Please install one and try again." >&2
+    exit 1
+  fi
+fi
+
+bash /tmp/install_sh ${version_string}
+'
+
+<% if chef.encrypted_data_bag_secret %>
+cat > /etc/chef/encrypted_data_bag_secret << 'EOF'
+<%= chef.encrypted_data_bag_secret %>
+EOF
+chmod 0600 /etc/chef/encrypted_data_bag_secret
+<% end %>
+
+mkdir -p /etc/chef
+
+cat > /etc/chef/validation.pem << 'EOF'
+<%= chef.validation_key %>
+EOF
+chmod 0644 /etc/chef/validation.pem
+
+cat > /etc/chef/client.rb << 'EOF'
+<%= chef.client_content %>
+EOF
+chmod 644 /etc/chef/client.rb
+
+cat > /etc/chef/first-boot.json << 'EOF'
+<%= first_boot_content %>
+EOF
+chmod 644 /etc/chef/first-boot.json
