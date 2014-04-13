@@ -1,7 +1,0 @@
-default install
-prompt 0
-timeout 1
-label install
-        kernel vmlinuz
-        ipappend 2
-        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://midwife.example.org/ks/server.example.org
