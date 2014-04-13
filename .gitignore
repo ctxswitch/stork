@@ -15,5 +15,6 @@ rdoc
 specs/reports
 specs/tmp
 specs/version_tmp
+specs/ksvalidator
 tmp
 .DS_Store
