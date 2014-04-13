@@ -1,8 +1,13 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Stork::Configuration" do
+  before(:each) do
+    @path = File.dirname(__FILE__)
+    FileUtils.mkdir_p "#{@path}/tmp"
+  end
+
   after(:each) do
-    FileUtils.rm_rf(Dir.glob('./specs/tmp/*'))
+    FileUtils.rm_rf(Dir.glob("#{@path}/tmp/*"))
   end
 
   it "should respond to path accessors" do

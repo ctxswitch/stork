@@ -20,38 +20,38 @@ Install the latest version from the github:
 ## Usage
 
 ### Control the server
-storkctl start restart stop [options]
+    storkctl start restart stop [options]
 
 ### Query
-stork host list
-stork host search [query]
-stork host localboot [name]
-stork host install [name]
-stork host show [name]
+    stork host list
+    stork host search [query]
+    stork host localboot [name]
+    stork host install [name]
+    stork host show [name]
 
-stork chef list
-stork chef search
-stork chek show [name]
+    stork chef list
+    stork chef search
+    stork chek show [name]
 
-stork distro list
-stork distro search
-stork distro show [name]
+    stork distro list
+    stork distro search
+    stork distro show [name]
 
-stork layout list
-stork layout search
-stork layout show [name] 
+    stork layout list
+    stork layout search
+    stork layout show [name] 
 
-stork network list
-stork network search
-stork network show
+    stork network list
+    stork network search
+    stork network show
 
-stork snippet list
-stork snippet search
-stork snippet show [name]
+    stork snippet list
+    stork snippet search
+    stork snippet show [name]
 
-stork template list
-stork template search
-stork template show [name]
+    stork template list
+    stork template search
+    stork template show [name]
 
 ## Contributing
 

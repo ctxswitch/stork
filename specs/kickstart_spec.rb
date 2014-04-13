@@ -3,19 +3,24 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe "Stork::Deploy::Kickstart" do
   before(:each) do
     @host = collection.hosts.get("server.example.org")
+    @path = File.dirname(__FILE__)
+    FileUtils.mkdir_p "#{@path}/tmp"
+  end
+
+  after(:each) do
+    FileUtils.rm_rf(Dir.glob("#{@path}/tmp/*"))
   end
 
   %w{ RHEL5 RHEL6 RHEL7 }.each do |ver|
     it "should generate valid kickstart configurations for #{ver}" do
-      path        = File.dirname(__FILE__)
-      ksvalidate  = "#{path}/scripts/ksvalidate.sh"
-      testpath    = "#{path}"
-      kspath      = "#{path}/tmp/output.ks"
-      template    = "#{path}/stork/bundles/templates/default.ks.erb"
+      ksvalidate  = "#{@path}/scripts/ksvalidate.sh"
+      testpath    = "#{@path}"
+      kspath      = "#{@path}/tmp/output.ks"
+      template    = "#{@path}/stork/bundles/templates/default.ks.erb"
 
       ks = Stork::Deploy::Kickstart.new(@host, configuration)
 
-      File.open("#{path}/tmp/output.ks", 'w') do |file|
+      File.open("#{@path}/tmp/output.ks", 'w') do |file|
         file.write(ks.render)
       end
 
@@ -25,7 +30,7 @@ describe "Stork::Deploy::Kickstart" do
         assert_equal(0, exit_status, output)
       end
 
-      File.unlink("#{path}/tmp/output.ks")
+      File.unlink("#{@path}/tmp/output.ks")
     end
   end
 end
