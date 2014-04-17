@@ -5,3 +5,6 @@ rvm:
   - 1.9.3
 
 before_script: bundle exec rake ksvalidator:setup
+
+notifications:
+  hipchat: ***REMOVED***@Stork
