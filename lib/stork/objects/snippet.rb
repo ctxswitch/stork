@@ -1,6 +1,6 @@
 module Stork
   module Objects
-    class Snippet
+    class Snippet < Base
       attr_reader :name
       attr_reader :content
 

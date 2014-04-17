@@ -1,7 +1,6 @@
-
 module Stork
   module Objects
-    class Chef
+    class Chef < Base
       attr_reader :name
       attr_accessor :url
       attr_accessor :version

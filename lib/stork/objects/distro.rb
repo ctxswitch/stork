@@ -1,6 +1,6 @@
 module Stork
   module Objects
-    class Distro
+    class Distro < Base
       attr_reader :name
       attr_accessor :kernel
       attr_accessor :image

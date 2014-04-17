@@ -1,6 +1,6 @@
 module Stork
   module Objects
-    class Firewall
+    class Firewall 
       attr_accessor :enabled
       attr_accessor :trusted_devices
       attr_accessor :ports_allowed

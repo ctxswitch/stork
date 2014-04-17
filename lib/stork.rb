@@ -6,6 +6,7 @@ require 'stork/version'
 require 'stork/configuration'
 require 'stork/collections'
 
+require 'stork/objects/base'
 require 'stork/objects/chef'
 require 'stork/objects/distro'
 require 'stork/objects/partition'

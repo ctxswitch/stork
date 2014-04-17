@@ -1,6 +1,6 @@
 module Stork
   module Objects
-    class Host
+    class Host < Base
       attr_reader :name
       attr_reader :configuration
       attr_accessor :layout

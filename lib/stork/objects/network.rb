@@ -1,6 +1,6 @@
 module Stork
   module Objects
-    class Network
+    class Network < Base
       attr_reader :name
       attr_accessor :netmask
       attr_accessor :gateway

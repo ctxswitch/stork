@@ -4,7 +4,7 @@ describe "Stork::Builder" do
   it "must load everything" do
     builder = Stork::Builder.load(configuration)
     collection = builder.collection
-    collection.hosts.size.must_equal 1
+    collection.hosts.size.must_equal 11
     collection.chefs.size.must_equal 1
     collection.distros.size.must_equal 1
     collection.layouts.size.must_equal 1

@@ -1,6 +1,6 @@
 module Stork
   module Objects
-    class Layout
+    class Layout < Base
       attr_reader   :name
       attr_accessor :zerombr
       attr_accessor :clearpart

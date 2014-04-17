@@ -1,6 +1,6 @@
 module Stork
   module Objects
-    class Template
+    class Template < Base
       attr_reader :name
       attr_reader :content
 

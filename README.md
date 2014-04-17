@@ -22,7 +22,7 @@ Install the latest version from the github:
     storkctl start restart stop [options]
 
 ### Query
-    stork sync
+    stork bundle sync
 
     stork host list
     stork host search [query]
