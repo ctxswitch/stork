@@ -7,4 +7,4 @@ rvm:
 before_script: bundle exec rake ksvalidator:setup
 
 notifications:
-  hipchat: JZJbSiaRvj2I3oPf3r4P9fKKoTjufDBNcpRGUG7R@Stork
+  hipchat: ac943dbb9ee5b4a2562d4476987a91@Stork
