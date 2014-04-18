@@ -1,1 +1,62 @@
 #!/usr/bin/env ruby
+
+# begin
+#   require 'rubygems'
+# rescue LoadError
+# end
+
+# begin
+#   require 'stork'
+# rescue LoadError
+#   $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
+#   require 'stork'
+# end
+
+# require 'optparse'
+# require 'ostruct'
+
+# class StorkApp
+#   def initialize
+#     @options = OpenStruct.new
+#     @options.config = "/etc/stork/config.rb"
+#     @options.command = nil
+#   end
+
+#   def parse
+#     opts = OptionParser.new do |o|
+#       o.banner = "Usage: storkctl start|stop|restart [options]"
+#       o.on("-c", "--config FILE", "Read configuration from the specified file") do |config|
+#         @options.config = config
+#       end
+#     end
+
+#     action = :"#{ARGV.shift}"
+#     unless [:start, :stop, :restart].include?(action)
+#       puts opts.help
+#       exit 1
+#     end
+#     @options.command = action
+#     opts.parse!
+#   end
+
+#   def build
+#     @configuration = Stork::Configuration.from_file(@options.config)
+#     @collection = Stork::Builder.load(@configuration).collection
+#   end
+
+#   def run
+#     case @options.command
+#     when :start
+#       Stork::Server::Control.start(@configuration, @collection)
+#     when :stop
+#       Stork::Server::Control.stop(@configuration, @collection)
+#     when :restart
+#       Stork::Server::Control.restart(@configuration, @collection)
+#     end
+#   end
+# end
+
+# app = StorkCtlApp.new
+# app.parse
+# app.build
+# app.run

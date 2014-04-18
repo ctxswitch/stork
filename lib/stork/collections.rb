@@ -26,5 +26,13 @@ module Stork
       @snippets = Stork::Collection::Snippets.new
       @templates = Stork::Collection::Templates.new
     end
+
+    alias_method :network, :networks
+    alias_method :layout, :layouts
+    alias_method :host, :hosts
+    alias_method :chef, :chefs
+    alias_method :distro, :distros
+    alias_method :snippet, :snippets
+    alias_method :template, :templates
   end
 end

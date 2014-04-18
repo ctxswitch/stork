@@ -55,7 +55,7 @@ module Stork
           str = "rootpw"
           unless host.password.locked?
             str += host.password.encrypted ? " --iscrypted" : " --plaintext"
-            str += " " + host.password.to_s
+            str += " " + host.password.value
           else
             str += " --lock"
           end
@@ -72,7 +72,7 @@ module Stork
             str += " --smtp" if fw.smtp
             str += " --http" if fw.http
             str += " --ftp" if fw.ftp
-            str += " --port #{fw.ports_allowed.join(',')}" unless fw.ports_allowed.empty?
+            str += " --port #{fw.allowed_ports.join(',')}" unless fw.allowed_ports.empty?
             fw.trusted_devices.each do |device|
               str += " --trust #{device}"
             end

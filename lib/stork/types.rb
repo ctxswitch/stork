@@ -1,0 +1,7 @@
+require 'stork/type/default'
+require 'stork/type/array'
+require 'stork/type/file'
+require 'stork/type/symbol'
+require 'stork/type/boolean'
+require 'stork/type/resource'
+require 'stork/type/collection'

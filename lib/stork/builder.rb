@@ -32,38 +32,38 @@ module Stork
 
       def host(name, &block)
         @delegated.collection.hosts.add(
-          Objects::Host.build(@delegated.configuration, @delegated.collection, name, &block)
+          Resource::Host.build(@delegated.configuration, @delegated.collection, name, &block)
         )
       end
 
       def layout(name, &block)
         @delegated.collection.layouts.add(
-          Objects::Layout.build(name, &block)
+          Resource::Layout.build(name, &block)
         )
       end
 
       def network(name, &block)
         @delegated.collection.networks.add(
-          Objects::Network.build(name, &block)
+          Resource::Network.build(name, &block)
         )
       end
 
       def chef(name, &block)
         @delegated.collection.chefs.add(
-          Objects::Chef.build(name, &block)
+          Resource::Chef.build(name, &block)
         )
       end
 
       def distro(name, &block)
         @delegated.collection.distros.add(
-          Objects::Distro.build(name, &block)
+          Resource::Distro.build(name, &block)
         )
       end
 
       def templates(path)
         Dir.glob(path + "/*.erb") do |file|
           @delegated.collection.templates.add(
-            Objects::Template.new(file)
+            Resource::Template.new(file)
           )
         end
       end
@@ -71,7 +71,7 @@ module Stork
       def snippets(path)
         Dir.glob(path + "/*.erb") do |file|
           @delegated.collection.snippets.add(
-            Objects::Snippet.new(file)
+            Resource::Snippet.new(file)
           )
         end
       end
