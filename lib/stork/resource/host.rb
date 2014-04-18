@@ -22,8 +22,8 @@ module Stork
       def initialize(configuration, name)
         @configuration = configuration
         @name = name
-        @layout = "default"
-        @template = "default"
+        @layout = 'default'
+        @template = 'default'
         @chef = nil
         @pxemac = nil
         @pre_snippets = []
@@ -33,14 +33,14 @@ module Stork
         @timezone = Timezone.new(configuration.timezone)
         @firewall = Firewall.new
         @password = Password.new
-        @selinux = "enforcing"
+        @selinux = 'enforcing'
         @packages = default_packages
         @run_list = []
         @repos = []
       end
 
       def default_packages
-        %w{
+        %w(
           @core
           curl
           openssh-clients
@@ -62,7 +62,7 @@ module Stork
           which
           wget
           man
-        }
+)
       end
 
       def deploy
@@ -93,7 +93,7 @@ module Stork
         def template(value)
           template = @collection.templates.get(value)
           unless template
-            raise SyntaxError, "The #{value} template was not found"
+            fail SyntaxError, "The #{value} template was not found"
           end
           @delegated.template = template
         end
@@ -113,7 +113,7 @@ module Stork
         def pre_snippet(value)
           snippet = @collection.snippets.get(value)
           unless snippet
-            raise SyntaxError, "The #{value} snippet was not found"
+            fail SyntaxError, "The #{value} snippet was not found"
           end
           @delegated.pre_snippets << snippet
         end
@@ -121,7 +121,7 @@ module Stork
         def post_snippet(value)
           snippet = @collection.snippets.get(value)
           unless snippet
-            raise SyntaxError, "The #{value} snippet was not found"
+            fail SyntaxError, "The #{value} snippet was not found"
           end
           @delegated.post_snippets << snippet
         end
@@ -140,14 +140,14 @@ module Stork
 
         def firewall(&block)
           unless block_given?
-            raise SyntaxError, "Firewall requires a block"
+            fail SyntaxError, 'Firewall requires a block'
           end
           @delegated.firewall = Firewall.build(&block)
         end
 
         def password(&block)
           unless block_given?
-            raise SyntaxError, "Password requires a block"
+            fail SyntaxError, 'Password requires a block'
           end
           @delegated.password = Password.build(&block)
         end
@@ -158,7 +158,7 @@ module Stork
 
         def run_list(value)
           if value.is_a?(String)
-            list = value.split(",")
+            list = value.split(',')
           else
             list = value
           end

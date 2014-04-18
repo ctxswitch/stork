@@ -11,10 +11,10 @@ module Stork
       def initialize(name, options = {})
         @name = name
         @size = 1
-        @type = "ext4"
+        @type = 'ext4'
         @grow = false
         @recommended = true
-        @path = "/"
+        @path = '/'
       end
     end
   end

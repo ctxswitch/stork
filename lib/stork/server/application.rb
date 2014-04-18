@@ -1,4 +1,4 @@
-require "sinatra"
+require 'sinatra'
 
 module Stork
   module Server
@@ -10,12 +10,12 @@ module Stork
       end
 
       before do
-        logger.datetime_format = "%Y/%m/%d @ %H:%M:%S "
+        logger.datetime_format = '%Y/%m/%d @ %H:%M:%S '
         logger.level = Logger::INFO
       end
 
       get '/' do
-        info "GET /"
+        info 'GET /'
         json_halt 200, 200, "Stork Version #{VERSION} - #{CODENAME}"
       end
 
@@ -96,22 +96,22 @@ module Stork
 
         def json_halt(request_status, op_status, message)
           content_type :json
-          halt request_status, {'Content-Type' => 'application/json'}, "{ \"status\":\"#{op_status}\", \"message\": \"#{message}\" }"
+          halt request_status, { 'Content-Type' => 'application/json' }, "{ \"status\":\"#{op_status}\", \"message\": \"#{message}\" }"
         end
 
         def json_halt_ok
           content_type :json
-          json_halt 200, 200, "OK"
+          json_halt 200, 200, 'OK'
         end
 
         def json_halt_internal_error
           content_type :json
-          json_halt 500, 500, "Internal error"
+          json_halt 500, 500, 'Internal error'
         end
 
         def json_halt_not_found
           content_type :json
-          json_halt 404, 404, "not found"
+          json_halt 404, 404, 'not found'
         end
       end
     end

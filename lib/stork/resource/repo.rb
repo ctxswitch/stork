@@ -7,15 +7,15 @@ module Stork
 
       def initialize(name, options = {})
         @name = name
-        @baseurl = options.has_key?(:baseurl) ? options[:baseurl] : nil
-        @mirrorlist = options.has_key?(:mirrorlist) ? options[:mirrorlist] : nil
+        @baseurl = options.key?(:baseurl) ? options[:baseurl] : nil
+        @mirrorlist = options.key?(:mirrorlist) ? options[:mirrorlist] : nil
 
         unless baseurl || mirrorlist
-          raise SyntaxError, "One of baseurl or mirrorlist must be specified."
+          fail SyntaxError, 'One of baseurl or mirrorlist must be specified.'
         end
 
         if baseurl && mirrorlist
-          raise SyntaxError, "You may use only baseurl or mirrorlist but not both."
+          fail SyntaxError, 'You may use only baseurl or mirrorlist but not both.'
         end
       end
 

@@ -12,18 +12,18 @@ module Stork
 
       def client_content
         lines = []
-        lines << "log_level        :auto"
-        lines << "log_location     STDOUT"
+        lines << 'log_level        :auto'
+        lines << 'log_location     STDOUT'
         lines << "chef_server_url  \"#{url}\""
         lines << "validation_client_name \"#{validator_name}\""
-        lines << "# Using default node name (fqdn)"
+        lines << '# Using default node name (fqdn)'
         lines.join("\n")
       end
 
       def knife_content
         lines = []
-        "log_level                :info"
-        "log_location             STDOUT"
+        'log_level                :info'
+        'log_location             STDOUT'
         "node_name                \"#{client_name}\""
         "client_key               \"/root/.chef/#{client_name}.pem\""
         "validation_client_name   \"#{validator_name}\""

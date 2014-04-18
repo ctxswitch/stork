@@ -1,7 +1,7 @@
 module Stork
   module Deploy
     class Kickstart
-      def initialize(host, configuration=nil)
+      def initialize(host, configuration = nil)
         @host = host
         @configuration = configuration
       end

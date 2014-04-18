@@ -13,12 +13,12 @@ module Stork
       delegator = BuilderDelegator.new(builder)
       delegator.snippets(configuration.snippets_path)
       delegator.templates(configuration.templates_path)
-      [ configuration.distros_path,
-        configuration.chefs_path,
-        configuration.networks_path,
-        configuration.layouts_path,
-        configuration.hosts_path ].each do |path|
-        Dir.glob(path + "/*.rb") do |file|
+      [configuration.distros_path,
+       configuration.chefs_path,
+       configuration.networks_path,
+       configuration.layouts_path,
+       configuration.hosts_path].each do |path|
+        Dir.glob(path + '/*.rb') do |file|
           delegator.instance_eval(File.read(file))
         end
       end
@@ -61,7 +61,7 @@ module Stork
       end
 
       def templates(path)
-        Dir.glob(path + "/*.erb") do |file|
+        Dir.glob(path + '/*.erb') do |file|
           @delegated.collection.templates.add(
             Resource::Template.new(file)
           )
@@ -69,7 +69,7 @@ module Stork
       end
 
       def snippets(path)
-        Dir.glob(path + "/*.erb") do |file|
+        Dir.glob(path + '/*.erb') do |file|
           @delegated.collection.snippets.add(
             Resource::Snippet.new(file)
           )

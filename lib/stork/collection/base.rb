@@ -30,7 +30,7 @@ module Stork
 
       # Need to check for nil and raise
       def get(id)
-        find{ |obj| obj.id == id }
+        find { |obj| obj.id == id }
       end
     end
   end

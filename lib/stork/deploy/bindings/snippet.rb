@@ -22,16 +22,16 @@ module Stork
         end
 
         def first_boot_content
-          run_list = {'run_list' => host.run_list }
+          run_list = { 'run_list' => host.run_list }
           run_list.to_json
         end
 
         def nameservers
-          host.interfaces.collect{ |x| x.nameservers }.uniq.flatten
+          host.interfaces.map { |x| x.nameservers }.uniq.flatten
         end
 
         def search_paths
-          host.interfaces.collect{ |x| x.search_paths }.uniq.flatten
+          host.interfaces.map { |x| x.search_paths }.uniq.flatten
         end
 
         def midwife_server

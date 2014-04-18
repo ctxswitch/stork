@@ -18,11 +18,11 @@ module Stork
         end
 
         def post_snippets
-          render_snippets(:post, host.post_snippets, "/root/midwife-post.log")
+          render_snippets(:post, host.post_snippets, '/root/midwife-post.log')
         end
 
         def url
-          str = "url"
+          str = 'url'
           str += " --url #{host.distro.url}"
           str
         end
@@ -40,10 +40,10 @@ module Stork
             end
             # Others
             str += " --onboot=#{interface.onboot ? 'yes' : 'no'}"
-            str += " --noipv4" if interface.noipv4
-            str += " --noipv6" if interface.noipv6
-            str += " --nodefroute" if interface.nodefroute
-            str += " --nodns" if interface.nodns
+            str += ' --noipv4' if interface.noipv4
+            str += ' --noipv6' if interface.noipv6
+            str += ' --nodefroute' if interface.nodefroute
+            str += ' --nodns' if interface.nodns
             str += " --ethtool=\"#{ethtool}\"" if interface.ethtool
             str += " --mtu=#{mtu}" if interface.mtu
             lines << str
@@ -52,41 +52,41 @@ module Stork
         end
 
         def password
-          str = "rootpw"
+          str = 'rootpw'
           unless host.password.locked?
-            str += host.password.encrypted ? " --iscrypted" : " --plaintext"
-            str += " " + host.password.value
+            str += host.password.encrypted ? ' --iscrypted' : ' --plaintext'
+            str += ' ' + host.password.value
           else
-            str += " --lock"
+            str += ' --lock'
           end
           str
         end
 
         def firewall
           fw = host.firewall
-          str = "firewall"
+          str = 'firewall'
           if fw.enabled
-            str += " --enabled"
-            str += " --ssh" if fw.ssh
-            str += " --telnet" if fw.telnet
-            str += " --smtp" if fw.smtp
-            str += " --http" if fw.http
-            str += " --ftp" if fw.ftp
+            str += ' --enabled'
+            str += ' --ssh' if fw.ssh
+            str += ' --telnet' if fw.telnet
+            str += ' --smtp' if fw.smtp
+            str += ' --http' if fw.http
+            str += ' --ftp' if fw.ftp
             str += " --port #{fw.allowed_ports.join(',')}" unless fw.allowed_ports.empty?
             fw.trusted_devices.each do |device|
               str += " --trust #{device}"
             end
           else
-            str += " --disabled"
+            str += ' --disabled'
           end
           str
         end
 
         def timezone
           tz = host.timezone
-          str = "timezone"
-          str += " --utc" if tz.utc
-          str += " --nontp" if tz.nontp
+          str = 'timezone'
+          str += ' --utc' if tz.utc
+          str += ' --nontp' if tz.nontp
           # str += " --ntpservers=#{tz.ntpservers.join(',')}" unless tz.ntpservers.empty?
           str += " #{tz.zone}"
           str
@@ -99,9 +99,9 @@ module Stork
         def layout
           layout = host.layout
           lines = []
-          lines << "bootloader --location mbr"
-          lines << "zerombr" if layout.zerombr
-          lines << "clearpart --all --initlabel" if layout.clearpart
+          lines << 'bootloader --location mbr'
+          lines << 'zerombr' if layout.zerombr
+          lines << 'clearpart --all --initlabel' if layout.clearpart
           lines << partitions
           lines << volume_groups
           lines.join("\n")
@@ -114,13 +114,13 @@ module Stork
           parts.each do |part|
             str = "part #{part.path}"
             str += " --fstype #{part.type}" if part.type
-            str += " --asprimary" if part.primary
+            str += ' --asprimary' if part.primary
 
             unless part.recommended
               str += " --size #{part.size}"
-              str += " --grow" if part.grow
+              str += ' --grow' if part.grow
             else
-              str += " --recommended"
+              str += ' --recommended'
             end
             lines << str
           end
@@ -149,9 +149,9 @@ module Stork
               str += " --fstype #{lv.type}" if lv.type
               unless lv.recommended
                 str += " --size #{lv.size}"
-                str += " --grow" if lv.grow
+                str += ' --grow' if lv.grow
               else
-                str += " --recommended"
+                str += ' --recommended'
               end
               lines << str
             end
@@ -163,8 +163,8 @@ module Stork
           host.packages.join("\n")
         end
 
-      private
-        def render_snippets(type, snippets, log=nil)
+        private
+        def render_snippets(type, snippets, log = nil)
           lines = []
           str = "%#{type}"
           str += " --log=#{log}" if log
@@ -175,7 +175,7 @@ module Stork
             lines << renderer.result(
               Snippet.new(@configuration, host).get_binding)
           end
-          lines << "%end"
+          lines << '%end'
           lines.join("\n")
         end
       end

@@ -15,9 +15,9 @@ module Stork
 
       def self.create_delegators(klass, name, options)
         if options.of == :resources
-          raise "A resource must be specified for #{name}" unless options.resource
-          resource = options.resource.to_s.split('_').map{|e| e.capitalize}.join
-          
+          fail "A resource must be specified for #{name}" unless options.resource
+          resource = options.resource.to_s.split('_').map { |e| e.capitalize }.join
+
           klass.class_eval <<-EOS, __FILE__, __LINE__
             def #{name}(value = nil, options = {}, &block)
               @delegated.#{name}s << Stork::Resource::#{resource}.build(value, options, &block)

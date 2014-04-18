@@ -11,7 +11,7 @@ module Stork
 
       alias_method :id, :name
 
-    private
+      private
       def read_content(path)
         File.read(path)
       end

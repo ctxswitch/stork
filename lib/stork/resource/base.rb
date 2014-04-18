@@ -19,13 +19,13 @@ module Stork
       end
 
       def self.attribute(name, options = {})
-        type      = options.has_key?(:type) ? options[:type] : :default
-        as        = options.has_key?(:as) ? options[:as] : nil
-        negate    = options.has_key?(:negate) ? options[:negate] : nil
-        resource  = options.has_key?(:resource) ? options[:resource] : nil
-        forward   = options.has_key?(:forward) ? options[:forward] : []
-        of        = options.has_key?(:of) ? options[:of] : :default
-        default   = options.has_key?(:default) ? options[:default] : nil
+        type      = options.key?(:type) ? options[:type] : :default
+        as        = options.key?(:as) ? options[:as] : nil
+        negate    = options.key?(:negate) ? options[:negate] : nil
+        resource  = options.key?(:resource) ? options[:resource] : nil
+        forward   = options.key?(:forward) ? options[:forward] : []
+        of        = options.key?(:of) ? options[:of] : :default
+        default   = options.key?(:default) ? options[:default] : nil
 
         # Set up the options
         attribute_options[name] = OpenStruct.new
@@ -40,11 +40,11 @@ module Stork
         # Add the attribute and create the accessors
         attributes << name
 
-        klass = Stork::Type::const_get(type.to_s.capitalize)
+        klass = Stork::Type.const_get(type.to_s.capitalize)
         klass.create_accessors(self, name, attribute_options[name])
       end
 
-      def self.build(name=nil, options = {}, &block)
+      def self.build(name = nil, options = {}, &block)
         inst = new(name, options)
         delegator = Delegator.setup(attributes, attribute_options).new(inst, options)
         delegator.instance_eval(&block) if block_given?
@@ -67,7 +67,7 @@ module Stork
         def self.setup(attributes, attribute_options)
           attributes.each do |name|
             options = attribute_options[name]
-            klass = Stork::Type::const_get(options.type.to_s.capitalize)
+            klass = Stork::Type.const_get(options.type.to_s.capitalize)
             klass.create_delegators(self, name, options)
             class_eval "alias_method :#{options.as}, :#{name}" if options.as
           end

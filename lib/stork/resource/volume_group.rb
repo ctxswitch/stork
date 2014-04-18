@@ -7,7 +7,7 @@ module Stork
 
       def initialize(name, options = {})
         @name = name
-        @partition = options.has_key?(:part) ? options[:part] : nil
+        @partition = options.key?(:part) ? options[:part] : nil
         @logical_volumes = []
       end
     end

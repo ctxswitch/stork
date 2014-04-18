@@ -11,7 +11,7 @@ module Stork
       def initialize(path, options = {})
         @path = path
         @size = 1
-        @type = "ext4"
+        @type = 'ext4'
         @grow = false
         @primary = false
         @recommended = true

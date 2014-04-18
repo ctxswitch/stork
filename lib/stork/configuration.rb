@@ -12,46 +12,46 @@ module Stork
     attr_accessor :timezone
 
     def initialize
-      @path                 = "/etc/stork"
-      @authorized_keys_file = path + "/authorized_keys"
-      @bundle_path          = path + "/bundles"
+      @path                 = '/etc/stork'
+      @authorized_keys_file = path + '/authorized_keys'
+      @bundle_path          = path + '/bundles'
 
-      @pxe_path             = "/var/lib/tftpboot/pxelinux.cfg"
-      @log_file             = "/var/log/stork.log"
-      @pid_file             = "/var/run/stork.pid"
+      @pxe_path             = '/var/lib/tftpboot/pxelinux.cfg'
+      @log_file             = '/var/log/stork.log'
+      @pid_file             = '/var/run/stork.pid'
 
-      @server               = "localhost"
+      @server               = 'localhost'
       @port                 = 9293
-      @bind                 = "0.0.0.0"
-      @timezone             = "America/Los_Angeles"
+      @bind                 = '0.0.0.0'
+      @timezone             = 'America/Los_Angeles'
     end
 
     def hosts_path
-      bundle_path + "/hosts"
+      bundle_path + '/hosts'
     end
 
     def snippets_path
-      bundle_path + "/snippets"
+      bundle_path + '/snippets'
     end
 
     def layouts_path
-      bundle_path + "/layouts"
+      bundle_path + '/layouts'
     end
 
     def networks_path
-      bundle_path + "/networks"
+      bundle_path + '/networks'
     end
 
     def distros_path
-      bundle_path + "/distros"
+      bundle_path + '/distros'
     end
 
     def templates_path
-      bundle_path + "/templates"
+      bundle_path + '/templates'
     end
 
     def chefs_path
-      bundle_path + "/chefs"
+      bundle_path + '/chefs'
     end
 
     def to_file
@@ -91,7 +91,7 @@ timezone                "#{timezone}"
       end
 
       def method_missing(meth, *args)
-        @delegated.send("#{meth.to_s}=", *args)
+        @delegated.send("#{meth}=", *args)
       end
     end
   end

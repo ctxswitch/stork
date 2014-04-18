@@ -3,13 +3,13 @@ module Stork
     class Layout < Base
       attribute :zerombr, type: :boolean, default: false
       attribute :clearpart, type: :boolean, default: false
-      attribute :partition, type: :array, 
-                            of: :resources, 
-                            resource: :partition, 
-                            as: :part, 
+      attribute :partition, type: :array,
+                            of: :resources,
+                            resource: :partition,
+                            as: :part,
                             required: true
-      attribute :volume_group,  type: :array, 
-                                of: :resources, 
+      attribute :volume_group,  type: :array,
+                                of: :resources,
                                 resource: :volume_group, as: :volgroup
       # attributes :raid_groups
 
@@ -23,7 +23,7 @@ module Stork
 
       def validate!
         if partitions.empty?
-          raise SyntaxError, "You must supply a partition block"
+          fail SyntaxError, 'You must supply a partition block'
         end
       end
     end

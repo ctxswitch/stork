@@ -25,7 +25,7 @@ module Stork
 
     alias_method :default, :localboot
 
-  private
+    private
     def install_content
       <<-EOS
 default install
@@ -57,7 +57,7 @@ LABEL local
     end
 
     def pxefile
-      @mac.gsub(/[:]/,'-')
+      @mac.gsub(/[:]/, '-')
     end
   end
 end
