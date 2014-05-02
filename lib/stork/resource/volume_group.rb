@@ -3,12 +3,21 @@ module Stork
     class VolumeGroup < Base
       attr_reader :name
       attr_accessor :partition
-      attribute :logical_volume, type: :array, of: :resources, resource: :logical_volume
+      attr_accessor :logical_volumes
 
-      def initialize(name, options = {})
-        @name = name
+      def setup
         @partition = options.key?(:part) ? options[:part] : nil
-        @logical_volumes = []
+        @logical_volumes = Array.new
+      end
+
+      class VolumeGroupDelegator < Stork::Resource::Delegator
+        def partition(partition)
+
+        end
+
+        def logical_volume(name, options = {}, &block)
+          @delegated.logical_volumes << LogicalVolume.build(name, options, &block)
+        end
       end
     end
   end

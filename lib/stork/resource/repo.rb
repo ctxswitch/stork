@@ -1,15 +1,15 @@
 module Stork
   module Resource
-    class Repo
-      attr_reader :name
+    class Repo < Base
       attr_accessor :baseurl
       attr_accessor :mirrorlist
 
-      def initialize(name, options = {})
-        @name = name
+      def setup
         @baseurl = options.key?(:baseurl) ? options[:baseurl] : nil
         @mirrorlist = options.key?(:mirrorlist) ? options[:mirrorlist] : nil
+      end
 
+      def validate!
         unless baseurl || mirrorlist
           fail SyntaxError, 'One of baseurl or mirrorlist must be specified.'
         end
@@ -23,9 +23,7 @@ module Stork
         !(baseurl && mirrorlist)
       end
 
-      def self.build(name, options = {}, &block)
-        new(name, options)
-      end
+      class RepoDelegator < Stork::Resource::Delegator ; end
     end
   end
 end

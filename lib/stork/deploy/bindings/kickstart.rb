@@ -44,8 +44,8 @@ module Stork
             str += ' --noipv6' if interface.noipv6
             str += ' --nodefroute' if interface.nodefroute
             str += ' --nodns' if interface.nodns
-            str += " --ethtool=\"#{ethtool}\"" if interface.ethtool
-            str += " --mtu=#{mtu}" if interface.mtu
+            str += " --ethtool=\"#{interface.ethtool}\"" if interface.ethtool
+            str += " --mtu=#{interface.mtu}" if interface.mtu
             lines << str
           end
           lines.join("\n")
@@ -85,8 +85,8 @@ module Stork
         def timezone
           tz = host.timezone
           str = 'timezone'
-          str += ' --utc' if tz.utc
-          str += ' --nontp' if tz.nontp
+          # str += ' --utc' if tz.utc
+          # str += ' --nontp' unless tz.ntp
           # str += " --ntpservers=#{tz.ntpservers.join(',')}" unless tz.ntpservers.empty?
           str += " #{tz.zone}"
           str

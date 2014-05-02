@@ -44,6 +44,58 @@ describe "Chef" do
     Stork::Resource::Chef.new("test").must_respond_to :encrypted_data_bag_secret=
   end
 
+  it "should require url" do
+    proc {
+      ckey = "./specs/keys/snakeoil-root.pem"
+      vkey = "./specs/keys/snakeoil-validation.pem"
+
+      chef = Stork::Resource::Chef.build("test") do
+        version "11.4.4"
+        client_key ckey
+        validation_key vkey
+      end
+      }.must_raise(SyntaxError)
+  end
+
+  it "should require version" do
+    proc {
+      ckey = "./specs/keys/snakeoil-root.pem"
+      vkey = "./specs/keys/snakeoil-validation.pem"
+
+      chef = Stork::Resource::Chef.build("test") do
+        url "https://chef.example.org"
+        client_key ckey
+        validation_key vkey
+      end
+      }.must_raise(SyntaxError)
+  end
+
+  it "should require client_key" do
+    proc {
+      ckey = "./specs/keys/snakeoil-root.pem"
+      vkey = "./specs/keys/snakeoil-validation.pem"
+
+      chef = Stork::Resource::Chef.build("test") do
+        url "https://chef.example.org"
+        version "11.4.4"
+        validation_key vkey
+      end
+      }.must_raise(SyntaxError)
+  end
+
+  it "should require validation_key" do
+    proc {
+      ckey = "./specs/keys/snakeoil-root.pem"
+      vkey = "./specs/keys/snakeoil-validation.pem"
+
+      chef = Stork::Resource::Chef.build("test") do
+        url "https://chef.example.org"
+        version "11.4.4"
+        client_key ckey
+      end
+      }.must_raise(SyntaxError)
+  end
+
   it "should build" do
     ckey = "./specs/keys/snakeoil-root.pem"
     vkey = "./specs/keys/snakeoil-validation.pem"
@@ -52,10 +104,8 @@ describe "Chef" do
       url "https://chef.example.org"
       version "11.4.4"
       client_name "root"
-      # Change to read file
       client_key ckey
       validator_name "validator"
-      # Change to read file
       validation_key vkey
       encrypted_data_bag_secret "secret"
     end

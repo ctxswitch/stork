@@ -12,7 +12,7 @@ host "server.example.org" do
   interface "eth0" do
     bootproto :static
     ip        "99.99.1.8"
-    network   "org"
+    # network   "org"
   end
 
   interface "eth1" do
@@ -51,6 +51,7 @@ hosts.each do |octet, mac|
   host "n0#{octet}.example.org" do
     template    "default"
     chef        "default"
+    distro      "centos"
     pxemac      mac
     layout      "home"
 

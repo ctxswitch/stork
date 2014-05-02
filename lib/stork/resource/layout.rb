@@ -1,30 +1,42 @@
 module Stork
   module Resource
     class Layout < Base
-      attribute :zerombr, type: :boolean, default: false
-      attribute :clearpart, type: :boolean, default: false
-      attribute :partition, type: :array,
-                            of: :resources,
-                            resource: :partition,
-                            as: :part,
-                            required: true
-      attribute :volume_group,  type: :array,
-                                of: :resources,
-                                resource: :volume_group, as: :volgroup
-      # attributes :raid_groups
+      attr_accessor :zerombr
+      attr_accessor :clearpart
+      attr_accessor :partitions
+      attr_accessor :volume_groups
+      # attr_accessor :raid_groups
 
-      def initialize(name, options = {})
-        @name = name
+      def setup
         @zerombr = false
         @clearpart = false
-        @partitions = []
-        @volume_groups = []
+        @partitions = Array.new
+        @volume_groups = Array.new
       end
 
       def validate!
         if partitions.empty?
           fail SyntaxError, 'You must supply a partition block'
         end
+      end
+
+      class LayoutDelegator < Stork::Resource::Delegator
+        flag :zerombr
+        flag :clearpart
+
+        def partition(name, options = {}, &block)
+          fail SyntaxError, 'You must supply a block to partition' unless block_given?
+          @delegated.partitions << Partition.build(name, options, &block)
+        end
+
+        alias_method :part, :partition
+
+        def volume_group(name, options = {}, &block)
+          fail SyntaxError, 'You must supply a block to volume_group' unless block_given?
+          @delegated.volume_groups << VolumeGroup.build(name, options, &block)
+        end
+
+        alias_method :volgroup, :volume_group
       end
     end
   end

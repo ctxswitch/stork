@@ -1,6 +1,6 @@
 module Stork
   module Resource
-    class Template < Base
+    class Template
       attr_reader :name
       attr_reader :content
 
@@ -11,7 +11,7 @@ module Stork
 
       alias_method :id, :name
 
-      private
+    private
       def read_content(path)
         File.read(path)
       end

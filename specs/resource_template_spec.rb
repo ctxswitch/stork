@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/spec_helper'
+# require File.dirname(__FILE__) + '/spec_helper'
 
-describe "Stork::Resource::Template" do
+# describe "Stork::Resource::Template" do
 
-end
+# end

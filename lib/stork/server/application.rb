@@ -80,14 +80,7 @@ module Stork
         end
 
         def pxe(host)
-          Stork::PXE.new(
-            config.server,
-            config.pxe_path,
-            host.name,
-            host.pxemac,
-            host.distro.kernel,
-            host.distro.image
-          )
+          Stork::PXE.new(host, "127.0.0.1", config.port)
         end
 
         def info(msg)

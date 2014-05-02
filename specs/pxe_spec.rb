@@ -3,15 +3,10 @@ require 'fileutils'
 
 describe "Stork::PXE" do
   before :all do
+    @host = collection.hosts.get("server.example.org")
     @path = './specs/tmp/pxeboot'
     FileUtils.mkdir_p @path
-    @pxe = Stork::PXE.new(
-      'midwife.example.org',
-      @path,
-      'server.example.org',
-      '00:11:22:33:44:55',
-      'vmlinuz',
-      'initrd.img')
+    @pxe = Stork::PXE.new(@host, 'midwife.example.org', 9293)
   end
 
   after(:each) do
@@ -29,7 +24,7 @@ ONTIMEOUT local
 LABEL local
         LOCALBOOT -1
     EOS
-    File.read("#{@path}/00-11-22-33-44-55").must_equal expected_content
+    File.read("#{@path}/01-00-11-22-33-44-55").must_equal expected_content
   end
 
   it "creates the default file" do
@@ -43,7 +38,7 @@ ONTIMEOUT local
 LABEL local
         LOCALBOOT -1
     EOS
-    File.read("#{@path}/00-11-22-33-44-55").must_equal expected_content
+    File.read("#{@path}/01-00-11-22-33-44-55").must_equal expected_content
   end
 
   it "creates the install file" do
@@ -55,8 +50,8 @@ timeout 1
 label install
         kernel vmlinuz
         ipappend 2
-        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://midwife.example.org/ks/server.example.org
+        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://midwife.example.org:9293/ks/server.example.org
     EOS
-    File.read("#{@path}/00-11-22-33-44-55").must_equal expected_content
+    File.read("#{@path}/01-00-11-22-33-44-55").must_equal expected_content
   end
 end

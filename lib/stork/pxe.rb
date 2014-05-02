@@ -2,24 +2,31 @@ module Stork
   class PXE
     attr_reader :initrd, :kernel, :kickstart, :path, :hostname, :mac
 
-    def initialize(server, path, hostname, mac, kernel, initrd)
-      @host = hostname
-      @initrd = initrd
-      @kernel = kernel
-      @path = path
-      @mac = mac
-      @kickstart = "http://#{server}/ks/#{hostname}"
+    # def initialize(server, path, hostname, mac, kernel, initrd)
+    #   @host = hostname
+    #   @initrd = initrd
+    #   @kernel = kernel
+    #   @path = path
+    #   @mac = mac
+    #   @kickstart = "http://#{server}/ks/#{hostname}"
+    # end
+
+    def initialize(host, server, port)
+      @hostname = host.name
+      @initrd = host.distro.image
+      @kernel = host.distro.kernel
+      @path = host.configuration.pxe_path
+      @mac = host.pxemac
+      @server = server
+      @port = port
+      @kickstart = "http://#{server}:#{port}/ks/#{hostname}"
     end
 
     def localboot
-      # template = File.dirname(__FILE__) + '/erbs/pxe.localboot.erb'
-      # write ERB.new(File.read(template)).result(binding())
       write localboot_content
     end
 
     def install
-      # template = File.dirname(__FILE__) + '/erbs/pxe.install.erb'
-      # write ERB.new(File.read(template)).result(binding())
       write install_content
     end
 
@@ -57,7 +64,7 @@ LABEL local
     end
 
     def pxefile
-      @mac.gsub(/[:]/, '-')
+      '01-' + @mac.gsub(/[:]/, '-')
     end
   end
 end

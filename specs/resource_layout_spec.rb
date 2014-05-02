@@ -24,15 +24,15 @@ describe "Stork::Resource::Layout" do
     Stork::Resource::Layout.new('test').must_respond_to :partitions=
   end
 
-  # it "requires a block for partition during build" do
-  #   proc {
-  #     layout = Stork::Resource::Layout.build('test') do
-  #       zerombr
-  #       clearpart
-  #       part '/'
-  #     end
-  #   }.must_raise(SyntaxError)
-  # end
+  it "requires a block for partition during build" do
+    proc {
+      layout = Stork::Resource::Layout.build('test') do
+        zerombr
+        clearpart
+        part '/'
+      end
+    }.must_raise(SyntaxError)
+  end
 
   it "requires a block for volume_group during build" do
     proc {

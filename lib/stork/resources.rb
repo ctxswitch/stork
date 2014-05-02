@@ -1,3 +1,4 @@
+require 'stork/resource/delegator'
 require 'stork/resource/base'
 require 'stork/resource/chef'
 require 'stork/resource/distro'

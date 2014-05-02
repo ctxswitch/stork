@@ -1,20 +1,36 @@
 module Stork
   module Resource
     class LogicalVolume < Base
-      attribute :path
-      attribute :size
-      attribute :type
-      attribute :primary, type: :boolean
-      attribute :grow, type: :boolean
-      attribute :recommended, type: :boolean
+      attr_accessor :path
+      attr_accessor :size
+      attr_accessor :type
+      attr_accessor :primary
+      attr_accessor :grow
+      attr_accessor :recommended
 
-      def initialize(name, options = {})
-        @name = name
+      def setup
         @size = 1
         @type = 'ext4'
         @grow = false
         @recommended = true
         @path = '/'
+      end
+
+      class LogicalVolumeDelegator < Stork::Resource::Delegator
+        flag :grow
+        flag :recommended
+
+        def path(path)
+          delegated.path = path
+        end
+
+        def size(size)
+          delegated.size = size
+        end
+
+        def type(type)
+          delegated.type = type
+        end
       end
     end
   end

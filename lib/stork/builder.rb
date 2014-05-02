@@ -8,16 +8,29 @@ module Stork
       @collection = Stork::Collections.new
     end
 
+    def self.load_paths(configuration)
+      %w{
+        configuration.distros_path
+      }
+    end
+
     def self.load(configuration)
       builder = Builder.new(configuration)
       delegator = BuilderDelegator.new(builder)
+
+      # Load in snippets and templates
       delegator.snippets(configuration.snippets_path)
       delegator.templates(configuration.templates_path)
-      [configuration.distros_path,
-       configuration.chefs_path,
-       configuration.networks_path,
-       configuration.layouts_path,
-       configuration.hosts_path].each do |path|
+
+      load_paths = [
+        configuration.distros_path,
+        configuration.chefs_path,
+        configuration.networks_path,
+        configuration.layouts_path,
+        configuration.hosts_path
+      ]
+
+      load_paths.each do |path|
         Dir.glob(path + '/*.rb') do |file|
           delegator.instance_eval(File.read(file))
         end
@@ -32,7 +45,10 @@ module Stork
 
       def host(name, &block)
         @delegated.collection.hosts.add(
-          Resource::Host.build(@delegated.configuration, @delegated.collection, name, &block)
+          Resource::Host.build(name, 
+            configuration: @delegated.configuration,
+            collection: @delegated.collection,
+            &block)
         )
       end
 

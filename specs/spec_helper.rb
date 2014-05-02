@@ -25,9 +25,9 @@ if ENV['DEBUG']
 end
 
 def configuration
-  @configuration ||= Stork::Configuration.from_file('./specs/stork/config.rb')
+  Stork::Configuration.from_file('./specs/stork/config.rb')
 end
 
 def collection
-  @collection ||= Stork::Builder.load(configuration).collection
+  Stork::Builder.load(configuration).collection
 end

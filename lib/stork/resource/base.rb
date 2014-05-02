@@ -2,78 +2,37 @@ module Stork
   module Resource
     class Base
       attr_reader :name
+      attr_reader :options
+      attr_reader :configuration
 
       def initialize(name = nil, options = {})
         @name = name
+        @configuration = options[:configuration]
+        @options = options
+        setup
+      end
+
+      def setup
       end
 
       def validate!
       end
 
-      def self.attributes
-        @attributes ||= []
-      end
-
-      def self.attribute_options
-        @attribute_options ||= {}
-      end
-
-      def self.attribute(name, options = {})
-        type      = options.key?(:type) ? options[:type] : :default
-        as        = options.key?(:as) ? options[:as] : nil
-        negate    = options.key?(:negate) ? options[:negate] : nil
-        resource  = options.key?(:resource) ? options[:resource] : nil
-        forward   = options.key?(:forward) ? options[:forward] : []
-        of        = options.key?(:of) ? options[:of] : :default
-        default   = options.key?(:default) ? options[:default] : nil
-
-        # Set up the options
-        attribute_options[name] = OpenStruct.new
-        attribute_options[name].type = type
-        attribute_options[name].as = as
-        attribute_options[name].negate = negate
-        attribute_options[name].resource = resource
-        attribute_options[name].forward = forward
-        attribute_options[name].of = of
-        attribute_options[name].default = default
-
-        # Add the attribute and create the accessors
-        attributes << name
-
-        klass = Stork::Type.const_get(type.to_s.capitalize)
-        klass.create_accessors(self, name, attribute_options[name])
+      def require_value(attr)
+        fail SyntaxError, "#{attr} is required" if send(attr).nil?
       end
 
       def self.build(name = nil, options = {}, &block)
         inst = new(name, options)
-        delegator = Delegator.setup(attributes, attribute_options).new(inst, options)
+        klass_name = self.to_s.split('::').last
+        klass = const_get("#{klass_name}Delegator")
+        delegator = klass.new(inst, options)
         delegator.instance_eval(&block) if block_given?
         inst.validate!
         inst
       end
 
       alias_method :id, :name
-
-      class Delegator
-        attr_reader :collection
-        attr_reader :configuration
-
-        def initialize(inst, options)
-          @delegated = inst
-          @collection = options[:collection]
-          @configuration = options[:configuration]
-        end
-
-        def self.setup(attributes, attribute_options)
-          attributes.each do |name|
-            options = attribute_options[name]
-            klass = Stork::Type.const_get(options.type.to_s.capitalize)
-            klass.create_delegators(self, name, options)
-            class_eval "alias_method :#{options.as}, :#{name}" if options.as
-          end
-          self
-        end
-      end
     end
   end
 end

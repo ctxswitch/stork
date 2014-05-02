@@ -53,7 +53,7 @@ ONTIMEOUT local
 LABEL local
         LOCALBOOT -1
     EOS
-    File.read("./specs/tmp/pxeboot/00-11-22-33-44-55").must_equal expected_content
+    File.read("./specs/tmp/pxeboot/01-00-11-22-33-44-55").must_equal expected_content
   end
 
   it "should error on completed install for invalid host" do
@@ -72,9 +72,9 @@ timeout 1
 label install
         kernel vmlinuz
         ipappend 2
-        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost/ks/server.example.org
+        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://127.0.0.1:5000/ks/server.example.org
     EOS
-    File.read("./specs/tmp/pxeboot/00-11-22-33-44-55").must_equal expected_content
+    File.read("./specs/tmp/pxeboot/01-00-11-22-33-44-55").must_equal expected_content
   end
 
   it "should error for invalid host" do

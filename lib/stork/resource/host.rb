@@ -1,8 +1,6 @@
 module Stork
   module Resource
     class Host < Base
-      attr_reader :name
-      attr_reader :configuration
       attr_accessor :layout
       attr_accessor :template
       attr_accessor :chef
@@ -19,24 +17,33 @@ module Stork
       attr_accessor :run_list
       attr_accessor :repos
 
-      def initialize(configuration, name)
-        @configuration = configuration
-        @name = name
-        @layout = 'default'
-        @template = 'default'
+      def setup
+        @layout = nil
+        @template = nil
+        @distro = nil
+
         @chef = nil
         @pxemac = nil
-        @pre_snippets = []
-        @post_snippets = []
-        @interfaces = []
-        @distro = nil
-        @timezone = Timezone.new(configuration.timezone)
-        @firewall = Firewall.new
-        @password = Password.new
         @selinux = 'enforcing'
+        
+        @pre_snippets = Array.new
+        @post_snippets = Array.new
+        @interfaces = Array.new
+        @run_list = Array.new
+        @repos = Array.new
         @packages = default_packages
-        @run_list = []
-        @repos = []
+        
+        @timezone = Timezone.new("America/Los_Angeles")
+        @firewall = Firewall.new # get from config
+        @password = Password.new
+      end
+
+      def validate!
+        require_value(:layout)
+        require_value(:template)
+        require_value(:distro)
+        require_value(:layout)
+        require_value(:layout)
       end
 
       def default_packages
@@ -62,79 +69,67 @@ module Stork
           which
           wget
           man
-)
+        )
       end
 
       def deploy
         Stork::Deploy::Kickstart.new(self, configuration)
       end
 
-      def self.build(configuration, collection, name, &block)
-        host = new(configuration, name)
-        delegator = HostDelegator.new(collection, host)
-        delegator.instance_eval(&block) if block_given?
-        host
-      end
-
-      class HostDelegator
-        def initialize(collection, obj)
-          @collection = collection
-          @delegated = obj
-        end
-
+      class HostDelegator < Stork::Resource::Delegator
         def layout(value, &block)
           if block_given?
-            @delegated.layout = Layout.build(value, &block)
+            delegated.layout = Layout.build(value, &block)
           else
-            @delegated.layout = @collection.layouts.get(value)
+            delegated.layout = collection.layouts.get(value)
           end
         end
 
         def template(value)
-          template = @collection.templates.get(value)
+          template = collection.templates.get(value)
           unless template
             fail SyntaxError, "The #{value} template was not found"
           end
-          @delegated.template = template
+          delegated.template = template
         end
 
         def chef(value, &block)
           if block_given?
-            @delegated.chef = Chef.build(value, &block)
+            delegated.chef = Chef.build(value, &block)
           else
-            @delegated.chef = @collection.chefs.get(value)
+            delegated.chef = collection.chefs.get(value)
           end
         end
 
         def pxemac(value)
-          @delegated.pxemac = value
+          delegated.pxemac = value
         end
 
         def pre_snippet(value)
-          snippet = @collection.snippets.get(value)
+          snippet = collection.snippets.get(value)
           unless snippet
             fail SyntaxError, "The #{value} snippet was not found"
           end
-          @delegated.pre_snippets << snippet
+          delegated.pre_snippets << snippet
         end
 
         def post_snippet(value)
-          snippet = @collection.snippets.get(value)
+          snippet = collection.snippets.get(value)
           unless snippet
             fail SyntaxError, "The #{value} snippet was not found"
           end
-          @delegated.post_snippets << snippet
+          delegated.post_snippets << snippet
         end
 
         def interface(value, &block)
-          @delegated.interfaces << Interface.build(value, collection: @collection, &block)
+          delegated.interfaces << Interface.build(value, collection: collection, &block)
         end
 
         def distro(value, &block)
           if block_given?
-            @delegated.distro = Distro.build(value, &block)
+            delegated.distro = Distro.build(value, &block)
           else
-            @delegated.distro = @collection.distros.get(value)
+            delegated.distro = collection.distros.get(value)
           end
         end
 
@@ -142,18 +137,18 @@ module Stork
           unless block_given?
             fail SyntaxError, 'Firewall requires a block'
           end
-          @delegated.firewall = Firewall.build(&block)
+          delegated.firewall = Firewall.build(&block)
         end
 
         def password(&block)
           unless block_given?
             fail SyntaxError, 'Password requires a block'
           end
-          @delegated.password = Password.build(&block)
+          delegated.password = Password.build(&block)
         end
 
         def selinux(value)
-          @delegated.selinux = value.to_s
+          delegated.selinux = value.to_s
         end
 
         def run_list(value)
@@ -162,15 +157,15 @@ module Stork
           else
             list = value
           end
-          @delegated.run_list |= list
+          delegated.run_list |= list
         end
 
         def repo(name, args = {})
-          @delegated.repos << Repo.new(name, args)
+          delegated.repos << Repo.build(name, args)
         end
 
         def package(name)
-          @delegated.packages << name
+          delegated.packages << name
         end
       end
 
