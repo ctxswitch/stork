@@ -80,7 +80,7 @@ module Stork
         end
 
         def pxe(host)
-          Stork::PXE.new(host, "127.0.0.1", config.port)
+          Stork::PXE.new(host, host.stork, config.port)
         end
 
         def info(msg)

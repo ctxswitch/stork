@@ -16,6 +16,7 @@ module Stork
       attr_accessor :packages
       attr_accessor :run_list
       attr_accessor :repos
+      attr_accessor :stork
 
       def setup
         @layout = nil
@@ -25,6 +26,7 @@ module Stork
         @chef = nil
         @pxemac = nil
         @selinux = 'enforcing'
+        @stork = configuration ? configuration.server : 'localhost'
         
         @pre_snippets = Array.new
         @post_snippets = Array.new
@@ -103,6 +105,10 @@ module Stork
 
         def pxemac(value)
           delegated.pxemac = value
+        end
+
+        def stork(value)
+          delegated.stork = value
         end
 
         def pre_snippet(value)

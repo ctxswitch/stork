@@ -72,7 +72,7 @@ timeout 1
 label install
         kernel vmlinuz
         ipappend 2
-        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://127.0.0.1:5000/ks/server.example.org
+        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost:5000/ks/server.example.org
     EOS
     File.read("./specs/tmp/pxeboot/01-00-11-22-33-44-55").must_equal expected_content
   end
