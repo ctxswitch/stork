@@ -18,7 +18,7 @@ describe "Stork::Deploy::Kickstart" do
       kspath      = "#{@path}/tmp/output.ks"
       template    = "#{@path}/stork/bundles/templates/default.ks.erb"
 
-      ks = Stork::Deploy::Kickstart.new(@host, configuration)
+      ks = Stork::Deploy::InstallScript.new(@host, :kickstart)
 
       File.open("#{@path}/tmp/output.ks", 'w') do |file|
         file.write(ks.render)

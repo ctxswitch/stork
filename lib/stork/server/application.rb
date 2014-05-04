@@ -19,14 +19,14 @@ module Stork
         json_halt 200, 200, "Stork Version #{VERSION} - #{CODENAME}"
       end
 
-      get '/ks/:host' do |host|
+      get '/host/:host' do |host|
         info "#{host} requested kickstart"
 
         h = hosts.get(host)
 
         if h
           # hmm, should the host deploy?
-          ks = Stork::Deploy::Kickstart.new(h, config)
+          ks = Stork::Deploy::InstallScript.new(h) # we will be passing the type in shortly
           content_type :plain
           ks.render
         else
@@ -34,7 +34,7 @@ module Stork
         end
       end
 
-      get '/notify/:host/installed' do |host|
+      get '/host/:host/installed' do |host|
         info "#{host} has notified completed install"
         h = hosts.get(host)
 
@@ -46,7 +46,7 @@ module Stork
         end
       end
 
-      get '/notify/:host/install' do |host|
+      get '/host/:host/install' do |host|
         info "install requested for #{host}"
         h = hosts.get(host)
 

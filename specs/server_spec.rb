@@ -29,19 +29,19 @@ describe "Stork::Server::Application" do
   end
 
   it "should output the kickstart file for a valid host" do
-    get '/ks/server.example.org'
+    get '/host/server.example.org'
     message = "foo"
     last_response.body.wont_equal "{ \"status\":\"404\", \"message\": \"not found\" }"
   end
 
   it "should error for invalid host" do
-    get '/ks/invalid.org'
+    get '/host/invalid.org'
     message = "{ \"status\":\"404\", \"message\": \"not found\" }"
     last_response.body.must_equal message
   end
 
   it "should notify of a completed install" do
-    get '/notify/server.example.org/installed'
+    get '/host/server.example.org/installed'
     last_response.body.must_equal "{ \"status\":\"200\", \"message\": \"OK\" }"
 
     expected_content = <<-EOS
@@ -57,12 +57,12 @@ LABEL local
   end
 
   it "should error on completed install for invalid host" do
-    get '/notify/invalid.org/installed'
+    get '/host/invalid.org/installed'
     last_response.body.must_equal "{ \"status\":\"404\", \"message\": \"not found\" }"
   end
 
   it "should notify of an install request" do
-    get '/notify/server.example.org/install'
+    get '/host/server.example.org/install'
     last_response.body.must_equal "{ \"status\":\"200\", \"message\": \"OK\" }"
 
     expected_content = <<-EOS
@@ -72,13 +72,13 @@ timeout 1
 label install
         kernel vmlinuz
         ipappend 2
-        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost:5000/ks/server.example.org
+        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost:5000/host/server.example.org
     EOS
     File.read("./specs/tmp/pxeboot/01-00-11-22-33-44-55").must_equal expected_content
   end
 
   it "should error for invalid host" do
-    get '/notify/invalid.org/install'
+    get '/host/invalid.org/install'
     last_response.body.must_equal "{ \"status\":\"404\", \"message\": \"not found\" }"
   end
 end

@@ -50,7 +50,7 @@ timeout 1
 label install
         kernel vmlinuz
         ipappend 2
-        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://midwife.example.org:9293/ks/server.example.org
+        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://midwife.example.org:9293/host/server.example.org
     EOS
     File.read("#{@path}/01-00-11-22-33-44-55").must_equal expected_content
   end

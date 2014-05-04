@@ -1,6 +1,6 @@
 module Stork
   module Deploy
-    module Bindings
+    module Commands
       class Snippet
         attr_reader :host
 

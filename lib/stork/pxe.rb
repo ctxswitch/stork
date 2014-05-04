@@ -19,7 +19,7 @@ module Stork
       @mac = host.pxemac
       @server = server
       @port = port
-      @kickstart = "http://#{server}:#{port}/ks/#{hostname}"
+      @kickstart = "http://#{server}:#{port}/host/#{hostname}"
     end
 
     def localboot
