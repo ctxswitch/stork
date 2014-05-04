@@ -24,7 +24,7 @@ module Stork
         attr_reader :host, :configuration
 
         def initialize(type, host)
-          puts Stork::Deploy.Commands.inspect
+          # puts Stork::Deploy::Commands.constants.inspect
           @builder = Stork::Deploy::Commands.const_get(type.to_s.capitalize).new(host)
           @configuration = configuration
           @host = host.configuration
