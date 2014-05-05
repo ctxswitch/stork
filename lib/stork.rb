@@ -9,13 +9,10 @@ require 'stork/resources'
 
 require 'stork/builder'
 
-# require 'stork/deploy/bindings/snippet'
-# require 'stork/deploy/bindings/kickstart'
-
-require 'stork/deploy/commands/command'
-require 'stork/deploy/commands/section'
-require 'stork/deploy/commands/snippet'
-require 'stork/deploy/commands/kickstart'
+require 'stork/deploy/command'
+require 'stork/deploy/section'
+require 'stork/deploy/snippet_binding'
+require 'stork/deploy/kickstart_binding'
 require 'stork/deploy/install_script'
 
 require 'stork/pxe'

@@ -25,7 +25,7 @@ module Stork
 
         def initialize(type, host)
           # puts Stork::Deploy::Commands.constants.inspect
-          @builder = Stork::Deploy::Commands.const_get(type.to_s.capitalize).new(host)
+          @builder = Stork::Deploy.const_get("#{type.to_s.capitalize}Binding").new(host)
           @configuration = configuration
           @host = host.configuration
         end
