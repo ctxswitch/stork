@@ -113,25 +113,6 @@ module Stork
         end if host.layout.clearpart
       end
 
-      def partitions
-        commands = []
-        host.layout.partitions.each do |part|
-          command = Command.create 'part' do |c|
-            c.value part.path
-            c.option 'fstype', part.type
-            c.boolean 'asprimary', part.primary
-            if part.recommended
-              c.boolean 'recommended', true
-            else
-              c.option 'size', part.size
-              c.boolean 'grow', part.grow
-            end
-          end
-          commands << command
-        end
-        commands.join("\n")
-      end
-
       def repos
         commands = []
         host.repos.each do |repo|
@@ -148,33 +129,59 @@ module Stork
       def volume_groups
         commands = []
         host.layout.volume_groups.each do |vg|
-          command = Command.create 'volgroup' do |c|
-            c.value "#{vg.name} #{vg.partition}"
-          end
-          commands << command
+          commands << volume_group(vg)
           commands << logical_volumes(vg)
         end
         commands.join("\n")
       end
 
+      def volume_group(vg)
+        Command.create 'volgroup' do |c|
+          c.value "#{vg.name} #{vg.partition}"
+        end
+      end
+
       def logical_volumes(volume_group)
         commands = []
         volume_group.logical_volumes.each do |lv|
-          command = Command.create 'logvol' do |c|
-            c.value lv.path
-            c.option 'vgname', lv.name
-            c.option 'name', lv.name
-            c.option 'fstype', lv.type
-            if lv.recommended
-              c.boolean 'recommended', true
-            else
-              c.option 'size', lv.size
-              c.boolean 'grow', lv.grow
-            end
-          end
-          commands << command
+          commands << logical_volume(lv)
         end
         commands.join("\n")
+      end
+
+      def logical_volume(lv)
+        Command.create 'logvol' do |c|
+          c.value lv.path
+          c.option 'vgname', lv.name
+          c.option 'name', lv.name
+          filesystem_options(lv, c)
+        end
+      end
+
+      def partitions
+        commands = []
+        host.layout.partitions.each do |part|
+          commands << partition(part)
+        end
+        commands.join("\n")
+      end
+
+      def partition(part)
+        Command.create 'part' do |c|
+          c.value part.path
+          c.boolean 'asprimary', part.primary
+          filesystem_options(part, c)
+        end
+      end
+
+      def filesystem_options(part_or_lv, command)
+        command.option 'fstype', part_or_lv.type
+        if part_or_lv.recommended
+          command.boolean 'recommended', true
+        else
+          command.option 'size', part_or_lv.size
+          command.boolean 'grow', part_or_lv.grow
+        end
       end
 
       def packages
@@ -195,14 +202,17 @@ module Stork
         end
       end
 
-    private
+      private
+
       def render_snippets(snippets)
         lines = []
         snippets.each do |snippet|
           # Render me!!!
           renderer = ERB.new(snippet.content, nil, '-')
           lines << renderer.result(
-            Stork::Deploy::SnippetBinding.new(@configuration, host).get_binding)
+            Stork::Deploy::SnippetBinding.new(
+              @configuration, host).get_binding
+            )
         end
         lines.join("\n")
       end

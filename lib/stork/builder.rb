@@ -1,4 +1,10 @@
 module Stork
+  # The Builder object loads all of the configuration files and parses them
+  # to build a collection of resources
+  #
+  # === Attributes
+  # * +configuration+ - The configuration containing the paths to the resource
+  #                     files.
   class Builder
     attr_reader :collection
     attr_reader :configuration
@@ -6,12 +12,6 @@ module Stork
     def initialize(configuration)
       @configuration = configuration
       @collection = Stork::Collections.new
-    end
-
-    def self.load_paths(configuration)
-      %w{
-        configuration.distros_path
-      }
     end
 
     def self.load(configuration)
@@ -38,6 +38,12 @@ module Stork
       builder
     end
 
+    # Expose a limited number of methods for DSL parsing from files.  Allow
+    # delegation of the host, layout, network, chef, distro, templates and
+    # snippets blocks.
+    #
+    # ==== Attributes
+    # * +obj+ - The Builder object that is being delegated.
     class BuilderDelegator
       def initialize(obj)
         @delegated = obj
@@ -45,10 +51,12 @@ module Stork
 
       def host(name, &block)
         @delegated.collection.hosts.add(
-          Resource::Host.build(name, 
+          Resource::Host.build(
+            name,
             configuration: @delegated.configuration,
             collection: @delegated.collection,
-            &block)
+            &block
+          )
         )
       end
 
