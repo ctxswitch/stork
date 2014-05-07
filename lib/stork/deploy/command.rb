@@ -46,6 +46,7 @@ module Stork
       def self.create(name, value=nil, &block)
         command = new(name, value)
         yield command if block_given?
+        # puts "COMM: #{command.to_s}"
         command.to_s
       end
     end

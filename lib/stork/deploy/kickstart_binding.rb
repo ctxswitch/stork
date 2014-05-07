@@ -19,7 +19,7 @@ module Stork
         host.interfaces.each do |i|
           commands << interface(i)
         end
-        commands.join("\n")
+        commands.join
       end
 
       def interface(interface)
@@ -93,7 +93,7 @@ module Stork
         commands << clearpart
         commands << partitions
         commands << volume_groups
-        commands.join("\n")
+        commands.join
       end
 
       def bootloader
@@ -123,22 +123,27 @@ module Stork
           end
           commands << command
         end
-        commands.join("\n")
+        commands.join
       end
 
       def volume_groups
         commands = []
         host.layout.volume_groups.each do |vg|
-          commands << volume_group(vg)
+          a = volume_group(vg)
+          puts "AAAA: #{a}"
+          commands << a
           commands << logical_volumes(vg)
         end
-        commands.join("\n")
+        commands.join
       end
 
       def volume_group(vg)
-        Command.create 'volgroup' do |c|
+        d = Command.create 'volgroup' do |c|
+          puts "C: #{c.inspect}"
           c.value "#{vg.name} #{vg.partition}"
         end
+        puts "D: #{d.inspect}"
+        d
       end
 
       def logical_volumes(volume_group)
@@ -146,7 +151,7 @@ module Stork
         volume_group.logical_volumes.each do |lv|
           commands << logical_volume(lv)
         end
-        commands.join("\n")
+        commands.join
       end
 
       def logical_volume(lv)
@@ -163,7 +168,7 @@ module Stork
         host.layout.partitions.each do |part|
           commands << partition(part)
         end
-        commands.join("\n")
+        commands.join
       end
 
       def partition(part)
