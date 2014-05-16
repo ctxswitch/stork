@@ -145,15 +145,15 @@ module Stork
       def logical_volumes(volume_group)
         commands = []
         volume_group.logical_volumes.each do |lv|
-          commands << logical_volume(lv)
+          commands << logical_volume(volume_group, lv)
         end
         commands.join
       end
 
-      def logical_volume(lv)
+      def logical_volume(vg, lv)
         Command.create 'logvol' do |c|
           c.value lv.path
-          c.option 'vgname', lv.name
+          c.option 'vgname', vg.name
           c.option 'name', lv.name
           filesystem_options(lv, c)
         end
