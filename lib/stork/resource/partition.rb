@@ -10,7 +10,7 @@ module Stork
       def setup
         @size = 1
         @type = 'ext4'
-        @grow = true
+        @grow = false
         @primary = false
         @recommended = false
       end
@@ -24,6 +24,7 @@ module Stork
 
         def size(size)
           delegated.size = size
+          delegated.recommended = false
         end
 
         def type(type)
