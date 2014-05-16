@@ -24,6 +24,8 @@ describe "Stork::Deploy::Kickstart" do
         file.write(ks.render)
       end
 
+      puts ks.render
+
       Open3.popen3("#{ksvalidate} #{testpath} #{kspath} #{ver}") do |stdin, stdout, stderr, wait_thr|
         exit_status = wait_thr.value.to_i
         output = (stdout.readlines + stderr.readlines).join
