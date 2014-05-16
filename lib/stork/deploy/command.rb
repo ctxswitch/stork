@@ -10,7 +10,11 @@ module Stork
       def to_s
         command_str = @name
         command_str << " #{@value}" if @value
-        command_str << " #{@options.join(' ')}\n" unless @options.empty?
+        if @options.empty?
+          command_str << "\n"
+        else
+          command_str << " #{@options.join(' ')}\n"
+        end
       end
 
       def boolean(opt, value)
@@ -46,7 +50,8 @@ module Stork
       def self.create(name, value=nil, &block)
         command = new(name, value)
         yield command if block_given?
-        # puts "COMM: #{command.to_s}"
+        # puts "COMM: #{command.inspect}"
+        # puts "COMS: #{command.to_s}"
         command.to_s
       end
     end

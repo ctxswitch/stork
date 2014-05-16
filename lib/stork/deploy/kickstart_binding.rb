@@ -130,7 +130,6 @@ module Stork
         commands = []
         host.layout.volume_groups.each do |vg|
           a = volume_group(vg)
-          puts "AAAA: #{a}"
           commands << a
           commands << logical_volumes(vg)
         end
@@ -138,12 +137,9 @@ module Stork
       end
 
       def volume_group(vg)
-        d = Command.create 'volgroup' do |c|
-          puts "C: #{c.inspect}"
+        Command.create 'volgroup' do |c|
           c.value "#{vg.name} #{vg.partition}"
         end
-        puts "D: #{d.inspect}"
-        d
       end
 
       def logical_volumes(volume_group)
