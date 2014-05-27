@@ -8,7 +8,7 @@ module Stork
 
       def setup
         @netmask = "255.255.255.0"
-        @gateway = "192.168.0.1"
+        @gateway = nil
         @nameservers = Array.new
         @search_paths = Array.new
       end
