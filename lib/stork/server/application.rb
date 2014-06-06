@@ -19,6 +19,10 @@ module Stork
         json_halt 200, 200, "Stork Version #{VERSION} - #{CODENAME}"
       end
 
+      get '/api/v1/reload' do
+        reload_collection
+      end
+
       get '/api/v1/hosts' do
         h = {'hosts' => hosts.hashify}
         json_halt_ok_with_content(h.to_json)
@@ -74,11 +78,20 @@ module Stork
 
       helpers do
         def hosts
-          @hosts ||= settings.collection.hosts
+          settings.collection.hosts
         end
 
         def config
-          @config ||= settings.config
+          settings.config
+        end
+
+        def collection
+          settings.collection
+        end
+
+        def reload_collection
+          settings.collection = Stork::Builder.load(config).collection
+          json_halt 200, 200, 'OK'
         end
 
         def set_localboot(host)

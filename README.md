@@ -20,10 +20,11 @@ Install the latest version from the github:
 ### Control the server
     storkctl start restart stop [options]
 
-### Query
+### Commands
+    stork host install [name]
     stork host list
     stork host localboot [name]
-    stork host install [name]
+    stork host reload
     stork host show [name]
 
 ## Contributing

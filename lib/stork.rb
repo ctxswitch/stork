@@ -23,8 +23,6 @@ require 'stork/server/control'
 require 'stork/plugin'
 Dir[File.join('./lib/stork/client/plugins', '*.rb')].each do |plugin|
   require plugin
-
-  Stork.add_plugin(plugin)
 end
 
 # Also make sure we allow a .stork/plugins dir
