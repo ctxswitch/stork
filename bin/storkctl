@@ -41,17 +41,16 @@ class StorkCtlApp
 
   def build
     @configuration = Stork::Configuration.from_file(@options.config)
-    @collection = Stork::Builder.load(@configuration).collection
   end
 
   def run
     case @options.command
     when :start
-      Stork::Server::Control.start(@configuration, @collection)
+      Stork::Server::Control.start(@configuration)
     when :stop
-      Stork::Server::Control.stop(@configuration, @collection)
+      Stork::Server::Control.stop(@configuration)
     when :restart
-      Stork::Server::Control.restart(@configuration, @collection)
+      Stork::Server::Control.restart(@configuration)
     end
   end
 end

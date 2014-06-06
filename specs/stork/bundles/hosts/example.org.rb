@@ -48,7 +48,7 @@ hosts=[
 ]
 
 hosts.each do |octet, mac|
-  host "n0#{octet}.example.org" do
+  host "c0#{octet}.example.org" do
     template    "default"
     chef        "default"
     distro      "centos"

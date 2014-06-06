@@ -6,11 +6,11 @@ require 'thin'
 module Stork
   module Server
     class Control
-      def self.start(configuration, collection)
+      def self.start(configuration)
         puts "Starting stork server on port #{configuration.port}."
         app = Stork::Server::Application
-        app.set :collection, collection
         app.set :config, configuration
+        app.set :collection, Stork::Builder.load(configuration).collection
 
         @thin = Thin::Server.new(configuration.bind, configuration.port, app)
         @thin.tag = "Stork #{VERSION}"
@@ -24,14 +24,14 @@ module Stork
         @thin.start
       end
 
-      def self.stop(configuration, collection)
+      def self.stop(configuration)
         puts 'Stoping the stork server.'
         Thin::Server.kill(configuration.pid_file)
       end
 
-      def self.restart(configuration, collection)
-        stop(configuration, collection)
-        start(configuration, collection)
+      def self.restart(configuration)
+        stop(configuration)
+        start(configuration)
       end
     end
   end
