@@ -9,7 +9,7 @@ Stork is a autoinstall utility, kickstart generation tool and server for CentOS 
 
 Installation using rubygems:
 
-    $ gem install stork
+    $ gem install stork --pre
 
 Install the latest version from the github:
 
