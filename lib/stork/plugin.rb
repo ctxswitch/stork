@@ -39,8 +39,15 @@ module Stork
     def show(key, data, options = {})
       padding = options.has_key?('pad') ? options['pad'] : 16
       name = key.split('_').map{|k| k.capitalize}.join(' ').ljust(padding)
+
       if data[key].is_a?(Array)
-        value = data[key].join(', ')
+        if data[key].empty?
+          value = "** empty **"
+        else
+          value = data[key].join(', ')
+        end
+      elsif data[key].is_a?(NilClass)
+        value = "Unset"
       else
         value = data[key]
       end
