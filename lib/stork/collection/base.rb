@@ -32,6 +32,14 @@ module Stork
       def get(id)
         find { |obj| obj.id == id }
       end
+
+      def hashify
+        objs = []
+        @objects.each do |obj|
+          objs << obj.name
+        end
+        objs
+      end
     end
   end
 end

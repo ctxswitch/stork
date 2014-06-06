@@ -20,6 +20,13 @@ module Stork
         end
       end
 
+      def hashify
+        {
+          'partitions' => partitions.map{|p| p.hashify},
+          'volume_groups' => volume_groups.map{|v| v.hashify}
+        }
+      end
+
       class LayoutDelegator < Stork::Resource::Delegator
         flag :zerombr
         flag :clearpart

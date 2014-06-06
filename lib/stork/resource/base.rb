@@ -18,6 +18,10 @@ module Stork
       def validate!
       end
 
+      def hashify
+        {'name' => @name}
+      end
+
       def require_value(attr)
         fail SyntaxError, "#{attr} is required" if send(attr).nil?
       end

@@ -40,6 +40,27 @@ module Stork
         @password = Password.new
       end
 
+      def hashify
+        attrs = {}
+        attrs['name'] = name
+        
+        attrs['distro'] = distro ? distro.name : ''
+        attrs['template'] = template ? template.name : ''
+        attrs['chef'] = chef ? chef.name : ''
+
+        attrs['layout'] = layout.hashify
+        attrs['interfaces'] = interfaces.map{|i| i.hashify}
+        attrs['pre_snippets'] = pre_snippets.map{|s| s.name}
+        attrs['post_snippets'] = post_snippets.map{|s| s.name}
+        
+        attrs['repos'] = repos.map{|r| r.name}
+        attrs['run_list'] = run_list
+        attrs['packages'] = packages
+        attrs['timezone'] = timezone.zone
+        attrs['selinux'] = selinux
+        attrs
+      end
+
       def validate!
         require_value(:layout)
         require_value(:template)

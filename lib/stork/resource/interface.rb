@@ -64,6 +64,17 @@ module Stork
         @bootproto == :static
       end
 
+      def hashify
+        {
+          'ip' => ip,
+          'bootproto' => bootproto,
+          'netmask' => netmask,
+          'gateway' => gateway,
+          'nameservers' => nameservers,
+          'search_paths' => search_paths
+        }
+      end
+
       alias_method :device, :name
 
       class InterfaceDelegator < Stork::Resource::Delegator

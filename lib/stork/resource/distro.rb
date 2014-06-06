@@ -5,6 +5,13 @@ module Stork
       attr_accessor :image
       attr_accessor :url
 
+      def hashify
+        attrs = {}
+        attrs['kernel'] = kernel
+        attrs['image'] = image
+        attrs['url'] = url
+      end
+
       class DistroDelegator < Stork::Resource::Delegator
         def kernel(kernel)
           delegated.kernel = kernel

@@ -16,6 +16,17 @@ module Stork
         @path = '/'
       end
 
+      def hashify
+        {
+          'path' => path,
+          'size' => size,
+          'type' => type,
+          'primary' => primary,
+          'grow' => grow,
+          'recommended' => recommended
+        }
+      end
+
       class LogicalVolumeDelegator < Stork::Resource::Delegator
         flag :grow
         flag :recommended

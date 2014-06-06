@@ -19,6 +19,16 @@ module Stork
         json_halt 200, 200, "Stork Version #{VERSION} - #{CODENAME}"
       end
 
+      get '/api/v1/hosts' do
+        h = {'hosts' => hosts.hashify}
+        json_halt_ok_with_content(h.to_json)
+      end
+
+      get '/api/v1/host/:host' do |host|
+        h = hosts.get(host)
+        json_halt_ok_with_content(h.hashify.to_json)
+      end
+
       get '/host/:host' do |host|
         info "#{host} requested kickstart"
 
@@ -95,6 +105,11 @@ module Stork
         def json_halt_ok
           content_type :json
           json_halt 200, 200, 'OK'
+        end
+
+        def json_halt_ok_with_content(content)
+          content_type :json
+          halt 200, { 'Content-Type' => 'application/json' }, content
         end
 
         def json_halt_internal_error

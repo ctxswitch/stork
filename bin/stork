@@ -1,62 +1,97 @@
 #!/usr/bin/env ruby
 
-# begin
-#   require 'rubygems'
-# rescue LoadError
-# end
+begin
+  require 'rubygems'
+rescue LoadError
+end
 
-# begin
-#   require 'stork'
-# rescue LoadError
-#   $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-#   require 'stork'
-# end
+begin
+  require 'stork'
+rescue LoadError
+  $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
+  require 'stork'
+end
 
-# require 'optparse'
-# require 'ostruct'
+require 'optparse'
+require 'ostruct'
 
-# class StorkApp
-#   def initialize
-#     @options = OpenStruct.new
-#     @options.config = "/etc/stork/config.rb"
-#     @options.command = nil
-#   end
+class StorkApp
+  def initialize
+    @options = OpenStruct.new
+    @options.config = "/etc/stork/config.rb"
 
-#   def parse
-#     opts = OptionParser.new do |o|
-#       o.banner = "Usage: storkctl start|stop|restart [options]"
-#       o.on("-c", "--config FILE", "Read configuration from the specified file") do |config|
-#         @options.config = config
-#       end
-#     end
+    @opts = OptionParser.new do |o|
+      o.banner = "Usage: stork sub-command action [options]"
+      o.on("-c", "--config FILE", "Read configuration from the specified file") do |config|
+        @options.config = config
+      end
+    end
+  end
 
-#     action = :"#{ARGV.shift}"
-#     unless [:start, :stop, :restart].include?(action)
-#       puts opts.help
-#       exit 1
-#     end
-#     @options.command = action
-#     opts.parse!
-#   end
+  def help(error = nil)
+    puts "Error: #{error}" if error
+    puts @opts.help
+    puts
+    puts "** COMMANDS **"
+    plugins.sort.each do |plugin|
+      const_name = "#{plugin}::#{plugin.to_s.gsub('Plugin', '')}"
+      puts Module.const_get(const_name).help
+    end
+    exit 1
+  end
 
-#   def build
-#     @configuration = Stork::Configuration.from_file(@options.config)
-#     @collection = Stork::Builder.load(@configuration).collection
-#   end
+  # Probably not the best way to keep track
+  def plugins
+    Module.constants.select{|m| m =~ /Plugin/}
+  end
 
-#   def run
-#     case @options.command
-#     when :start
-#       Stork::Server::Control.start(@configuration, @collection)
-#     when :stop
-#       Stork::Server::Control.stop(@configuration, @collection)
-#     when :restart
-#       Stork::Server::Control.restart(@configuration, @collection)
-#     end
-#   end
-# end
+  def parse
+    sub_command = ARGV.shift
+    action = ARGV.shift
 
-# app = StorkCtlApp.new
-# app.parse
-# app.build
-# app.run
+    if sub_command.nil? || action.nil?
+      help "You need to pass a sub-command and an action."
+    end
+
+    sub_command_name = sub_command.to_s.capitalize
+    action_name = action.to_s.capitalize
+
+    opt_parse
+
+    plugin_name = "#{sub_command_name}#{action_name}"
+    module_name = "#{plugin_name}Plugin"
+    constant_name = "#{module_name}::#{plugin_name}"
+    
+    begin
+      klass = Stork.const_get(constant_name)
+      # pass the options and the remaning args
+      configuration = Stork::Configuration.from_file(@options.config)
+      @plugin = klass.new(configuration, @options, ARGV)
+    rescue NameError => err
+      help "Unknown sub-command"
+    rescue Errno::ENOENT => err
+      help err.message
+      raise "bam"
+    end
+  end
+
+  def opt_parse
+    @opts.parse!
+  end
+
+  def run
+    begin
+      @plugin.run
+    rescue SyntaxError => err
+      help err.message
+    rescue RestClient::InternalServerError => err
+      puts err.message
+    rescue RestClient::ResourceNotFound
+      puts "Not Found"
+    end
+  end
+end
+
+app = StorkApp.new
+app.parse
+app.run

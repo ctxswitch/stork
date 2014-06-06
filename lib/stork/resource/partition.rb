@@ -15,6 +15,17 @@ module Stork
         @recommended = false
       end
 
+      def hashify
+        {
+          'path' => path,
+          'size' => size,
+          'type' => type,
+          'primary' => primary,
+          'grow' => grow,
+          'recommended' => recommended
+        }
+      end
+
       alias_method :path, :name
 
       class PartitionDelegator < Stork::Resource::Delegator

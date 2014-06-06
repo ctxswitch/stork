@@ -3,8 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/rlyon/stork/badge.png)](https://coveralls.io/r/rlyon/stork)
 [![Code Climate](https://codeclimate.com/github/rlyon/stork.png)](https://codeclimate.com/github/rlyon/stork)
 
-Stork is a kickstart generation tool and server for CentOS and Redhat systems.  
-It aims to fill the gap in the bare metal systems deployment that many of the other tools for cloud and virtual systems excel at.
+Stork is a autoinstall utility, kickstart generation tool and server for CentOS and Redhat systems.  It aims to fill the gap in the bare metal systems deployment that many of the other tools for cloud and virtual systems excel at.
 
 ## Installation
 
@@ -22,37 +21,10 @@ Install the latest version from the github:
     storkctl start restart stop [options]
 
 ### Query
-    stork bundle sync
-
     stork host list
-    stork host search [query]
     stork host localboot [name]
     stork host install [name]
     stork host show [name]
-
-    stork chef list
-    stork chef search
-    stork chek show [name]
-
-    stork distro list
-    stork distro search
-    stork distro show [name]
-
-    stork layout list
-    stork layout search
-    stork layout show [name] 
-
-    stork network list
-    stork network search
-    stork network show
-
-    stork snippet list
-    stork snippet search
-    stork snippet show [name]
-
-    stork template list
-    stork template search
-    stork template show [name]
 
 ## Contributing
 

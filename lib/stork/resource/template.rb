@@ -9,6 +9,10 @@ module Stork
         @content = read_content(path)
       end
 
+      def hashify
+        {'name' => name}
+      end
+
       alias_method :id, :name
 
     private

@@ -10,6 +10,13 @@ module Stork
         @logical_volumes = Array.new
       end
 
+      def hashify
+        {
+          'partition' => partition,
+          'logical_volumes' => logical_volumes.map{|l| l.hashify}
+        }
+      end
+
       class VolumeGroupDelegator < Stork::Resource::Delegator
         def partition(partition)
 
