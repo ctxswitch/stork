@@ -5,7 +5,7 @@ module HostShowPlugin
     def run
       host = args.shift
       raise SyntaxError, "A host must be supplied" if host.nil?
-      data = fetch("/host/#{host}")
+      data = fetch("host/#{host}")
       show('name', data)
       show('distro', data)
       show('template', data)

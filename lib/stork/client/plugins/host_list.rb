@@ -3,7 +3,7 @@ module HostListPlugin
     banner "stork host list (options)"
 
     def run
-      data = fetch('/hosts')
+      data = fetch('hosts')
       data['hosts'].sort.each do |host|
         puts host
       end
