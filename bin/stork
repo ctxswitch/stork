@@ -18,7 +18,7 @@ require 'ostruct'
 class StorkApp
   def initialize
     @options = OpenStruct.new
-    @options.config = "/etc/stork/config.rb"
+    @options.config = ENV['STORK_CONFIG'] || "/etc/stork/config.rb"
 
     @opts = OptionParser.new do |o|
       o.banner = "Usage: stork sub-command action [options]"
