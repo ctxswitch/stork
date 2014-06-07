@@ -37,7 +37,7 @@ Install the latest version from the github:
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-### Seting up for the kickstart validation tests
+### Setting up for the kickstart validation tests
 
 To run the kickstart validation tests on your local system, you
 will need to install python and the python virtualenv module.  
