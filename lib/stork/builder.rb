@@ -67,7 +67,7 @@ module Stork
 
       # Build and add a host to the resource collection.
       #
-      # Parameters:
+      # == Parameters:
       # name::
       #   The fully qualified domain name of the host.
       #
@@ -86,7 +86,7 @@ module Stork
 
       # Build and add a layout to the resource collection.
       #
-      # Parameters:
+      # == Parameters:
       # name::
       #   A unique name to identify the layout.
       #
@@ -99,7 +99,7 @@ module Stork
 
       # Build and add a network to the resource collection.
       #
-      # Parameters:
+      # == Parameters:
       # name::
       #   A unique name to identify the network.
       #
@@ -112,7 +112,7 @@ module Stork
 
       # Build and add a chef server to the resource collection.
       #
-      # Parameters:
+      # == Parameters:
       # name::
       #   A unique name to identify the chef server.
       #
@@ -125,7 +125,7 @@ module Stork
 
       # Build and add a distro to the resource collection.
       #
-      # Parameters:
+      # == Parameters:
       # name::
       #   A unique name to identify the distro.
       #
@@ -138,7 +138,7 @@ module Stork
 
       # Read and add a template to the resource collection.
       #
-      # Parameters:
+      # == Parameters:
       # name::
       #   A unique name to identify the template.
       #
@@ -153,7 +153,7 @@ module Stork
 
       # Read and add a snippet to the resource collection.
       #
-      # Parameters:
+      # == Parameters:
       # name::
       #   A unique name to identify the snippet.
       #
