@@ -59,6 +59,122 @@ describe "Stork::Resource::Host" do
     Stork::Resource::Host.new.must_respond_to :repos=
   end
 
+  it "must return a hash with hashify" do
+    host = collection.hosts.get("server.example.org")
+    hash = {   
+      'name' => 'server.example.org', 
+      'distro' => 'centos', 
+      'template' => 'default', 
+      'chef' => 'default', 
+      'layout' => {
+        'partitions' => [
+          { 
+            'path' => '/boot',
+            'size' => 100,
+            'type' => 'ext4',
+            'primary' => true,
+            'grow' => false,
+            'recommended' => false
+          },
+          { 
+            'path' => 'swap',
+            'size' => 1,
+            'type' => 'swap',
+            'primary' => true, 
+            'grow' => false,
+            'recommended' => true
+          }, 
+          { 
+            'path' => '/',
+            'size' => 4096,
+            'type' => 'ext4',
+            'primary' => false,
+            'grow' => false,
+            'recommended' => false
+          },
+          { 
+            'path' => 'pv.01',
+            'size' => 1,
+            'type' => 'ext4',
+            'primary' => false,
+            'grow' => true,
+            'recommended' => false
+          }
+        ],
+        'volume_groups' => [
+          { 
+            'partition' => 'pv.01',
+            'logical_volumes' => [
+              { 
+                'path' => '/home',
+                'size' => 1,
+                'type' => 'ext4',
+                'primary' => nil,
+                'grow' => true,
+                'recommended' => false
+              }
+            ]
+          }
+        ]
+      },
+      'interfaces' => [
+        { 
+          'ip' => '99.99.1.8',
+          'bootproto' => :static,
+          'netmask' => '255.255.255.0',
+          'gateway' => nil,
+          'nameservers' => [],
+          'search_paths' => []
+        },
+        { 
+          'ip' => '192.168.1.10',
+          'bootproto' => :static,
+          'netmask' => '255.255.255.0',
+          'gateway' => '192.168.1.1',
+          'nameservers' => ['192.168.1.253', '192.168.1.252'],
+          'search_paths' => []
+        }
+      ],
+      'pre_snippets' => ['setup'],
+      'post_snippets' => [
+        'ntp',
+        'resolv-conf',
+        'chef-bootstrap',
+        'chef-reconfigure',
+        'notify'
+      ],
+      'repos' => ['whamcloud-client'],
+      'run_list' => ['role[base]', 'recipe[apache]'], 
+      'packages' => [
+        '@core',
+        'curl',
+        'openssh-clients',
+        'openssh-server',
+        'finger',
+        'pciutils',
+        'yum',
+        'at',
+        'acpid',
+        'vixie-cron',
+        'cronie-noanacron',
+        'crontabs',
+        'logrotate',
+        'ntp',
+        'ntpdate',
+        'tmpwatch',
+        'rsync',
+        'mailx',
+        'which',
+        'wget',
+        'man',
+        'foo'
+      ], 
+      'timezone' => 'America/Los_Angeles', 
+      'selinux' => 'enforcing'
+    }
+    host.hashify.must_equal hash
+  end
+
   # it "must raise an error if the template is not found" do
   #   proc {
   #     host = Stork::Resource::Host.build configuration, collection, "example.org" do
@@ -203,13 +319,13 @@ describe "Stork::Resource::Host" do
   #   ckey = "./specs/files/configs/keys/snakeoil-root.pem"
   #   vkey = "./specs/files/configs/keys/snakeoil-validation.pem"
   #   collection = Midwife::Collection.new
-  #
+  
   #   distro = Stork::Resource::Distro.build("centos") do
   #     kernel "vmlinuz"
   #     image "initrd.img"
   #     url "http://mirror.example.com/centos"
   #   end
-  #
+  
   #   layout = Stork::Resource::Layout.build("default") do
   #     clearpart
   #     zerombr
@@ -218,25 +334,25 @@ describe "Stork::Resource::Host" do
   #       type "ext4"
   #       primary
   #     end
-  #
+  
   #     part "swap" do
   #       type "swap"
   #       primary
   #       recommended
   #     end
-  #
+  
   #     part "/" do
   #       size 4096
   #       type "ext4"
   #     end
-  #
+  
   #     part "/home" do
   #       size 1
   #       type "ext4"
   #       grow
   #     end
   #   end
-  #
+  
   #   chef = Stork::Resource::Chef.build("default") do
   #     url "https://chef.example.org"
   #     version "11.6.0"
@@ -246,40 +362,40 @@ describe "Stork::Resource::Host" do
   #     validation_key vkey
   #     encrypted_data_bag_secret "secretkey"
   #   end
-  #
+  
   #   net = Stork::Resource::Network.build("local") do
   #     netmask "255.255.255.0"
   #     gateway "192.168.1.1"
   #     nameserver "192.168.1.253"
   #     nameserver "192.168.1.252"
   #   end
-  #
+  
   #   snip = Stork::Resource::Snippet.new(File.dirname(__FILE__) + '/files/configs/snippets/noop.erb')
-  #
+  
   #   collection.distros.add(distro)
   #   collection.layouts.add(layout)
   #   collection.chefs.add(chef)
   #   collection.networks.add(net)
   #   collection.snippets.add(snip)
-  #
+  
   #   host = Stork::Resource::Host.build(collection, "example.org") do
   #     template "default"
   #     pxemac "00:11:22:33:44:55"
-  #
+  
   #     distro "centos"
   #     layout "default"
   #     chef "default"
-  #
+  
   #     pre_snippet "noop"
   #     post_snippet "noop"
-  #
+  
   #     interface "eth0" do
   #       bootproto :static
   #       ip "192.168.1.10"
   #       network "local"
   #     end
   #   end
-  #
+  
   #   host.name.must_equal "example.org"
   #   host.pxemac.must_equal "00:11:22:33:44:55"
   #   host.distro.name.must_equal "centos"
