@@ -8,6 +8,7 @@ require 'stork/collection/snippets'
 require 'stork/collection/templates'
 
 module Stork
+  # A simple container for all of the resource collections
   class Collections
     attr_reader :hosts
     attr_reader :layouts
