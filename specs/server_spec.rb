@@ -44,15 +44,15 @@ describe "Stork::Server::Application" do
     get '/host/server.example.org/installed'
     last_response.body.must_equal "{ \"status\":\"200\", \"message\": \"OK\" }"
 
-    expected_content = <<-EOS
-DEFAULT local
-PROMPT 0
-TIMEOUT 0
-TOTALTIMEOUT 0
-ONTIMEOUT local
-LABEL local
-        LOCALBOOT -1
-    EOS
+    expected_content = <<-EOS.gsub(/^ {6}/, '')
+      DEFAULT local
+      PROMPT 0
+      TIMEOUT 0
+      TOTALTIMEOUT 0
+      ONTIMEOUT local
+      LABEL local
+              LOCALBOOT -1
+      EOS
     File.read("./specs/tmp/pxeboot/01-00-11-22-33-44-55").must_equal expected_content
   end
 
@@ -65,15 +65,15 @@ LABEL local
     get '/host/server.example.org/install'
     last_response.body.must_equal "{ \"status\":\"200\", \"message\": \"OK\" }"
 
-    expected_content = <<-EOS
-default install
-prompt 0
-timeout 1
-label install
-        kernel vmlinuz
-        ipappend 2
-        append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost:5000/host/server.example.org
-    EOS
+    expected_content = <<-EOS.gsub(/^ {6}/, '')
+      default install
+      prompt 0
+      timeout 1
+      label install
+              kernel vmlinuz
+              ipappend 2
+              append initrd=initrd.img ksdevice=bootif priority=critical kssendmac ks=http://localhost:5000/host/server.example.org
+      EOS
     File.read("./specs/tmp/pxeboot/01-00-11-22-33-44-55").must_equal expected_content
   end
 
