@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "sinatra"
-  spec.add_runtime_dependency "thin"
+  spec.add_runtime_dependency "webrick"
   spec.add_runtime_dependency "sqlite3"
   spec.add_runtime_dependency "rest-client"
   spec.add_runtime_dependency "highline"
