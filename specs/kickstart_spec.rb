@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Stork::Deploy::Kickstart" do
   before(:each) do
+    load_config
     @host = collection.hosts.get("server.example.org")
     @path = File.dirname(__FILE__)
     FileUtils.mkdir_p "#{@path}/tmp"

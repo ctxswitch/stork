@@ -28,20 +28,21 @@ module Stork
     default(:chefs_path) { relative_to_bundle_path('chefs') }
     default(:distros_path) { relative_to_bundle_path('distros') }
 
-    # def self.to_file
-    #   <<-EOS.gsub(/^ {12}/, '')
-    #     # Stork configuration file
-    #     path                    "#{path}"
-    #     bundle_path             "#{bundle_path}"
-    #     authorized_keys_file    "#{authorized_keys_file}"
-    #     pxe_path                "#{pxe_path}"
-    #     log_file                "#{log_file}"
-    #     pid_file                "#{pid_file}"
-    #     server                  "#{server}"
-    #     port                    #{port}
-    #     bind                    "#{bind}"
-    #     timezone                "#{timezone}"
-    #   EOS
-    # end
+    def self.to_file(config_path)
+      content = <<-EOS.gsub(/^ {8}/, '')
+        # Stork configuration file
+        path                    "#{path}"
+        bundle_path             "#{bundle_path}"
+        authorized_keys_file    "#{authorized_keys_file}"
+        pxe_path                "#{pxe_path}"
+        log_file                "#{log_file}"
+        pid_file                "#{pid_file}"
+        server                  "#{server}"
+        port                    #{port}
+        bind                    "#{bind}"
+        timezone                "#{timezone}"
+      EOS
+      File.open(config_path,'w') { |f| f.write(content) }
+    end
   end
 end

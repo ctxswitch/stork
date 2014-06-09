@@ -25,6 +25,7 @@ if ENV['DEBUG']
 end
 
 def load_config
+  Stork::Configuration.reset
   Stork::Configuration.from_file('./specs/stork/config.rb')
 end
 
