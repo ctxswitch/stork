@@ -53,13 +53,28 @@ class StorkCtlApp
   end
 
   def run
+    @control = Stork::Server::Control.new(@options)
+
     case @options.command
     when :start
-      Stork::Server::Control.new(@options).start
+      if @options.daemonize
+        start_daemon
+      else
+        @control.start
+      end
     when :stop
-      Stork::Server::Control.new(@options).stop
+      @control.stop
     when :restart
-      Stork::Server::Control.new(@options).restart
+      @restart.restart
+    end
+  end
+
+  def start_daemon
+    if Process.respond_to?(:daemon)
+      Process.daemon(true)
+      @control.start
+    else
+      abort 'Process.daemon requires Ruby >= 1.9'
     end
   end
 end

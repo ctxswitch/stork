@@ -11,11 +11,6 @@ module Stork
         @daemonize = options.daemonize
       end
 
-      ####
-      # Basic start management borrowed from chef-zero.  Thanks for the
-      # heavy lifting!  Could there be a way to utilize any light http 
-      # servers (thin, puma, unicorn)?
-      ####
       def start
         @app.set :collection, Stork::Builder.load.collection
 
@@ -26,11 +21,17 @@ module Stork
             >> Press CTRL+C to stop
 
           EOH
+        else
+          emit_process_id
         end
 
         thread = start_background
         %w[INT TERM].each { |signal| trap_signal(signal) }
         thread.join
+      end
+
+      def emit_process_id
+        File.open(Configuration[:pid_file], 'w') { |f| f.write(Process.pid) }
       end
 
       def trap_signal(signal)
@@ -40,6 +41,11 @@ module Stork
         end
       end
 
+      ####
+      # Basic start management borrowed from chef-zero.  Thanks for the
+      # heavy lifting!  Could there be a way to utilize any light http 
+      # servers (thin, puma, unicorn)?
+      ####
       def start_background
         @server = WEBrick::HTTPServer.new(
           :BindAddress => Configuration[:bind],
@@ -69,19 +75,13 @@ module Stork
         @daemonize
       end
 
-      def stop(wait = 5)
-        if @running
-          @server.shutdown
-          @thread.join(wait)
-        end
-      rescue Timeout::Error
-        if @thread
-          puts "Stork did not stop within #{wait} seconds! Killing..."
-          @thread.kill
-        end
-      ensure
-        @server = nil
-        @thread = nil
+      def stop
+        pid = File.read(Configuration[:pid_file]).to_i
+        Process.kill('TERM', pid)
+      rescue Errno::ENOENT
+        puts "Process ID file not present."
+      rescue Errno::ESRCH
+        puts "Stork is not running."
       end
 
       def restart
