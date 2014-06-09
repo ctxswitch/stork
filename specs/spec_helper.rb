@@ -24,10 +24,10 @@ if ENV['DEBUG']
   require 'minitest/debugger'
 end
 
-def configuration
+def load_config
   Stork::Configuration.from_file('./specs/stork/config.rb')
 end
 
 def collection
-  Stork::Builder.load(configuration).collection
+  Stork::Builder.load.collection
 end

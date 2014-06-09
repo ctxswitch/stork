@@ -2,13 +2,11 @@ module Stork
   module Resource
     class Delegator
       attr_reader :collection
-      attr_reader :configuration
       attr_reader :delegated
 
       def initialize(inst, options)
         @delegated = inst
         @collection = options[:collection]
-        @configuration = options[:configuration]
       end
 
       def get_collection_item(name, value)

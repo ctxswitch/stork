@@ -6,23 +6,20 @@ require 'webrick'
 module Stork
   module Server
     class Control
-      def initialize(configuration, options)
-        @configuration = configuration
+      def initialize(options)
         @app = Stork::Server::Application
-        # @thin = Thin::Server.new(@configuration.bind, @configuration.port, app)
         @daemonize = options.daemonize
       end
 
       # Basic start management borrowed from chef-zero.  Could there be a
       # way to utilize any light http servers (thin, puma, unicorn)?
       def start
-        @app.set :config, @configuration
-        @app.set :collection, Stork::Builder.load(@configuration).collection
+        @app.set :collection, Stork::Builder.load.collection
 
         unless is_daemon?
           puts <<-EOH.gsub(/^ {12}/, '')
             >> Starting Stork Server (#{Stork::VERSION})...
-            >> WEBrick (#{WEBrick::VERSION}) with Rack (#{Rack.release}) is listening on #{@configuration.bind}:#{@configuration.port}
+            >> WEBrick (#{WEBrick::VERSION}) with Rack (#{Rack.release}) is listening on #{Configuration[:bind]}:#{Configuration[:port]}
             >> Press CTRL+C to stop
 
           EOH
@@ -42,8 +39,8 @@ module Stork
 
       def start_background
         @server = WEBrick::HTTPServer.new(
-          :BindAddress => @configuration.bind,
-          :Port =>        @configuration.port,
+          :BindAddress => Configuration[:bind],
+          :Port =>        Configuration[:port],
           :AccessLog =>   [],
           :Logger =>      WEBrick::Log.new(StringIO.new, 7),
           :StartCallback => proc { @running = true }

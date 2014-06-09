@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "sqlite3"
   spec.add_runtime_dependency "rest-client"
   spec.add_runtime_dependency "highline"
+  spec.add_runtime_dependency "mixlib-config"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
