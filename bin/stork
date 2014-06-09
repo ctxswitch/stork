@@ -18,7 +18,7 @@ require 'ostruct'
 class StorkApp
   def initialize
     @options = OpenStruct.new
-    @options.config = ENV['STORK_CONFIG'] || "/etc/stork/config.rb"
+    @options.config = ENV['STORK_CONFIG'] || "#{ENV['HOME']}/.stork/client.rb"
 
     @opts = OptionParser.new do |o|
       o.banner = "Usage: stork sub-command action [options]"
@@ -80,7 +80,7 @@ class StorkApp
 
   def load_or_create_config
     unless File.exist?(@options.config)
-      Stork::Configuration.to_file(@options.config)
+      help "Your configuration file was not found at: #{@options.config}"
     end
     Stork::Configuration.from_file(@options.config)
   end

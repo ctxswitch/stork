@@ -11,10 +11,11 @@ module Stork
     default :pxe_path, '/var/lib/tftpboot/pxelinux.cfg'
     default :log_file, '/var/log/stork.log'
     default :pid_file, '/var/run/stork.pid'
+    default :timezone, 'America/Los_Angeles'
+
     default :server, 'localhost'
     default :port, 9293
     default :bind, '0.0.0.0'
-    default :timezone, 'America/Los_Angeles'
     
     def self.relative_to_bundle_path(path)
       File.join(self.configuration[:bundle_path], path)
@@ -28,6 +29,12 @@ module Stork
     default(:chefs_path) { relative_to_bundle_path('chefs') }
     default(:distros_path) { relative_to_bundle_path('distros') }
 
+    default(:client_name) { 'root' }
+    default(:client_key) { '~/.stork/root.pem' }
+    default(:stork_server_url) { "http://#{self.configuration[:server]}:#{self.configuration[:port]}" } 
+
+    # Only used for the server.  Clients will use a plugin to
+    # interactively set the parameters or create it manually.
     def self.to_file(config_path)
       content = <<-EOS.gsub(/^ {8}/, '')
         # Stork configuration file

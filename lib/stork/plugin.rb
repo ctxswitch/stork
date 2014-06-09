@@ -31,7 +31,11 @@ module Stork
     end
 
     def config
-      Stork::Configuration
+      Stork::Configuration.client
+    end
+
+    def url
+      Stork::Configuration.url
     end
 
     def fetch(path)

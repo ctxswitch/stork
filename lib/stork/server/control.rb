@@ -11,8 +11,11 @@ module Stork
         @daemonize = options.daemonize
       end
 
-      # Basic start management borrowed from chef-zero.  Could there be a
-      # way to utilize any light http servers (thin, puma, unicorn)?
+      ####
+      # Basic start management borrowed from chef-zero.  Thanks for the
+      # heavy lifting!  Could there be a way to utilize any light http 
+      # servers (thin, puma, unicorn)?
+      ####
       def start
         @app.set :collection, Stork::Builder.load.collection
 
@@ -55,7 +58,7 @@ module Stork
             @running = false
           end
         end
-        # Do not return until the web server is genuinely started.
+        
         while !@running && @thread.alive?
           sleep(0.01)
         end
@@ -73,7 +76,7 @@ module Stork
         end
       rescue Timeout::Error
         if @thread
-          # ChefZero::Log.error("Chef Zero did not stop within #{wait} seconds! Killing...")
+          puts "Stork did not stop within #{wait} seconds! Killing..."
           @thread.kill
         end
       ensure
