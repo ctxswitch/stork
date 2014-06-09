@@ -31,12 +31,12 @@ describe "Stork::Server::Application" do
   it "should output the kickstart file for a valid host" do
     get '/host/server.example.org'
     message = "foo"
-    last_response.body.wont_equal "{ \"status\":\"404\", \"message\": \"not found\" }"
+    last_response.body.wont_equal "{ \"status\":\"404\", \"message\": \"Not found\" }"
   end
 
   it "should error for invalid host" do
     get '/host/invalid.org'
-    message = "{ \"status\":\"404\", \"message\": \"not found\" }"
+    message = "{ \"status\":\"404\", \"message\": \"Not found\" }"
     last_response.body.must_equal message
   end
 
@@ -58,7 +58,7 @@ describe "Stork::Server::Application" do
 
   it "should error on completed install for invalid host" do
     get '/host/invalid.org/installed'
-    last_response.body.must_equal "{ \"status\":\"404\", \"message\": \"not found\" }"
+    last_response.body.must_equal "{ \"status\":\"404\", \"message\": \"Not found\" }"
   end
 
   it "should notify of an install request" do
@@ -79,6 +79,6 @@ describe "Stork::Server::Application" do
 
   it "should error for invalid host" do
     get '/host/invalid.org/install'
-    last_response.body.must_equal "{ \"status\":\"404\", \"message\": \"not found\" }"
+    last_response.body.must_equal "{ \"status\":\"404\", \"message\": \"Not found\" }"
   end
 end
