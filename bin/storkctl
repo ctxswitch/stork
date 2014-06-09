@@ -19,14 +19,18 @@ class StorkCtlApp
   def initialize
     @options = OpenStruct.new
     @options.config = ENV['STORK_CONFIG'] || "/etc/stork/config.rb"
+    @options.daemonize = false
     @options.command = :start
   end
 
   def parse
     opts = OptionParser.new do |o|
       o.banner = "Usage: storkctl start|stop|restart [options]"
-      o.on("-c", "--config FILE", "Read configuration from the specified file") do |config|
+      o.on("-c", "--config FILE", "Read configuration from the specified file.") do |config|
         @options.config = config
+      end
+      o.on("-d", "--daemonize", "Daemonize stork.") do
+        @options.daemonize = true
       end
     end
 
@@ -46,11 +50,11 @@ class StorkCtlApp
   def run
     case @options.command
     when :start
-      Stork::Server::Control.start(@configuration)
+      Stork::Server::Control.new(@configuration, @options).start
     when :stop
-      Stork::Server::Control.stop(@configuration)
+      Stork::Server::Control.new(@configuration, @options).stop
     when :restart
-      Stork::Server::Control.restart(@configuration)
+      Stork::Server::Control.new(@configuration, @options).restart
     end
   end
 end
