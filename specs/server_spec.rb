@@ -6,15 +6,15 @@ require 'rack/test'
 include Rack::Test::Methods
 
 def app
-  b = Stork::Builder.load(configuration)
+  b = Stork::Builder.load
   a = Stork::Server::Application
   a.set :collection, b.collection
-  a.set :config, configuration
   a
 end
 
 describe "Stork::Server::Application" do
   before(:each) do
+    load_config
     FileUtils.mkdir('./specs/tmp/pxeboot')
   end
 

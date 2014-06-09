@@ -90,7 +90,7 @@ module Stork
         end
 
         def reload_collection
-          settings.collection = Stork::Builder.load(config).collection
+          settings.collection = Stork::Builder.load.collection
           json_halt 200, 200, 'OK'
         end
 
@@ -103,7 +103,7 @@ module Stork
         end
 
         def pxe(host)
-          Stork::PXE.new(host, host.stork, config.port)
+          Stork::PXE.new(host, host.stork, Configuration.port)
         end
 
         def info(msg)

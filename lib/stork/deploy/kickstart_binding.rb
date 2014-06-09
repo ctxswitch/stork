@@ -1,11 +1,10 @@
 module Stork
   module Deploy
     class KickstartBinding
-      attr_reader :host, :configuration
+      attr_reader :host
 
       def initialize(host)
         @host = host
-        @configuration = host.configuration
       end
 
       def url
@@ -211,9 +210,8 @@ module Stork
           # Render me!!!
           renderer = ERB.new(snippet.content, nil, '-')
           lines << renderer.result(
-            Stork::Deploy::SnippetBinding.new(
-              @configuration, host).get_binding
-            )
+            Stork::Deploy::SnippetBinding.new(host).get_binding
+          )
         end
         lines.join("\n")
       end
