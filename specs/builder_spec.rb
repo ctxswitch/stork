@@ -1,8 +1,12 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Stork::Builder" do
+  before(:each) do
+    load_config
+  end
+
   it "must load everything" do
-    builder = Stork::Builder.load(configuration)
+    builder = Stork::Builder.load
     collection = builder.collection
     collection.hosts.size.must_equal 11
     collection.chefs.size.must_equal 1

@@ -6,31 +6,32 @@ require 'webrick'
 module Stork
   module Server
     class Control
-      def initialize(configuration, options)
-        @configuration = configuration
+      def initialize(options)
         @app = Stork::Server::Application
-        # @thin = Thin::Server.new(@configuration.bind, @configuration.port, app)
         @daemonize = options.daemonize
       end
 
-      # Basic start management borrowed from chef-zero.  Could there be a
-      # way to utilize any light http servers (thin, puma, unicorn)?
       def start
-        @app.set :config, @configuration
-        @app.set :collection, Stork::Builder.load(@configuration).collection
+        @app.set :collection, Stork::Builder.load.collection
 
         unless is_daemon?
           puts <<-EOH.gsub(/^ {12}/, '')
             >> Starting Stork Server (#{Stork::VERSION})...
-            >> WEBrick (#{WEBrick::VERSION}) with Rack (#{Rack.release}) is listening on #{@configuration.bind}:#{@configuration.port}
+            >> WEBrick (#{WEBrick::VERSION}) with Rack (#{Rack.release}) is listening on #{Configuration[:bind]}:#{Configuration[:port]}
             >> Press CTRL+C to stop
 
           EOH
+        else
+          emit_process_id
         end
 
         thread = start_background
         %w[INT TERM].each { |signal| trap_signal(signal) }
         thread.join
+      end
+
+      def emit_process_id
+        File.open(Configuration[:pid_file], 'w') { |f| f.write(Process.pid) }
       end
 
       def trap_signal(signal)
@@ -40,10 +41,15 @@ module Stork
         end
       end
 
+      ####
+      # Basic start management borrowed from chef-zero.  Thanks for the
+      # heavy lifting!  Could there be a way to utilize any light http 
+      # servers (thin, puma, unicorn)?
+      ####
       def start_background
         @server = WEBrick::HTTPServer.new(
-          :BindAddress => @configuration.bind,
-          :Port =>        @configuration.port,
+          :BindAddress => Configuration[:bind],
+          :Port =>        Configuration[:port],
           :AccessLog =>   [],
           :Logger =>      WEBrick::Log.new(StringIO.new, 7),
           :StartCallback => proc { @running = true }
@@ -58,7 +64,7 @@ module Stork
             @running = false
           end
         end
-        # Do not return until the web server is genuinely started.
+        
         while !@running && @thread.alive?
           sleep(0.01)
         end
@@ -69,19 +75,13 @@ module Stork
         @daemonize
       end
 
-      def stop(wait = 5)
-        if @running
-          @server.shutdown
-          @thread.join(wait)
-        end
-      rescue Timeout::Error
-        if @thread
-          # ChefZero::Log.error("Chef Zero did not stop within #{wait} seconds! Killing...")
-          @thread.kill
-        end
-      ensure
-        @server = nil
-        @thread = nil
+      def stop
+        pid = File.read(Configuration[:pid_file]).to_i
+        Process.kill('TERM', pid)
+      rescue Errno::ENOENT
+        puts "Process ID file not present."
+      rescue Errno::ESRCH
+        puts "Stork is not running."
       end
 
       def restart

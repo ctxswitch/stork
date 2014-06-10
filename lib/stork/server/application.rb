@@ -30,7 +30,11 @@ module Stork
 
       get '/api/v1/host/:host' do |host|
         h = hosts.get(host)
-        json_halt_ok_with_content(h.hashify.to_json)
+        if h
+          json_halt_ok_with_content(h.hashify.to_json)
+        else
+          json_halt_not_found
+        end
       end
 
       get '/host/:host' do |host|
@@ -90,7 +94,7 @@ module Stork
         end
 
         def reload_collection
-          settings.collection = Stork::Builder.load(config).collection
+          settings.collection = Stork::Builder.load.collection
           json_halt 200, 200, 'OK'
         end
 
@@ -103,7 +107,7 @@ module Stork
         end
 
         def pxe(host)
-          Stork::PXE.new(host, host.stork, config.port)
+          Stork::PXE.new(host, host.stork, Configuration.port)
         end
 
         def info(msg)
@@ -132,7 +136,7 @@ module Stork
 
         def json_halt_not_found
           content_type :json
-          json_halt 404, 404, 'not found'
+          json_halt 404, 404, 'Not found'
         end
       end
     end

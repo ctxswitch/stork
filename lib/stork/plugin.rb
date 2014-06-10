@@ -23,12 +23,19 @@ module Stork
       @banner
     end
 
-    def initialize(configuration, options, args)
+    def initialize(options, args)
       @action = nil
-      @configuration = configuration
       @options = options
       @args = args
-      @stork = "http://#{configuration.server}:#{configuration.port}"
+      @stork = "http://#{Configuration[:server]}:#{Configuration[:port]}"
+    end
+
+    def config
+      Stork::Configuration.client
+    end
+
+    def url
+      Stork::Configuration.url
     end
 
     def fetch(path)

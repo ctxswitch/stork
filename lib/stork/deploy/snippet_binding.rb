@@ -3,9 +3,8 @@ module Stork
     class SnippetBinding
       attr_reader :host
 
-      def initialize(configuration, host)
+      def initialize(host)
         @host = host
-        @configuration = configuration
       end
 
       def get_binding
@@ -17,7 +16,7 @@ module Stork
       end
 
       def authorized_keys
-        File.read(@configuration.authorized_keys_file)
+        File.read(Configuration[:authorized_keys_file])
       end
 
       def first_boot_content
@@ -34,15 +33,15 @@ module Stork
       end
 
       def midwife_server
-        @configuration.server
+        Configuration[:server]
       end
 
       def midwife_port
-        @configuration.port
+        Configuration[:port]
       end
 
       def midwife_bind
-        @configuration.bind
+        Configuration[:bind]
       end
     end
   end

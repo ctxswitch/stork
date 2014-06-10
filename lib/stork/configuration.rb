@@ -1,98 +1,55 @@
+require 'mixlib/config'
+
 module Stork
   class Configuration
-    attr_accessor :path
-    attr_accessor :bundle_path
-    attr_accessor :authorized_keys_file
-    attr_accessor :pxe_path
-    attr_accessor :log_file
-    attr_accessor :pid_file
-    attr_accessor :server
-    attr_accessor :port
-    attr_accessor :bind
-    attr_accessor :timezone
+    extend Mixlib::Config
+    config_strict_mode true
 
-    def initialize
-      @path                 = '/etc/stork'
-      @authorized_keys_file = path + '/authorized_keys'
-      @bundle_path          = path + '/bundles'
+    default :path, '/etc/stork'
+    default :bundle_path, '/etc/stork/bundles'
+    default :authorized_keys_file, '/etc/stork/authorized_keys'
+    default :pxe_path, '/var/lib/tftpboot/pxelinux.cfg'
+    default :log_file, '/var/log/stork.log'
+    default :pid_file, '/var/run/stork.pid'
+    default :timezone, 'America/Los_Angeles'
 
-      @pxe_path             = '/var/lib/tftpboot/pxelinux.cfg'
-      @log_file             = '/var/log/stork.log'
-      @pid_file             = '/var/run/stork.pid'
-
-      @server               = 'localhost'
-      @port                 = 9293
-      @bind                 = '0.0.0.0'
-      @timezone             = 'America/Los_Angeles'
+    default :server, 'localhost'
+    default :port, 9293
+    default :bind, '0.0.0.0'
+    
+    def self.relative_to_bundle_path(path)
+      File.join(self.configuration[:bundle_path], path)
     end
 
-    def hosts_path
-      bundle_path + '/hosts'
-    end
+    default(:hosts_path) { relative_to_bundle_path('hosts') }
+    default(:snippets_path) { relative_to_bundle_path('snippets') }
+    default(:layouts_path) { relative_to_bundle_path('layouts') }
+    default(:networks_path) { relative_to_bundle_path('networks') }
+    default(:templates_path) { relative_to_bundle_path('templates') }
+    default(:chefs_path) { relative_to_bundle_path('chefs') }
+    default(:distros_path) { relative_to_bundle_path('distros') }
 
-    def snippets_path
-      bundle_path + '/snippets'
-    end
+    default(:client_name) { 'root' }
+    default(:client_key) { '~/.stork/root.pem' }
+    default(:stork_server_url) { "http://#{self.configuration[:server]}:#{self.configuration[:port]}" } 
 
-    def layouts_path
-      bundle_path + '/layouts'
-    end
-
-    def networks_path
-      bundle_path + '/networks'
-    end
-
-    def distros_path
-      bundle_path + '/distros'
-    end
-
-    def templates_path
-      bundle_path + '/templates'
-    end
-
-    def chefs_path
-      bundle_path + '/chefs'
-    end
-
-    def to_file
-      <<-EOS
-# Stork configuration file"
-path                    "#{path}"
-bundle_path             "#{bundle_path}"
-authorized_keys_file    "#{authorized_keys_file}"
-pxe_path                "#{pxe_path}"
-log_file                "#{log_file}"
-pid_file                "#{pid_file}"
-server                  "#{server}"
-port                    #{port}
-bind                    "#{bind}"
-timezone                "#{timezone}"
+    # Only used for the server.  Clients will use a plugin to
+    # interactively set the parameters or create it manually.
+    def self.to_file(config_path)
+      content = <<-EOS.gsub(/^ {8}/, '')
+        # Stork configuration file
+        path                    "#{path}"
+        bundle_path             "#{bundle_path}"
+        authorized_keys_file    "#{authorized_keys_file}"
+        pxe_path                "#{pxe_path}"
+        log_file                "#{log_file}"
+        pid_file                "#{pid_file}"
+        server                  "#{server}"
+        port                    #{port}
+        bind                    "#{bind}"
+        timezone                "#{timezone}"
       EOS
-    end
-
-    def self.from_file(filename)
-      find_or_create(filename)
-    end
-
-    def self.find_or_create(filename)
-      config = new
-      if File.exist?(filename)
-        delegator = ConfigDelegator.new(config)
-        delegator.instance_eval(File.read(filename), filename)
-      else
-        File.open(filename, 'w') { |file| file.write(config.to_file) }
-      end
-      config
-    end
-
-    class ConfigDelegator
-      def initialize(obj)
-        @delegated = obj
-      end
-
-      def method_missing(meth, *args)
-        @delegated.send("#{meth}=", *args)
-      end
+      File.open(config_path,'w') { |f| f.write(content) }
     end
   end
 end

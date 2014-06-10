@@ -1,12 +1,11 @@
 module Stork
   module Deploy
     class InstallScript
-      attr_reader :type, :host, :configuration
+      attr_reader :type, :host
 
       def initialize(host, type=:kickstart)
         @host = host
         @type = type
-        @configuration = host.configuration
       end
 
       def render
@@ -21,13 +20,12 @@ module Stork
         def_delegators :@builder, :url, :network, :password, :firewall,
           :timezone, :selinux, :layout, :partitions, :repos, :volume_groups,
           :packages, :pre_snippets, :post_snippets
-        attr_reader :host, :configuration
+        attr_reader :host
 
         def initialize(type, host)
           # puts Stork::Deploy::Commands.constants.inspect
           @builder = Stork::Deploy.const_get("#{type.to_s.capitalize}Binding").new(host)
-          @configuration = configuration
-          @host = host.configuration
+          @host = host
         end
 
         def get_binding

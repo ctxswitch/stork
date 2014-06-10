@@ -5,6 +5,8 @@
 
 Stork is a autoinstall utility, kickstart generation tool and server for CentOS and Redhat systems.  It aims to fill the gap in the bare metal systems deployment that many of the other tools for cloud and virtual systems excel at.
 
+### ***Currently under heavy development***
+
 ## Installation
 
 Installation using rubygems:

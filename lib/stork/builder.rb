@@ -1,18 +1,12 @@
 module Stork
-  # The Builder object loads all of the configuration files and parses them
+  # The Builder object loads all of the definition files and parses them
   # to build a collection of resources
-  # == Parameters:
-  # configuration::
-  #   The configuration containing the paths to the resource files.
   #
   class Builder
     attr_reader :collection
-    attr_reader :configuration
-    # Initialize the builder object.  Store the configuration and create a
-    # new collection.
+    # Initialize the builder object.  Create a new collection.
     #
-    def initialize(configuration)
-      @configuration = configuration
+    def initialize
       @collection = Stork::Collections.new
     end
 
@@ -20,28 +14,23 @@ module Stork
     # are first read in.  Then the rest of the resources will be evalutated
     # and added to the collections.
     #
-    # == Parameters:
-    # configuration::
-    #   The configuration containing the paths to the resource files.
-    #
     # == Returns:
-    # A builder object that contains the configuration and the resource
-    # collections that have been read in
+    # A builder object that contains the the resource collections
     #
-    def self.load(configuration)
-      builder = Builder.new(configuration)
+    def self.load
+      builder = Builder.new
       delegator = BuilderDelegator.new(builder)
 
       # Load in snippets and templates
-      delegator.snippets(configuration.snippets_path)
-      delegator.templates(configuration.templates_path)
+      delegator.snippets(Configuration[:snippets_path])
+      delegator.templates(Configuration[:templates_path])
 
       load_paths = [
-        configuration.distros_path,
-        configuration.chefs_path,
-        configuration.networks_path,
-        configuration.layouts_path,
-        configuration.hosts_path
+        Configuration[:distros_path],
+        Configuration[:chefs_path],
+        Configuration[:networks_path],
+        Configuration[:layouts_path],
+        Configuration[:hosts_path]
       ]
 
       load_paths.each do |path|
@@ -76,7 +65,6 @@ module Stork
         @delegated.collection.hosts.add(
           Resource::Host.build(
             name,
-            configuration: @delegated.configuration,
             collection: @delegated.collection,
             &block
           )

@@ -26,7 +26,7 @@ module Stork
         @chef = nil
         @pxemac = nil
         @selinux = 'enforcing'
-        @stork = configuration ? configuration.server : 'localhost'
+        @stork = Configuration[:server]
         
         @pre_snippets = Array.new
         @post_snippets = Array.new
@@ -90,10 +90,6 @@ module Stork
           wget
           man
         )
-      end
-
-      def deploy
-        Stork::Deploy::Kickstart.new(self, configuration)
       end
 
       class HostDelegator < Stork::Resource::Delegator

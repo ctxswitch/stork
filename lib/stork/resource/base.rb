@@ -3,11 +3,9 @@ module Stork
     class Base
       attr_reader :name
       attr_reader :options
-      attr_reader :configuration
 
       def initialize(name = nil, options = {})
         @name = name
-        @configuration = options[:configuration]
         @options = options
         setup
       end

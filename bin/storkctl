@@ -39,27 +39,46 @@ class StorkCtlApp
       puts opts.help
       exit 1
     end
+    
     @options.command = action
     opts.parse!
+    load_or_create_config
   end
 
-  def build
-    @configuration = Stork::Configuration.from_file(@options.config)
+  def load_or_create_config
+    unless File.exist?(@options.config)
+      Stork::Configuration.to_file(@options.config)
+    end
+    Stork::Configuration.from_file(@options.config)
   end
 
   def run
+    @control = Stork::Server::Control.new(@options)
+
     case @options.command
     when :start
-      Stork::Server::Control.new(@configuration, @options).start
+      if @options.daemonize
+        start_daemon
+      else
+        @control.start
+      end
     when :stop
-      Stork::Server::Control.new(@configuration, @options).stop
+      @control.stop
     when :restart
-      Stork::Server::Control.new(@configuration, @options).restart
+      @restart.restart
+    end
+  end
+
+  def start_daemon
+    if Process.respond_to?(:daemon)
+      Process.daemon(true)
+      @control.start
+    else
+      abort 'Process.daemon requires Ruby >= 1.9'
     end
   end
 end
 
 app = StorkCtlApp.new
 app.parse
-app.build
 app.run

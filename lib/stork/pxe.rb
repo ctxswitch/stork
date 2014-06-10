@@ -15,7 +15,7 @@ module Stork
       @hostname = host.name
       @initrd = host.distro.image
       @kernel = host.distro.kernel
-      @path = host.configuration.pxe_path
+      @path = Configuration[:pxe_path]
       @mac = host.pxemac
       @server = server
       @port = port
