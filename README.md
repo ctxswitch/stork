@@ -172,19 +172,38 @@ When used inline with a host block, the layout is not stored and cannot be refer
 
 ### Partition Resource
 
-TODO
+* ```size``` - Size of the partition in MB.
+* ```type``` - Set the file system type.
+* ```primary``` - Force allocation of the partition as a primary partition.
+* ```grow``` - Grow the partition to the maximum amount.
+* ```recommended``` - Let the installer determine the recommended size.
 
 ### Volume Group Resource
 
-TODO
+* ```logical_volume``` - Add a logical volume to the volume group.
 
 ### Logical Volume Resource
 
-TODO
+* ```path``` - Mount point.
+* ```size``` - Size of the partition in MB.
+* ```type``` - Set the file system type.
+* ```primary``` - Force allocation of the partition as a primary partition.
+* ```grow``` - Grow the partition to the maximum amount.
+* ```recommended``` - Let the installer determine the recommended size.
 
 ### Distro Resource
 
-TODO
+* ```kernel``` - Name of the kernel.  This is the kernel that will be transfered via tftp to the host at install time.
+* ```image``` - Name of the RAM disk image of the installer.
+* ```url``` - Install url for network install (only supports http - at least thats the only one I'm testing with)
+
+```ruby
+distro "centos" do
+  kernel "vmlinuz"
+  image "initrd.img"
+  url "http://mirror.example.com/centos"
+end
+```
 
 ### Firewall Resource
 
