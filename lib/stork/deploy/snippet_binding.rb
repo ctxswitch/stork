@@ -32,17 +32,22 @@ module Stork
         host.interfaces.map { |x| x.search_paths }.uniq.flatten
       end
 
-      def midwife_server
+      def stork_server
         Configuration[:server]
       end
 
-      def midwife_port
+      def stork_port
         Configuration[:port]
       end
 
-      def midwife_bind
+      def stork_bind
         Configuration[:bind]
       end
+
+      # Add aliases for old midwife methods
+      alias_method :midwife_server, :stork_server
+      alias_method :midwife_port, :stork_port
+      alias_method :midwife_bind, :stork_bind
     end
   end
 end

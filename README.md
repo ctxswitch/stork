@@ -217,6 +217,47 @@ TODO
 
 TODO
 
+### Chef Resource
+
+TODO
+
+## Templates and Snippet Scripts
+
+Templates and snippets use the ERB templating system.  When the ERB files are rendered, binding are created to expose ruby the underlying ruby objects.  
+
+In kickstart templates, the generated kickstart commands can be accessed:
+
+* ```url``` - Outputs the kickstart command assigning the URL for network installs.
+* ```network``` - Outputs each interface kickstart command for all defined interfaces.
+* ```password``` - Outputs the 'rootpw' command with a randomized password.
+* ```firewall``` - Outputs the firewall command.
+* ```timezone``` - Outputs the timezone command for the installer.
+* ```selinux``` - Outputs the selinux command.
+* ```layout``` - Outputs all of the partition, volume groups and logical volume commands.
+* ```bootloader``` - Outputs the bootloader config information.
+* ```zerombr``` - Outputs the zerombr command.
+* ```clearpart``` - Outputs the clearpart command.
+* ```repos``` - Outputs all additional repo commands.
+* ```packages``` - Outputs the packages section.
+* ```pre_snippets``` - Renders and outputs all pre snippets in the %pre section.
+* ```post_snippets``` - Renders and outputs all post snippets in the %post section.
+
+In addition to the kickstart command generators, the following objects are exposed and can be used:
+
+* ```host``` - The complete host object for the current host.
+
+Snippets expose the following objects to the template:
+
+* ```host``` - The current host.
+* ```chef``` - The chef object.
+* ```authorized_keys``` - A string containing all the public keys.
+* ```first_boot_content``` - A string representation of the json content that will make up the first_boot file.
+* ```nameservers``` - An array of all unique nameservers.
+* ```search_paths``` - An array of all unique search_paths.
+* ```stork_server``` - The IP address or hostname of the stork server.
+* ```stork_port``` - The port that the stork server is running on.
+* ```stork_bind``` - The bind IP address of the stork server.
+
 
 ## Contributing
 
