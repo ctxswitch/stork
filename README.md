@@ -33,7 +33,7 @@ Install the latest version from the github:
 
 ### Host Resource
 
-* ```layout``` - Partitioning information (see 'Layout Resource').  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined layout.
+* ```layout``` - Disk layout containing partition and volume group information (see 'Layout Resource').  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined layout.
 * ```template``` - The kickstart template to use when generating the autoinstallation instructions
 * ```chef``` - Chef server information (see 'Chef Resource').  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined chef server.
 * ```pxemac``` - The mac address of the PXE enabled interface.  Used to create the boot configuration files.
@@ -125,7 +125,50 @@ end
 
 ### Layout Resource
 
-TODO
+* ```zerombr``` - Initialize invalid partition tables
+* ```clearpart``` - Remove partitions prior to the creation of new partitions
+* ```partition``` or ```part``` - Partition information (see Partition Resource).
+* ```volume_group``` or ```vg``` - Volume group information (see Volume Group Resource)
+
+Layouts can be defined seperately from hosts and referenced in hosts by name.  A typical layout will look like this:
+
+```ruby
+layout "root_and_home" do
+  clearpart
+  zerombr
+  part "/boot" do
+    size 100
+    type "ext4"
+    primary
+  end
+
+  part "swap" do
+    recommended
+    type "swap"
+    primary
+  end
+
+  part "/" do
+    size 4096
+    type "ext4"
+  end
+
+  part "pv.01" do
+    size 1
+    grow
+  end
+
+  volume_group "vg", part: "pv.01" do
+    logical_volume "lv_home" do
+      path "/home"
+      size 1
+      grow
+    end
+  end
+end
+``` 
+
+When used inline with a host block, the layout is not stored and cannot be referenced from other hosts.
 
 ### Partition Resource
 
