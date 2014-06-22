@@ -29,9 +29,18 @@ Install the latest version from the github:
     stork host reload
     stork host show [name]
 
-## Resources
+## The Host Resource
 
-### Host Resource
+### ```host```
+
+##### Syntax:
+
+```ruby 
+host "fully-qualified-domain-name" do
+  attribute "value"
+end
+```
+##### Attributes:
 
 * ```layout``` - Disk layout containing partition and volume group information (see 'Layout Resource').  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined layout.
 * ```template``` - The kickstart template to use when generating the autoinstallation instructions
@@ -48,6 +57,8 @@ Install the latest version from the github:
 * ```run_list``` - Chef runlist items that will populate the first-boot.json file.  Can be an array or string value
 * ```repos``` - Add a new repo to the host (see Repo Resource)
 * ```stork``` - Url.  Override the stork server location.
+
+##### Examples:
 
 Typical hosts will look like:
 
