@@ -99,7 +99,7 @@ host "server.example.org" do
 end
 ```
 
-Or define hosts programatically with ruby iterators:
+Or define hosts programatically with common ruby techniques:
 
 ```ruby
 hosts=[
