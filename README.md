@@ -188,7 +188,7 @@ See ```layout``` for an example of how volume_group can be used to define volume
 
 ### Logical Volume Resource
 
-#### Command: ```logical_volume``` or ```logvol```  
+#### ```logical_volume``` or ```logvol```  
 
 * ```path``` - Mount point.
 * ```size``` - Size of the logical volume in MB.
