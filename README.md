@@ -182,13 +182,27 @@ See ```layout``` for an example of how partition can be used to define disk part
 
 ### Volume Group Resource
 
+#### ```volume_group``` or ```volgroup```
+
+The volume group resource takes an attribute
+
 * ```logical_volume``` - Add a logical volume to the volume group.
 
 See ```layout``` for an example of how volume_group can be used to define volume groups.
 
 ### Logical Volume Resource
 
-#### ```logical_volume``` or ```logvol```  
+#### ```logical_volume``` or ```logvol``` 
+
+###### Syntax:
+
+```ruby 
+logical_volume "name" do
+  attribute "value"
+end
+```
+
+###### Attributes:
 
 * ```path``` - Mount point.
 * ```size``` - Size of the logical volume in MB.
