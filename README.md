@@ -219,7 +219,24 @@ TODO
 
 ### Chef Resource
 
-TODO
+* ```version``` - The version of chef to use.
+* ```client_name``` - The admin client name.
+* ```client_key``` - The admin client key file.
+* ```validator_name``` - The validation client name.
+* ```validation_key``` - The validation key file.
+* ```encrypted_data_bag_secret``` - A string value of the data bag encryption key.
+
+```ruby
+chef "default" do
+  url "https://chef.example.org"
+  version "11.6.0"
+  client_name "root"
+  client_key "./specs/keys/snakeoil-root.pem"
+  validator_name "chef-validator"
+  validation_key "./specs/keys/snakeoil-validation.pem"
+  encrypted_data_bag_secret "9EE8rGyPB8mXARNrzSDal9TOAQ...e7/x2uPkqMS/tOU="
+end
+```
 
 ## Templates and Snippet Scripts
 
