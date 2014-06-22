@@ -178,18 +178,25 @@ When used inline with a host block, the layout is not stored and cannot be refer
 * ```grow``` - Grow the partition to the maximum amount.
 * ```recommended``` - Let the installer determine the recommended size.
 
+See ```layout``` for an example of how partition can be used to define disk partitions. 
+
 ### Volume Group Resource
 
 * ```logical_volume``` - Add a logical volume to the volume group.
 
+See ```layout``` for an example of how volume_group can be used to define volume groups.
+
 ### Logical Volume Resource
 
+#### Command: ```logical_volume``` or ```logvol```  
+
 * ```path``` - Mount point.
-* ```size``` - Size of the partition in MB.
+* ```size``` - Size of the logical volume in MB.
 * ```type``` - Set the file system type.
-* ```primary``` - Force allocation of the partition as a primary partition.
-* ```grow``` - Grow the partition to the maximum amount.
+* ```grow``` - Grow the logical volume to the maximum amount.
 * ```recommended``` - Let the installer determine the recommended size.
+
+See ```layout``` for an example of how logical_volume can be used to define logical volumes.
 
 ### Distro Resource
 
