@@ -50,20 +50,20 @@ where
 
 #### Attributes:
 
-* ```layout``` - Disk layout containing partition and volume group information (see 'Layout Resource').  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined layout.
+* ```layout``` - Disk layout containing partition and volume group information.  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined layout.
 * ```template``` - The kickstart template to use when generating the autoinstallation instructions
-* ```chef``` - Chef server information (see 'Chef Resource').  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined chef server.
+* ```chef``` - Chef server information.  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined chef server.
 * ```pxemac``` - The mac address of the PXE enabled interface.  Used to create the boot configuration files.
 * ```pre_snippet``` - Scripts that will be run in the **pre** section before the install begins.  Snippets are accessed by the basename of the file they are stored in.
 * ```post_snippet``` - Scripts that will be run in the **post** section afer the install has successfully completed.  Snippets are accessed by the basename of the file they are stored in.
-* ```interface``` - Network interface information (see 'Interface Resource'). Takes only a block value.
-* ```distro``` - Distribution information (see 'Distro Resource').  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined distribution.
-* ```timezone``` - The IANA zone name (e.g. 'America/Chicago') 
-* ```firewall``` - Initial firewall settings (see firewall resource).  Block only.
-* ```selinux``` - String or symbol value representing the three selinux states. The only valid values are:  enforcing, permissive, or disabled.  Default is enforcing
+* ```interface``` - Network interface information. Takes only a block value.
+* ```distro``` - Install distribution information.  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined distribution.
+* ```timezone``` - The IANA zone name (e.g. 'America/Chicago').
+* ```firewall``` - Initial firewall settings.  Block only.
+* ```selinux``` - String or symbol value representing the three selinux states. The only valid values are:  enforcing, permissive, or disabled.  Default is enforcing.
 * ```package``` - Adds a package to the install.  Generally not needed as the minimal set of packages that are installed by default will be enough to install the configuration management software.
-* ```run_list``` - Chef runlist items that will populate the first-boot.json file.  Can be an array or string value
-* ```repos``` - Add a new repo to the host (see Repo Resource)
+* ```run_list``` - Chef runlist items that will populate the first-boot.json file.  Can be an array or string value.
+* ```repos``` - Add a new repo to the host.
 * ```stork``` - Url.  Override the stork server location.
 
 #### Examples:
