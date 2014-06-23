@@ -488,6 +488,8 @@ where
 * ```validation_key``` - The validation key file.
 * ```encrypted_data_bag_secret``` - A string value of the data bag encryption key.
 
+#### Examples:
+
 ```ruby
 chef "default" do
   url "https://chef.example.org"
