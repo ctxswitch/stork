@@ -5,7 +5,7 @@
 
 Stork is a autoinstall utility, kickstart generation tool and server for CentOS and Redhat systems.  It aims to fill the gap in the bare metal systems deployment that many of the other tools for cloud and virtual systems excel at.
 
-### ***Currently under heavy development***
+##### ***Stork is currently under heavy development, but I hope to release the first stable version soon.  Please be aware that the DSL and/or API may change significantly during this time.***
 
 ## Installation
 
@@ -29,17 +29,25 @@ Install the latest version from the github:
     stork host reload
     stork host show [name]
 
-## The Host Resource
+## Defining a host
 
 ### ```host```
 
 #### Syntax:
 
+The syntax for **host** is as follows:
+
 ```ruby 
-host "fully-qualified-domain-name" do
+host "fqdn" do
   attribute "value"
 end
 ```
+
+where
+
+* ```fqdn``` is the fully qualified domain name of the host.
+* ```attribute``` is the attributes available for this resource.
+
 #### Attributes:
 
 * ```layout``` - Disk layout containing partition and volume group information (see 'Layout Resource').  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined layout.
@@ -99,7 +107,7 @@ host "server.example.org" do
 end
 ```
 
-Or define hosts programatically with common ruby techniques:
+Or you define hosts programatically with common ruby techniques:
 
 ```ruby
 hosts=[
@@ -133,14 +141,109 @@ hosts.each do |octet, mac|
   end
 end
 ```
+## Defining the disk layout
 
-### Layout Resource
+### ```layout```
 
-* ```zerombr``` - Initialize invalid partition tables
-* ```clearpart``` - Remove partitions prior to the creation of new partitions
+#### Syntax:
+
+The syntax for **layout** is as follows:
+
+```ruby
+layout "name", part: "physical_volume" do
+  attribute "value"
+end
+```
+
+where
+
+* ```name``` is a unique name that can be used to define global resources that can be referenced from other resources by the defined name.
+* ```partition``` is the physical_volume that the volume group will be placed on.
+* ```attribute``` is the attributes available for this resource.
+
+#### Attributes:
+
+* ```zerombr``` - Initialize invalid partition tables.
+* ```clearpart``` - Remove partitions prior to the creation of new partitions.
 * ```partition``` or ```part``` - Partition information (see Partition Resource).
-* ```volume_group``` or ```vg``` - Volume group information (see Volume Group Resource)
+* ```volume_group``` or ```vg``` - Volume group information (see Volume Group Resource).
 
+### ```partition``` or ```part```
+
+#### Syntax:
+
+The syntax for **partition** is as follows:
+
+```ruby
+partition "mountpoint" do
+  attribute "value"
+end
+```
+
+where
+
+* ```mountpoint``` is the filesystem path where the partition will be mounted. When a volume group will be associated with the partition, use the *pv.n* naming scheme to specify that the partition is a physical volume.
+* ```attribute``` is the attributes available for this resource
+
+#### Attributes:
+
+* ```size``` - Size of the partition in MB.
+* ```type``` - Set the file system type.
+* ```primary``` - Force allocation of the partition as a primary partition.
+* ```grow``` - Grow the partition to the maximum amount.
+* ```recommended``` - Let the installer determine the recommended size.
+
+See ```layout``` for an example of how partition can be used to define disk partitions. 
+
+### ```volume_group``` or ```volgroup```
+
+#### Syntax:
+
+The syntax for **volume_group** is as follows:
+
+```ruby
+volume_group "name" do
+  block_attribute "value" do
+    attribute "value"
+  end
+end
+```
+
+where
+
+* ```name``` is the name of the volume group.
+* ```attribute``` is the attributes available for this resource
+
+#### Attributes:
+
+* ```logical_volume``` - Add a logical volume to the volume group.
+
+### ```logical_volume``` or ```logvol``` 
+
+#### Syntax:
+
+The syntax for **logical_volume** is as follows:
+
+```ruby 
+logical_volume "name" do
+  attribute "value"
+end
+```
+
+where
+
+* ```name``` is the name of the logical volume.
+* ```attribute``` is the attributes available for this resource
+
+#### Attributes:
+
+* ```path``` - Mount point.
+* ```size``` - Size of the logical volume in MB.
+* ```type``` - Set the file system type.
+* ```grow``` - Grow the logical volume to the maximum amount.
+* ```recommended``` - Let the installer determine the recommended size.
+
+#### Examples:
 Layouts can be defined seperately from hosts and referenced in hosts by name.  A typical layout will look like this:
 
 ```ruby
@@ -179,56 +282,32 @@ layout "root_and_home" do
 end
 ``` 
 
-When used inline with a host block, the layout is not stored and cannot be referenced from other hosts.
+## Defining the install distribution
 
-### Partition Resource
+### ```distro```
 
-* ```size``` - Size of the partition in MB.
-* ```type``` - Set the file system type.
-* ```primary``` - Force allocation of the partition as a primary partition.
-* ```grow``` - Grow the partition to the maximum amount.
-* ```recommended``` - Let the installer determine the recommended size.
+#### Syntax:
 
-See ```layout``` for an example of how partition can be used to define disk partitions. 
+The syntax for **distro** is as follows:
 
-### Volume Group Resource
-
-#### ```volume_group``` or ```volgroup```
-
-The volume group resource takes an attribute
-
-* ```logical_volume``` - Add a logical volume to the volume group.
-
-See ```layout``` for an example of how volume_group can be used to define volume groups.
-
-### Logical Volume Resource
-
-#### ```logical_volume``` or ```logvol``` 
-
-###### Syntax:
-
-```ruby 
-logical_volume "name" do
+```ruby
+distro "name" do
   attribute "value"
 end
 ```
 
-###### Attributes:
+where
 
-* ```path``` - Mount point.
-* ```size``` - Size of the logical volume in MB.
-* ```type``` - Set the file system type.
-* ```grow``` - Grow the logical volume to the maximum amount.
-* ```recommended``` - Let the installer determine the recommended size.
+* ```name``` is a unique name that can be used to define global resources that can be referenced from other resources by the defined name.
+* ```attribute``` is the attributes available for this resource
 
-See ```layout``` for an example of how logical_volume can be used to define logical volumes.
-
-### Distro Resource
+#### Attributes:
 
 * ```kernel``` - Name of the kernel.  This is the kernel that will be transfered via tftp to the host at install time.
 * ```image``` - Name of the RAM disk image of the installer.
 * ```url``` - Install url for network install (only supports http - at least thats the only one I'm testing with)
 
+#### Examples:
 ```ruby
 distro "centos" do
   kernel "vmlinuz"
@@ -237,19 +316,151 @@ distro "centos" do
 end
 ```
 
-### Firewall Resource
+## Adding network interfaces
 
-TODO
+### ```network```
 
-### Interface Resource
+#### Syntax:
 
-TODO
+The syntax for **network** is as follows:
 
-### Network Resource
+```ruby
+network "name" do
+  attribute "value"
+end
+```
 
-TODO
+where
 
-### Chef Resource
+* ```name``` is a unique name that can be used to define global resources that can be referenced from other resources by the defined name.
+* ```attribute``` is one or more of the attributes available for this resource.
+
+#### Attributes:
+
+* ```netmask``` - the netmask of the network.
+* ```gateway``` - the ip address of the network's gateway.
+* ```nameserver``` - add a nameserver to the network.
+* ```search_path``` - add a search_path to the network.
+
+#### Examples:
+
+```ruby
+network "org" do
+  netmask "255.255.255.0"
+  gateway "99.99.1.1"
+  nameserver "99.99.1.253"
+  nameserver "99.99.1.252"
+  search_path "example.org"
+end
+
+```
+
+### ```interface```
+
+#### Syntax:
+
+The syntax for **interface** is as follows:
+
+```ruby
+interface "device" do
+  attribute "value"
+end
+```
+
+where
+
+* ```device``` is the device that is being configured
+* ```attribute``` is one or more of the attributes available for this resource.
+
+#### Attributes:
+
+* ```onboot``` - enables the interface on boot.
+* ```ipv4``` or ```noipv4``` - enable or disable ipv4 support.
+* ```ipv6``` or ```noipv6``` - enable or disable ipv6 support.
+* ```defroute``` or ```nodefroute``` - use or don't use the interface for the default route.
+* ```ethtool``` - a string value representing the ethtool options for the interface.
+* ```bootproto``` - a string or symbol representing the boot protocol.  Allowed values include :static and :dhcp.
+
+For statically configured interfaces: ```bootproto :static```
+
+* ```ip``` - the ip address of the interface.
+* ```netmask``` - the netmask of the network.
+* ```gateway``` - the ip address of the network's gateway.
+* ```nameserver``` - add a nameserver to the network.
+* ```search_path``` - add a search_path to the network.
+* ```network``` - set the netmask, gateway, nameservers, and search paths with the values found in the specified network resource. 
+
+For dynamically configured interfaces: ```bootproto :dhcp```
+
+* ```dns``` or ```nodns``` - allow or disallow dhcpd to update resolv.conf.
+
+#### Examples:
+
+```ruby
+
+```
+
+## Setting the host firewall
+
+### ```firewall```
+
+#### Syntax:
+
+The syntax for **firewall** is as follows:
+
+```ruby
+firewall do
+  attribute "value"
+end
+```
+
+where
+
+* ```attribute``` is one or more of the attributes available for this resource.
+
+#### Attributes:
+
+* ```enabled``` - enable the firewall.
+* ```disable``` - disable the firewall.
+* ```ssh``` - allow the ssh protocol through the firewall.
+* ```telnet``` - allow the telnet protocol through the firewall.
+* ```smtp``` - allow the smtp protocol through the firewall.
+* ```http``` - allow the http protocol through the firewall.
+* ```ftp``` - allow the ftp protocol through the firewall.
+* ```trust``` - add a device (e.g. eth1, eth2, p1p2, etc) as a trusted device.
+* ```allow``` - allow a port and using the **port:protocol** format
+
+#### Examples:
+
+```ruby
+firewall do
+  enabled
+  ssh
+  allow "8080:tcp"
+  trust "eth1"
+end
+```
+
+## Defining the chef resources
+
+### ```chef```
+
+#### Syntax:
+
+The syntax for the **chef** resource is as follows:
+
+```ruby
+chef "name" do
+  attribute "value"
+end
+```
+
+where
+
+* ```name``` is a unique name that can be used to define global resources that can be referenced from other resources by the defined name.
+* ```attribute``` is the attributes available for this resource
+
+#### Attributes:
 
 * ```version``` - The version of chef to use.
 * ```client_name``` - The admin client name.
