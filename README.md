@@ -158,7 +158,7 @@ end
 where
 
 * ```name``` is a unique name that can be used to define global resources that can be referenced from other resources by the defined name.
-* ```partition``` is the physical_volume that the volume group will be placed on.
+* ```part``` is the physical_volume that the volume group will be placed on.
 * ```attribute``` is the attributes available for this resource.
 
 #### Attributes:
