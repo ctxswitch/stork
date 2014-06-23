@@ -16,6 +16,7 @@ require 'stork/deploy/kickstart_binding'
 require 'stork/deploy/install_script'
 
 require 'stork/pxe'
+require 'stork/database'
 
 require 'stork/server/application'
 require 'stork/server/control'
