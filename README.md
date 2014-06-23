@@ -397,7 +397,25 @@ For dynamically configured interfaces: ```bootproto :dhcp```
 #### Examples:
 
 ```ruby
+interface "eth0" do
+  onboot
+  bootproto :dhcp
+end
 
+interface "eth1" do
+  bootproto :static
+  ip        "99.99.1.8"
+  network   "org"
+end
+
+interface "eth2" do
+  bootproto :static
+  ip        "192.168.1.10"
+  netmask   "255.255.255.0"
+  gateway   "192.168.1.1"
+  nameserver "192.168.1.253"
+  nameserver "192.168.1.252"
+end
 ```
 
 ## Setting the host firewall
