@@ -262,17 +262,18 @@ layout "root_and_home" do
     primary
   end
 
-  part "/" do
-    size 4096
-    type "ext4"
-  end
-
   part "pv.01" do
-    size 1
     grow
+    primary
   end
 
   volume_group "vg", part: "pv.01" do
+    logical_volume "lv_root" do
+      path "/"
+      size 4096
+      type "ext4"
+    end
+
     logical_volume "lv_home" do
       path "/home"
       size 1
