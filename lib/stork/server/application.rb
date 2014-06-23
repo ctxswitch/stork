@@ -5,6 +5,7 @@ module Stork
     class Application < Sinatra::Base
       configure do
         enable :logging
+        disable :show_exceptions
         mime_type :plain, 'text/plain'
         mime_type :json, 'application/json'
       end
@@ -15,7 +16,7 @@ module Stork
       end
 
       get '/' do
-        info 'GET /'
+        loginfo 'GET /'
         json_halt 200, 200, "Stork Version #{VERSION} - #{CODENAME}"
       end
 
@@ -38,7 +39,7 @@ module Stork
       end
 
       get '/host/:host' do |host|
-        info "#{host} requested kickstart"
+        loginfo "#{host} requested kickstart"
 
         h = hosts.get(host)
 
@@ -53,7 +54,7 @@ module Stork
       end
 
       get '/host/:host/installed' do |host|
-        info "#{host} has notified completed install"
+        loginfo "#{host} has notified completed install"
         h = hosts.get(host)
 
         if h
@@ -65,7 +66,7 @@ module Stork
       end
 
       get '/host/:host/install' do |host|
-        info "install requested for #{host}"
+        loginfo "install requested for #{host}"
         h = hosts.get(host)
 
         if h
@@ -78,6 +79,10 @@ module Stork
 
       not_found do
         json_halt_not_found
+      end
+
+      error do
+        json_halt_internal_error
       end
 
       helpers do
@@ -110,8 +115,12 @@ module Stork
           Stork::PXE.new(host, host.stork, Configuration.port)
         end
 
-        def info(msg)
+        def loginfo(msg)
           logger.info "[#{request.ip}] INFO: #{msg}"
+        end
+
+        def logerr(msg)
+          logger.error "[#{request.ip}] ERROR: #{msg}"
         end
 
         def json_halt(request_status, op_status, message)
@@ -129,9 +138,9 @@ module Stork
           halt 200, { 'Content-Type' => 'application/json' }, content
         end
 
-        def json_halt_internal_error
+        def json_halt_internal_error(content="Internal error")
           content_type :json
-          json_halt 500, 500, 'Internal error'
+          json_halt 500, 500, content
         end
 
         def json_halt_not_found
