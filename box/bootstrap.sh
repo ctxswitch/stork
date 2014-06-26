@@ -1,6 +1,6 @@
 #!/bin/bash
 # bootstrap.sh
-set -x
+# set -x
 ###############################################################################
 # Install tftp and configure it for PXE boot.
 ###############################################################################
@@ -134,26 +134,6 @@ EOF
 /etc/init.d/named start && chkconfig named on
 
 ###############################################################################
-# Networking adjustments
-###############################################################################
-echo "PEERDNS=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
-cat > /etc/resolv.conf << 'EOF'
-options single-request-reopen
-nameserver 127.0.0.1
-EOF
-
-/etc/init.d/network restart
-
-###############################################################################
-# Turn on NATing so we can use this as the gateway for our isolated test vms
-###############################################################################
-sed -i -re 's/(net.ipv4.ip_forward\s+=) 0/\1 1/' /etc/sysctl.conf
-sysctl -p /etc/sysctl.conf
-/etc/init.d/iptables start
-iptables --table nat --append POSTROUTING --out-interface eth0 -j MASQUERADE
-/etc/init.d/iptables save
-
-###############################################################################
 # Create ssh keys
 ###############################################################################
 pushd ~vagrant/.ssh
@@ -168,8 +148,11 @@ popd
 ###############################################################################
 # Set up EPEL and a few tools
 ###############################################################################
-yum -y install http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
-yum -y install git
+pushd /tmp
+wget http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+yum -y localinstall epel-release-6-8.noarch.rpm
+yum -y install git sqlite-devel
+popd
 
 ###############################################################################
 # RVM setup and Ruby 2.0.0 installation
@@ -182,11 +165,10 @@ rvm install 2.0.0
 ###############################################################################
 # Install and start stork
 ###############################################################################
-pushd /stork
+pushd /mnt/stork
 rvm use 2.0.0@stork --create
-gem install bundler
-bundle install
-rake install
+su vagrant -c 'rake build'
+gem install pkg/*.gem
 popd
 
 # Create the configuration
@@ -211,6 +193,26 @@ EOF
 cat /home/vagrant/.ssh/id_rsa.pub > /etc/stork/authorized_keys
 # Get the example bundles
 git clone https://github.com/rlyon/stork-bundle.git bundles
+
+###############################################################################
+# Networking adjustments
+###############################################################################
+echo "PEERDNS=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+cat > /etc/resolv.conf << 'EOF'
+options single-request-reopen
+nameserver 127.0.0.1
+EOF
+
+/etc/init.d/network restart
+
+###############################################################################
+# Turn on NATing so we can use this as the gateway for our isolated test vms
+###############################################################################
+sed -i -re 's/(net.ipv4.ip_forward\s+=) 0/\1 1/' /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf
+/etc/init.d/iptables start
+iptables --table nat --append POSTROUTING --out-interface eth0 -j MASQUERADE
+/etc/init.d/iptables save
 
 ###############################################################################
 # Since we now have a TFTP, SysLinux, DHCP, DNS, Nating and Stork shared on a
