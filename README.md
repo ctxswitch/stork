@@ -17,6 +17,8 @@ Install the latest version from the github:
 
     $ git clone https://github.com/rlyon/stork.git
 
+If you are installing the latest version from github, you have two choices to run stork.  First, you can run ```rake install``` and build/install the gem, or you can run the executables direcly from the **bin** directory.
+
 ## Usage
 
 ### Control the server
