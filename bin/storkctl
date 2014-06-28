@@ -20,6 +20,7 @@ class StorkCtlApp
     @options = OpenStruct.new
     @options.config = ENV['STORK_CONFIG'] || "/etc/stork/config.rb"
     @options.daemonize = false
+    @options.debug = false
     @options.command = :start
   end
 
@@ -31,6 +32,13 @@ class StorkCtlApp
       end
       o.on("-d", "--daemonize", "Daemonize stork.") do
         @options.daemonize = true
+      end
+      o.on("-D", "--debug", "Read debuguration from the specified file") do
+        @options.debug = true
+      end
+      o.on("-h", "--help", "Read debuguration from the specified file") do
+        puts opts.help
+        exit 1
       end
     end
 

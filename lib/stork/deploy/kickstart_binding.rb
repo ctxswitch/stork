@@ -9,7 +9,7 @@ module Stork
 
       def url
         Command.create 'url' do |c|
-          c.option 'url', host.distro.url
+          c.option_no_equal 'url', host.distro.url
         end
       end
 

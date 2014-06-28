@@ -44,7 +44,7 @@ authoritative;
 log-facility local7;
 
 subnet 10.10.1.0 netmask 255.255.255.0 {
-  range 10.10.1.100 10.10.1.200;
+  range 10.10.1.120 10.10.1.200;
   allow booting;
   allow bootp;
   next-server 10.10.1.10;
@@ -53,6 +53,38 @@ subnet 10.10.1.0 netmask 255.255.255.0 {
   option domain-name-servers 10.10.1.10;
   option routers 10.10.1.10;
   option broadcast-address 10.10.1.255;
+  host head.vbox.local {
+    option host-name "head";
+    option domain-name "vbox.local";
+    ddns-hostname "head";
+    ddns-domainname "vbox.local";
+    hardware ethernet 02:16:3f:c3:00:02;
+    fixed-address 10.10.1.101;
+  }
+  host node-101.vbox.local {
+    option host-name "node-101";
+    option domain-name "vbox.local";
+    ddns-hostname "node-101";
+    ddns-domainname "vbox.local";
+    hardware ethernet 02:16:3f:c3:01:01;
+    fixed-address 10.10.1.101;
+  }
+  host node-102.vbox.local {
+    option host-name "node-102";
+    option domain-name "vbox.local";
+    ddns-hostname "node-102";
+    ddns-domainname "vbox.local";
+    hardware ethernet 02:16:3f:c3:01:02;
+    fixed-address 10.10.1.102;
+  }
+  host node-103.vbox.local {
+    option host-name "node-103";
+    option domain-name "vbox.local";
+    ddns-hostname "node-103";
+    ddns-domainname "vbox.local";
+    hardware ethernet 02:16:3f:c3:01:03;
+    fixed-address 10.10.1.103;
+  }
 }
 EOF
 /etc/init.d/dhcpd start && chkconfig dhcpd on
@@ -108,15 +140,19 @@ EOF
 cat > /var/named/vbox.local.zone << 'EOF'
 $TTL    1D;
 $ORIGIN vbox.local.
-@       IN      SOA     @   root.vbox.local. (
+@               IN      SOA     @   root.vbox.local. (
                         2014062501 ; serial
                         3h ; refresh
                         1w ; retry
                         1w ; expire
                         3h) ; min
-@       1D  IN  NS      stork
-stork   1D  IN  A       10.10.1.10
-chef    1D  IN  CNAME   stork
+@           1D  IN  NS      stork
+stork       1D  IN  A       10.10.1.10
+chef        1D  IN  CNAME   stork
+head        1D  IN  A       10.10.1.100
+node-101    1D  IN  A       10.10.1.101
+node-102    1D  IN  A       10.10.1.102
+node-103    1D  IN  A       10.10.1.103
 EOF
 
 cat > /var/named/vbox.local.db << 'EOF'
@@ -129,6 +165,10 @@ $TTL    1D;
                         3h) ; min
                 NS      stork.vbox.local.
 10              PTR     stork.vbox.local.
+100             PTR     head.vbox.local.
+101             PTR     node-101.vbox.local.
+102             PTR     node-102.vbox.local.
+103             PTR     node-103.vbox.local.
 EOF
 
 /etc/init.d/named start && chkconfig named on
@@ -142,8 +182,30 @@ chown vagrant:vagrant id_rsa*
 popd
 
 ###############################################################################
-# Chef setup with chef-zero and a few basic cookbooks for testing.
+# Chef setup with chef server and a few basic cookbooks for testing.
 ###############################################################################
+pushd /tmp
+wget https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-server-11.0.12-1.el6.x86_64.rpm
+yum -y localinstall chef-server-11.0.12-1.el6.x86_64.rpm
+chef-server-ctl reconfigure
+wget https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-11.12.8-2.el6.x86_64.rpm
+yum -y localinstall chef-11.12.8-2.el6.x86_64.rpm
+popd
+
+# Just utilize the admin user that is already created
+pushd /root
+mkdir .chef
+cat > .chef/knife.rb << 'EOF'
+log_level                :info
+log_location             STDOUT
+node_name                'admin'
+client_key               '/etc/chef-server/admin.pem'
+validation_client_name   'chef-validator'
+validation_key           '/etc/chef-server/chef-validator.pem'
+chef_server_url          'https://stork.vbox.local:443'
+syntax_check_cache_path  '/root/.chef/syntax_check_cache'
+EOF
+popd
 
 ###############################################################################
 # Set up EPEL and a few tools
@@ -168,7 +230,7 @@ rvm install 2.0.0
 pushd /mnt/stork
 rvm use 2.0.0@stork --create
 su vagrant -c 'rake build'
-gem install pkg/*.gem
+gem install pkg/*.gem --no-rdoc --no-ri
 popd
 
 # Create the configuration
@@ -194,6 +256,32 @@ cat /home/vagrant/.ssh/id_rsa.pub > /etc/stork/authorized_keys
 # Get the example bundles
 git clone https://github.com/rlyon/stork-bundle.git bundles
 
+cat > /usr/bin/stork_start << 'EOF'
+#!/bin/bash
+source /usr/local/rvm/scripts/rvm
+rvm use 2.0.0@stork
+storkctl start
+EOF
+chmod 755 /usr/bin/stork_start
+
+cat > /usr/bin/stork_update << 'EOF'
+#!/bin/bash
+source /usr/local/rvm/scripts/rvm
+rvm use 2.0.0@stork
+cd /mnt/stork
+rake install
+EOF
+chmod 755 /usr/bin/stork_update
+
+mkdir ~vagrant/.stork
+ln -s /etc/stork/config.rb ~vagrant/.stork/client.rb
+chown -R vagrant:vagrant ~vagrant/.stork
+
+# Make sure that RVM uses the system ruby as default.
+rvm reset
+
+
+
 ###############################################################################
 # Networking adjustments
 ###############################################################################
@@ -211,7 +299,9 @@ EOF
 sed -i -re 's/(net.ipv4.ip_forward\s+=) 0/\1 1/' /etc/sysctl.conf
 sysctl -p /etc/sysctl.conf
 /etc/init.d/iptables start
-iptables --table nat --append POSTROUTING --out-interface eth0 -j MASQUERADE
+iptables -A FORWARD -i eth1 -j ACCEPT
+iptables -A FORWARD -o eth1 -j ACCEPT
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 /etc/init.d/iptables save
 
 ###############################################################################

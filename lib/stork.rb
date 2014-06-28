@@ -22,7 +22,9 @@ require 'stork/server/application'
 require 'stork/server/control'
 
 require 'stork/plugin'
-Dir[File.join('./lib/stork/client/plugins', '*.rb')].each do |plugin|
+
+path = File.expand_path(File.dirname(__FILE__))
+Dir[File.join(path, '/stork/client/plugins', '*.rb')].each do |plugin|
   require plugin
 end
 

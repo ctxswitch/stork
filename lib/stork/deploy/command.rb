@@ -29,6 +29,14 @@ module Stork
         end
       end
 
+      def option_no_equal(opt, value)
+        if value.is_a?(Array)
+          @options << "--#{opt} #{value.join(',')}" unless value.empty?
+        else
+          @options << "--#{opt} #{value}" if value
+        end
+      end
+
       def yes_no(opt, value)
         @options << "--#{opt}=#{value ? 'yes' : 'no'}" if value
       end

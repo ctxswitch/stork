@@ -20,4 +20,5 @@ specs/version_tmp
 specs/ksvalidator
 tmp
 test*
+box/stork_pxe*
 .DS_Store

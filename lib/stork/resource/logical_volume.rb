@@ -12,7 +12,7 @@ module Stork
         @size = 1
         @type = 'ext4'
         @grow = false
-        @recommended = true
+        @recommended = false
         @path = '/'
       end
 

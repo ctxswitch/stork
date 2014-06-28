@@ -19,11 +19,18 @@ class StorkApp
   def initialize
     @options = OpenStruct.new
     @options.config = ENV['STORK_CONFIG'] || "#{ENV['HOME']}/.stork/client.rb"
+    @options.debug = false
 
     @opts = OptionParser.new do |o|
       o.banner = "Usage: stork sub-command action [options]"
       o.on("-c", "--config FILE", "Read configuration from the specified file") do |config|
         @options.config = config
+      end
+      o.on("-D", "--debug", "Read debuguration from the specified file") do
+        @options.debug = true
+      end
+      o.on("-h", "--help", "Read debuguration from the specified file") do
+        help
       end
     end
   end
@@ -42,6 +49,7 @@ class StorkApp
 
   # Probably not the best way to keep track
   def plugins
+    puts Module.constants if @options.debug
     Module.constants.select{|m| m =~ /Plugin/}
   end
 
