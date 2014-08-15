@@ -81,6 +81,10 @@ module Stork
         send_file public_path(file)
       end
 
+      get '/snippets/:snippet' do |snippet|
+        # render snippet and send file
+      end
+
       not_found do
         json_halt_not_found
       end
