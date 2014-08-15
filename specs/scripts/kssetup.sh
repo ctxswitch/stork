@@ -8,12 +8,12 @@ if [ "$TRAVIS" = "true" ] ; then
   cd pykickstart
   sudo python setup.py install
 else
-  pip install virtualenv
+  # pip install virtualenv
   echo "Creating virtual environment: ksvalidator"
   virtualenv ksvalidator
   cd ksvalidator
   echo "Activating!!!"
-  source bin/activate
+  . ./bin/activate
   echo "Installing packages"
   pip install pycurl
   pip install urlgrabber

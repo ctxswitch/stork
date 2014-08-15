@@ -28,6 +28,7 @@ module Stork
     default(:templates_path) { relative_to_bundle_path('templates') }
     default(:chefs_path) { relative_to_bundle_path('chefs') }
     default(:distros_path) { relative_to_bundle_path('distros') }
+    default(:public_path) { relative_to_bundle_path('public') }
 
     default(:client_name) { 'root' }
     default(:client_key) { '~/.stork/root.pem' }

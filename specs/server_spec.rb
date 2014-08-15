@@ -61,6 +61,11 @@ describe "Stork::Server::Application" do
     last_response.body.must_equal "{ \"status\":\"404\", \"message\": \"Not found\" }"
   end
 
+  it "should send a public file" do
+    get '/public/file.txt'
+    last_response.status.must_equal 200
+  end
+
   it "should notify of an install request" do
     get '/host/server.example.org/install'
     last_response.body.must_equal "{ \"status\":\"200\", \"message\": \"OK\" }"
