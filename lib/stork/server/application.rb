@@ -77,6 +77,10 @@ module Stork
         end
       end
 
+      get '/public/:filename' do |file|
+        send_file public_path(file)
+      end
+
       not_found do
         json_halt_not_found
       end
@@ -113,6 +117,10 @@ module Stork
 
         def pxe(host)
           Stork::PXE.new(host, host.stork, Configuration.port)
+        end
+
+        def public_path(filename)
+          File.join(Configuration.public_path, filename)
         end
 
         def loginfo(msg)
