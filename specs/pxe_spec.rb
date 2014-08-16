@@ -22,7 +22,7 @@ TIMEOUT 0
 TOTALTIMEOUT 0
 ONTIMEOUT local
 LABEL local
-        LOCALBOOT -1
+        LOCALBOOT 0
     EOS
     File.read("#{@path}/01-00-11-22-33-44-55").must_equal expected_content
   end
@@ -36,7 +36,7 @@ TIMEOUT 0
 TOTALTIMEOUT 0
 ONTIMEOUT local
 LABEL local
-        LOCALBOOT -1
+        LOCALBOOT 0
     EOS
     File.read("#{@path}/01-00-11-22-33-44-55").must_equal expected_content
   end

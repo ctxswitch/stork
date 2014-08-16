@@ -53,7 +53,7 @@ TIMEOUT 0
 TOTALTIMEOUT 0
 ONTIMEOUT local
 LABEL local
-        LOCALBOOT -1
+        LOCALBOOT 0
       EOS
     end
 

@@ -2,6 +2,13 @@
 # bootstrap.sh
 # set -x
 ###############################################################################
+# Install and start ntp
+###############################################################################
+yum -y install ntp
+ntpdate pool.ntp.org
+/etc/init.d/ntpd start && chkconfig ntpd on
+
+###############################################################################
 # Install tftp and configure it for PXE boot.
 ###############################################################################
 yum -y install syslinux-tftpboot tftp-server
@@ -100,7 +107,6 @@ options {
     directory "/var/named";
     version "0.nunya";
     forwarders { 10.0.2.3; };
-    forward only;
     allow-transfer { none; };
     allow-query { localhost; };
     statistics-file "data/named_stats.txt";

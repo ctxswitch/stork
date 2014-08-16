@@ -51,7 +51,7 @@ describe "Stork::Server::Application" do
       TOTALTIMEOUT 0
       ONTIMEOUT local
       LABEL local
-              LOCALBOOT -1
+              LOCALBOOT 0
       EOS
     File.read("./specs/tmp/pxeboot/01-00-11-22-33-44-55").must_equal expected_content
   end
