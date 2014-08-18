@@ -33,7 +33,7 @@ module Stork
         @post_snippets = Array.new
         @interfaces = Array.new
         @run_list = Array.new
-        @environment = '_default'
+        @chef_environment = '_default'
         @repos = Array.new
         @packages = default_packages
         
