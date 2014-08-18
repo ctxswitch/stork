@@ -15,6 +15,7 @@ module Stork
       attr_accessor :selinux
       attr_accessor :packages
       attr_accessor :run_list
+      attr_accessor :chef_environment
       attr_accessor :repos
       attr_accessor :stork
 
@@ -32,6 +33,7 @@ module Stork
         @post_snippets = Array.new
         @interfaces = Array.new
         @run_list = Array.new
+        @environment = '_default'
         @repos = Array.new
         @packages = default_packages
         
@@ -52,6 +54,7 @@ module Stork
           'post_snippets' => post_snippets.map{|s| s.name},
           'repos'         => repos.map{|r| r.name},
           'run_list'      => run_list,
+          'chef_environment'   => chef_environment,
           'packages'      => packages,
           'timezone'      => timezone.zone,
           'selinux'       => selinux
@@ -178,6 +181,10 @@ module Stork
             list = value
           end
           delegated.run_list |= list
+        end
+
+        def chef_environment(value)
+          delegated.chef_environment = value
         end
 
         def repo(name, args = {})

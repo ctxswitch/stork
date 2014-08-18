@@ -54,6 +54,11 @@ describe "Stork::Resource::Host" do
     Stork::Resource::Host.new.must_respond_to :run_list=
   end
 
+  it "must respond to the chef_environment accessors" do
+    Stork::Resource::Host.new.must_respond_to :chef_environment
+    Stork::Resource::Host.new.must_respond_to :chef_environment=
+  end
+
   it "must respond to the repos accessors" do
     Stork::Resource::Host.new.must_respond_to :repos
     Stork::Resource::Host.new.must_respond_to :repos=
@@ -65,7 +70,8 @@ describe "Stork::Resource::Host" do
       'name' => 'server.example.org', 
       'distro' => 'centos', 
       'template' => 'default', 
-      'chef' => 'default', 
+      'chef' => 'default',
+      'chef_environment' => 'testing',
       'layout' => {
         'partitions' => [
           { 

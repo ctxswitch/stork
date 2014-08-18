@@ -65,6 +65,7 @@ where
 * ```selinux``` - String or symbol value representing the three selinux states. The only valid values are:  enforcing, permissive, or disabled.  Default is enforcing.
 * ```package``` - Adds a package to the install.  Generally not needed as the minimal set of packages that are installed by default will be enough to install the configuration management software.
 * ```run_list``` - Chef runlist items that will populate the first-boot.json file.  Can be an array or string value.
+* ```chef_environment``` - A string value representing the chef environment the system is part of.  Defaults to the '_default' environment.
 * ```repos``` - Add a new repo to the host.
 * ```stork``` - Url.  Override the stork server location.
 
