@@ -20,7 +20,8 @@ module Stork
       end
 
       def first_boot_content
-        run_list = { 'run_list' => host.run_list }
+        run_list = {}
+        run_list['run_list'] = host.run_list
         run_list.to_json
       end
 

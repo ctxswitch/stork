@@ -32,6 +32,7 @@ host "server.example.org" do
   post_snippet   "notify"
 
   run_list %w{ role[base] recipe[apache] }
+  chef_environment "testing"
 end
 
 hosts=[
