@@ -8,7 +8,12 @@ include Rack::Test::Methods
 def app
   b = Stork::Builder.load
   a = Stork::Server::Application
+
+  d = Stork::Database.load('./specs/tmp')
+  d.sync_hosts(b.collection.hosts)
+
   a.set :collection, b.collection
+  a.set :database, d
   a
 end
 
@@ -29,9 +34,16 @@ describe "Stork::Server::Application" do
   end
 
   it "should output the kickstart file for a valid host" do
+    get '/host/server.example.org/install'
     get '/host/server.example.org'
     message = "foo"
     last_response.body.wont_equal "{ \"status\":\"404\", \"message\": \"Not found\" }"
+  end
+
+  it "should not output the kickstart file when host action is not set to install" do
+    get '/host/server.example.org'
+    message = "foo"
+    last_response.body.must_equal "{ \"status\":\"404\", \"message\": \"Not found\" }"
   end
 
   it "should error for invalid host" do

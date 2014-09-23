@@ -21,6 +21,7 @@ describe "Stork::Configuration" do
       bundle_path             "/etc/stork/bundles"
       authorized_keys_file    "/etc/stork/authorized_keys"
       pxe_path                "/var/lib/tftpboot/pxelinux.cfg"
+      db_path                 "/var/lib/stork"
       log_file                "/var/log/stork.log"
       pid_file                "/var/run/stork.pid"
       server                  "localhost"

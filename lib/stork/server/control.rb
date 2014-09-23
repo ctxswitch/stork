@@ -12,7 +12,13 @@ module Stork
       end
 
       def start
-        @app.set :collection, Stork::Builder.load.collection
+        @collection = Stork::Builder.load.collection
+        
+        @db = Stork::Database.load(Configuration[:db_path])
+        @db.sync_hosts(@collection.hosts)
+
+        @app.set :collection, @collection
+        @app.set :database, @db
 
         unless is_daemon?
           puts <<-EOH.gsub(/^ {12}/, '')

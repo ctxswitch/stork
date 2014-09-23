@@ -3,7 +3,8 @@ require 'fileutils'
 
 describe "Stork::PXE" do
   before(:each) do
-    @db = Stork::Database.create('./specs/tmp/file.db', collection.hosts)
+    @db = Stork::Database.load('./specs/tmp')
+    @db.sync_hosts(collection.hosts)
   end
 
   after(:each) do

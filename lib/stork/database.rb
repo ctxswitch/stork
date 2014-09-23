@@ -2,18 +2,22 @@ require 'sqlite3'
 
 module Stork
   class Database
-    def initialize(dbfile)
-      @db = SQLite3::Database.open(dbfile)
+    def initialize(dbpath)
+      unless Dir.exists?(dbpath)
+        FileUtils.mkdir_p(dbpath)
+      end
+
+      @db = SQLite3::Database.open(File.join(dbpath, 'stork.rb'))
     end
 
     def create_tables
-      execute <<-SQL
+      sql = <<-SQL
         CREATE TABLE IF NOT EXISTS hosts(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT,
+          name TEXT PRIMARY KEY,
           action TEXT
         )
       SQL
+      execute sql
     end
 
     def execute(sql, *args)
@@ -36,7 +40,7 @@ module Stork
       host = find_one(sql, name)
 
       if host
-        { :name => host[1], :action => host[2] }
+        { :name => host[0], :action => host[1] }
       else
         nil
       end
@@ -56,23 +60,15 @@ module Stork
       hosts.each do |h|
         result = host(h.name)
         unless result
-          execute <<-SQL
-            INSERT INTO hosts(
-              name, action
-            ) 
-            VALUES(
-              '#{h.name}',
-              'localboot'
-            )
-          SQL
+          sql = "INSERT INTO hosts(name,action) VALUES(?, 'localboot')" 
+          execute sql, h.name
         end
       end
     end
 
-    def self.create(dbfile, hosts)
-      @db = new(dbfile).tap do |d|
+    def self.load(dbpath)
+      @db = new(dbpath).tap do |d|
         d.create_tables
-        d.sync_hosts(hosts)
       end
     end
   end

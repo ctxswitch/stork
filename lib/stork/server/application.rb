@@ -43,12 +43,14 @@ module Stork
 
         h = hosts.get(host)
 
-        if h
+        if h && is_installable?(host)
+          loginfo "Returned kickstart to #{host}"
           # hmm, should the host deploy?
           ks = Stork::Deploy::InstallScript.new(h) # we will be passing the type in shortly
           content_type :plain
           ks.render
         else
+          logerr "Was not able to return kickstart"
           json_halt_not_found
         end
       end
@@ -102,16 +104,26 @@ module Stork
           settings.collection
         end
 
+        def database
+          settings.database
+        end
+
+        def is_installable?(host)
+          database.host(host)[:action] == 'install'
+        end
+
         def reload_collection
           settings.collection = Stork::Builder.load.collection
           json_halt 200, 200, 'OK'
         end
 
         def set_localboot(host)
+          database.boot_local(host.name)
           pxe(host).localboot
         end
 
         def set_install(host)
+          database.boot_install(host.name)
           pxe(host).install
         end
 

@@ -12,6 +12,7 @@ module Stork
     default :log_file, '/var/log/stork.log'
     default :pid_file, '/var/run/stork.pid'
     default :timezone, 'America/Los_Angeles'
+    default :db_path, '/var/lib/stork'
 
     default :server, 'localhost'
     default :port, 9293
@@ -29,7 +30,6 @@ module Stork
     default(:chefs_path) { relative_to_bundle_path('chefs') }
     default(:distros_path) { relative_to_bundle_path('distros') }
     default(:public_path) { relative_to_bundle_path('public') }
-
     default(:client_name) { 'root' }
     default(:client_key) { '~/.stork/root.pem' }
     default(:stork_server_url) { "http://#{self.configuration[:server]}:#{self.configuration[:port]}" } 
@@ -43,6 +43,7 @@ module Stork
         bundle_path             "#{bundle_path}"
         authorized_keys_file    "#{authorized_keys_file}"
         pxe_path                "#{pxe_path}"
+        db_path                 "#{db_path}"
         log_file                "#{log_file}"
         pid_file                "#{pid_file}"
         server                  "#{server}"
