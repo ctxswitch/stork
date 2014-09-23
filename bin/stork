@@ -26,10 +26,10 @@ class StorkApp
       o.on("-c", "--config FILE", "Read configuration from the specified file") do |config|
         @options.config = config
       end
-      o.on("-D", "--debug", "Read debuguration from the specified file") do
+      o.on("-D", "--debug", "Turn on debug output") do
         @options.debug = true
       end
-      o.on("-h", "--help", "Read debuguration from the specified file") do
+      o.on("-h", "--help", "Print this help message") do
         help
       end
     end

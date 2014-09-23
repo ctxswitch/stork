@@ -43,8 +43,13 @@ module Stork
       data = JSON.parse(response)
     end
 
+    def print(first, second, options = {})
+      padding = options.has_key?(:pad) ? options[:pad] : 16
+      say("<%= color('#{first.ljust(padding)}:', CYAN) %> #{second}")
+    end
+
     def show(key, data, options = {})
-      padding = options.has_key?('pad') ? options['pad'] : 16
+      padding = options.has_key?(:pad) ? options[:pad] : 16
       name = key.split('_').map{|k| k.capitalize}.join(' ').ljust(padding)
 
       if data[key].is_a?(Array)
