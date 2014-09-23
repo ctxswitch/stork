@@ -7,7 +7,7 @@ module Stork
         FileUtils.mkdir_p(dbpath)
       end
 
-      @db = SQLite3::Database.open(File.join(dbpath, 'stork.rb'))
+      @db = SQLite3::Database.open(File.join(dbpath, 'stork.db'))
     end
 
     def create_tables
@@ -22,6 +22,22 @@ module Stork
 
     def execute(sql, *args)
       @db.execute(sql, args)
+    end
+
+    def find(sql, *args)
+      h = Array.new
+
+      stmt = @db.prepare(sql)
+      stmt.execute(*args) do |rows|
+        rows.each do |row|
+          h << {
+            :name => row[0],
+            :action => row[1]
+          }
+        end
+      end
+
+      h
     end
 
     def find_one(sql, *args)
@@ -44,6 +60,11 @@ module Stork
       else
         nil
       end
+    end
+
+    def hosts
+      sql = 'SELECT * FROM hosts ORDER BY name ASC'
+      find(sql)
     end
 
     def boot_install(name)

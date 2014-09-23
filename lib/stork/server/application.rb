@@ -24,6 +24,15 @@ module Stork
         reload_collection
       end
 
+      get '/api/v1/actions' do
+        h = {'hosts' => database.hosts}
+        json_halt_ok_with_content(h.to_json)
+      end
+
+      get '/api/v1/sync' do
+        sync_collection
+      end
+
       get '/api/v1/hosts' do
         h = {'hosts' => hosts.hashify}
         json_halt_ok_with_content(h.to_json)
@@ -114,6 +123,13 @@ module Stork
 
         def reload_collection
           settings.collection = Stork::Builder.load.collection
+          json_halt 200, 200, 'OK'
+        end
+
+        def sync_collection
+          # make sure we reload the collection to pick up changes
+          settings.collection = Stork::Builder.load.collection
+          settings.database.sync_hosts(hosts)
           json_halt 200, 200, 'OK'
         end
 
