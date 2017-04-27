@@ -2,11 +2,12 @@ language: ruby
 rvm:
   - 2.4.0
 
-sudo: required
+sudo: false
 dist: trusty
 
 before_install:
   - echo "Preparing for the install"
+  - apt-get -y install python python-dev
 
 before_script: 
   - sh ./spec/scripts/kssetup.sh
