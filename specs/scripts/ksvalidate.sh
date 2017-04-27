@@ -5,7 +5,7 @@ KSPATH=$2
 VER=$3
 mkdir -p $TESTPATH
 cd $TESTPATH
-
+which ksvalidator
 if [ "$TRAVIS" != "true" ] ; then
   if ! [ -f "./ksvalidator/bin/activate" ] ; then
     echo "Please run 'rake ksvalidator:setup' to ensure that the virtual"

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-pushd specs
 echo "Starting setup"
 if [ "$TRAVIS" = "true" ] ; then
   pip install pycurl
@@ -25,5 +24,7 @@ else
   cd pykickstart
   python setup.py install
 fi
+
+which ksvalidator
+env
 echo "Setup complete"
-popd # specs
