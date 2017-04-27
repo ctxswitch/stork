@@ -73,7 +73,7 @@ describe "Stork::Resource::Interface" do
   it "should raise a syntax error if the network is not found" do
     collection = Stork::Collections.new
     proc {
-      iface = Stork::Resource::Interface.build "eth0", collection: collection do
+      Stork::Resource::Interface.build "eth0", collection: collection do
         network 'invalid'
       end
     }.must_raise(SyntaxError)

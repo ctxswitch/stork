@@ -49,7 +49,7 @@ describe "Chef" do
       ckey = "./specs/keys/snakeoil-root.pem"
       vkey = "./specs/keys/snakeoil-validation.pem"
 
-      chef = Stork::Resource::Chef.build("test") do
+      Stork::Resource::Chef.build("test") do
         version "11.4.4"
         client_key ckey
         validation_key vkey
@@ -62,7 +62,7 @@ describe "Chef" do
       ckey = "./specs/keys/snakeoil-root.pem"
       vkey = "./specs/keys/snakeoil-validation.pem"
 
-      chef = Stork::Resource::Chef.build("test") do
+      Stork::Resource::Chef.build("test") do
         url "https://chef.example.org"
         client_key ckey
         validation_key vkey
@@ -72,10 +72,10 @@ describe "Chef" do
 
   it "should require client_key" do
     proc {
-      ckey = "./specs/keys/snakeoil-root.pem"
+      #ckey = "./specs/keys/snakeoil-root.pem"
       vkey = "./specs/keys/snakeoil-validation.pem"
 
-      chef = Stork::Resource::Chef.build("test") do
+      Stork::Resource::Chef.build("test") do
         url "https://chef.example.org"
         version "11.4.4"
         validation_key vkey
@@ -86,9 +86,9 @@ describe "Chef" do
   it "should require validation_key" do
     proc {
       ckey = "./specs/keys/snakeoil-root.pem"
-      vkey = "./specs/keys/snakeoil-validation.pem"
+      #vkey = "./specs/keys/snakeoil-validation.pem"
 
-      chef = Stork::Resource::Chef.build("test") do
+      Stork::Resource::Chef.build("test") do
         url "https://chef.example.org"
         version "11.4.4"
         client_key ckey

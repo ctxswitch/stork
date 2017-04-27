@@ -26,7 +26,7 @@ describe "Stork::Resource::Layout" do
 
   it "requires a block for partition during build" do
     proc {
-      layout = Stork::Resource::Layout.build('test') do
+      Stork::Resource::Layout.build('test') do
         zerombr
         clearpart
         part '/'
@@ -36,7 +36,7 @@ describe "Stork::Resource::Layout" do
 
   it "requires a block for volume_group during build" do
     proc {
-      layout = Stork::Resource::Layout.build('test') do
+      Stork::Resource::Layout.build('test') do
         zerombr
         clearpart
         volgroup 'hello'
@@ -69,7 +69,7 @@ describe "Stork::Resource::Layout" do
 
   it "must error if part blocks are not given" do
     proc {
-      layout = Stork::Resource::Layout.build('test') do
+      Stork::Resource::Layout.build('test') do
         zerombr
         clearpart
       end

@@ -40,7 +40,7 @@ module Stork
 
     def fetch(path)
       response = RestClient.get "#{@stork}/api/v1/#{path}"
-      data = JSON.parse(response)
+      JSON.parse(response)
     end
 
     def print(first, second, options = {})

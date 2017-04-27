@@ -17,7 +17,9 @@ else
   echo "Installing packages"
   pip install pycurl
   pip install urlgrabber
-  git clone git://git.fedorahosted.org/git/pykickstart.git
+  pip install requests
+  pip install ordered_set
+  git clone https://github.com/rhinstaller/pykickstart
   cd pykickstart
   python setup.py install
 fi

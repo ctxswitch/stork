@@ -36,13 +36,13 @@ describe "Stork::Server::Application" do
   it "should output the kickstart file for a valid host" do
     get '/host/server.example.org/install'
     get '/host/server.example.org'
-    message = "foo"
+    # message = "foo"
     last_response.body.wont_equal "{ \"status\":\"404\", \"message\": \"Not found\" }"
   end
 
   it "should not output the kickstart file when host action is not set to install" do
     get '/host/server.example.org'
-    message = "foo"
+    # message = "foo"
     last_response.body.must_equal "{ \"status\":\"404\", \"message\": \"Not found\" }"
   end
 

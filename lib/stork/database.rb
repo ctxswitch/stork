@@ -3,7 +3,7 @@ require 'sqlite3'
 module Stork
   class Database
     def initialize(dbpath)
-      unless Dir.exists?(dbpath)
+      unless Dir.exist?(dbpath)
         FileUtils.mkdir_p(dbpath)
       end
 

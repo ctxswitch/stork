@@ -17,7 +17,7 @@ describe "Stork::Deploy::Kickstart" do
       ksvalidate  = "#{@path}/scripts/ksvalidate.sh"
       testpath    = "#{@path}"
       kspath      = "#{@path}/tmp/output.ks"
-      template    = "#{@path}/stork/bundles/templates/default.ks.erb"
+      #template    = "#{@path}/stork/bundles/templates/default.ks.erb"
 
       ks = Stork::Deploy::InstallScript.new(@host, :kickstart)
 
