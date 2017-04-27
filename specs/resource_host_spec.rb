@@ -49,6 +49,16 @@ describe "Stork::Resource::Host" do
     Stork::Resource::Host.new.must_respond_to :repos=
   end
 
+  it "must respond to the tags accessors" do
+    Stork::Resource::Host.new.must_respond_to :tags
+    Stork::Resource::Host.new.must_respond_to :tags=
+  end
+
+  it "must respond to the environments accessors" do
+    Stork::Resource::Host.new.must_respond_to :environments
+    Stork::Resource::Host.new.must_respond_to :environments=
+  end
+
   it "must return a hash with hashify" do
     host = collection.hosts.get("server.example.org")
     hash = {   
@@ -156,7 +166,9 @@ describe "Stork::Resource::Host" do
         'foo'
       ], 
       'timezone' => 'America/Los_Angeles', 
-      'selinux' => 'enforcing'
+      'selinux' => 'enforcing',
+      'tags' => [],
+      'environments' => []
     }
     host.hashify.must_equal hash
   end

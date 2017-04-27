@@ -15,6 +15,8 @@ module Stork
       attr_accessor :packages
       attr_accessor :repos
       attr_accessor :stork
+      attr_accessor :tags
+      attr_accessor :environments
 
       def setup
         @layout = nil
@@ -30,6 +32,8 @@ module Stork
         @interfaces = Array.new
         @repos = Array.new
         @packages = default_packages
+        @tags = Array.new
+        @environments = Array.new
         
         @timezone = Timezone.new("America/Los_Angeles")
         @firewall = Firewall.new # get from config
@@ -48,7 +52,9 @@ module Stork
           'repos'         => repos.map{|r| r.name},
           'packages'      => packages,
           'timezone'      => timezone.zone,
-          'selinux'       => selinux
+          'selinux'       => selinux,
+          'tags'          => tags,
+          'environments'  => environments
         }
       end
 
@@ -163,6 +169,14 @@ module Stork
 
         def package(name)
           delegated.packages << name
+        end
+
+        def tags(tag)
+          delegated.tags << tag
+        end
+
+        def environments(name)
+          delegated.environments << name
         end
       end
 
