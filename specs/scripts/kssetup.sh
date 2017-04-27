@@ -2,11 +2,13 @@
 
 echo "Starting setup"
 if [ "$TRAVIS" = "true" ] ; then
-  sudo ip install pycurl
-  sudo pip install urlgrabber
-  git clone git://git.fedorahosted.org/git/pykickstart.git
+  pip install pycurl
+  pip install urlgrabber
+  pip install requests
+  pip install ordered_set
+  git clone https://github.com/rhinstaller/pykickstart
   cd pykickstart
-  sudo python setup.py install
+  python setup.py install
 else
   # pip install virtualenv
   echo "Creating virtual environment: ksvalidator"
