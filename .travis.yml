@@ -5,12 +5,8 @@ rvm:
 sudo: false
 dist: trusty
 
-before_install:
-  - echo "Preparing for the install"
-  - apt-get -y install python python-dev
-
 before_script: 
-  - sh ./spec/scripts/kssetup.sh
+  - sh ./specs/scripts/kssetup.sh
 
 # notifications:
 #   hipchat: ac943dbb9ee5b4a2562d4476987a91@Stork
