@@ -27,7 +27,6 @@ module Stork
 
       load_paths = [
         Configuration[:distros_path],
-        Configuration[:chefs_path],
         Configuration[:networks_path],
         Configuration[:layouts_path],
         Configuration[:hosts_path]
@@ -42,7 +41,7 @@ module Stork
     end
 
     # Expose a limited number of resource methods for DSL parsing from 
-    # files.  Allow delegation of the host, layout, network, chef, distro, 
+    # files.  Allow delegation of the host, layout, network, distro, 
     # templates and snippets blocks.
     #
     # == Parameters
@@ -95,19 +94,6 @@ module Stork
       def network(name, &block)
         @delegated.collection.networks.add(
           Resource::Network.build(name, &block)
-        )
-      end
-
-      # Build and add a chef server to the resource collection.
-      #
-      # == Parameters:
-      # name::
-      #   A unique name to identify the chef server.
-      #
-      #
-      def chef(name, &block)
-        @delegated.collection.chefs.add(
-          Resource::Chef.build(name, &block)
         )
       end
 

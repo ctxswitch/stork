@@ -3,7 +3,6 @@ module Stork
     class Host < Base
       attr_accessor :layout
       attr_accessor :template
-      attr_accessor :chef
       attr_accessor :pxemac
       attr_accessor :pre_snippets
       attr_accessor :post_snippets
@@ -14,8 +13,6 @@ module Stork
       attr_accessor :password
       attr_accessor :selinux
       attr_accessor :packages
-      attr_accessor :run_list
-      attr_accessor :chef_environment
       attr_accessor :repos
       attr_accessor :stork
 
@@ -24,7 +21,6 @@ module Stork
         @template = nil
         @distro = nil
 
-        @chef = nil
         @pxemac = nil
         @selinux = 'enforcing'
         @stork = Configuration[:server]
@@ -32,8 +28,6 @@ module Stork
         @pre_snippets = Array.new
         @post_snippets = Array.new
         @interfaces = Array.new
-        @run_list = Array.new
-        @chef_environment = '_default'
         @repos = Array.new
         @packages = default_packages
         
@@ -47,14 +41,11 @@ module Stork
           'name'          => name,
           'distro'        => distro ? distro.name : '',
           'template'      => template ? template.name : '',
-          'chef'          => chef ? chef.name : '',
           'layout'        => layout.hashify,
           'interfaces'    => interfaces.map{|i| i.hashify},
           'pre_snippets'  => pre_snippets.map{|s| s.name},
           'post_snippets' => post_snippets.map{|s| s.name},
           'repos'         => repos.map{|r| r.name},
-          'run_list'      => run_list,
-          'chef_environment'   => chef_environment,
           'packages'      => packages,
           'timezone'      => timezone.zone,
           'selinux'       => selinux
@@ -112,14 +103,6 @@ module Stork
           delegated.template = template
         end
 
-        def chef(value, &block)
-          if block_given?
-            delegated.chef = Chef.build(value, &block)
-          else
-            delegated.chef = collection.chefs.get(value)
-          end
-        end
-
         def pxemac(value)
           delegated.pxemac = value
         end
@@ -172,19 +155,6 @@ module Stork
 
         def selinux(value)
           delegated.selinux = value.to_s
-        end
-
-        def run_list(value)
-          if value.is_a?(String)
-            list = value.split(',')
-          else
-            list = value
-          end
-          delegated.run_list |= list
-        end
-
-        def chef_environment(value)
-          delegated.chef_environment = value
         end
 
         def repo(name, args = {})

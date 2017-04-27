@@ -9,7 +9,6 @@ describe "Stork::Builder" do
     builder = Stork::Builder.load
     collection = builder.collection
     collection.hosts.size.must_equal 11
-    collection.chefs.size.must_equal 1
     collection.distros.size.must_equal 1
     collection.layouts.size.must_equal 1
     collection.networks.size.must_equal 2

@@ -9,8 +9,6 @@ module HostShowPlugin
       show('name', data)
       show('distro', data)
       show('template', data)
-      show('chef', data)
-      show('run_list', data)
       show('pre_snippets', data)
       show('post_snippets', data)
       show('packages', data)

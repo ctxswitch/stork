@@ -54,7 +54,6 @@ where
 
 * ```layout``` - Disk layout containing partition and volume group information.  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined layout.
 * ```template``` - The kickstart template to use when generating the autoinstallation instructions
-* ```chef``` - Chef server information.  You can supply a string or a block value.  If a string is supplied stork will attempt to find the id matching a previously defined chef server.
 * ```pxemac``` - The mac address of the PXE enabled interface.  Used to create the boot configuration files.
 * ```pre_snippet``` - Scripts that will be run in the **pre** section before the install begins.  Snippets are accessed by the basename of the file they are stored in.
 * ```post_snippet``` - Scripts that will be run in the **post** section afer the install has successfully completed.  Snippets are accessed by the basename of the file they are stored in.
@@ -64,8 +63,6 @@ where
 * ```firewall``` - Initial firewall settings.  Block only.
 * ```selinux``` - String or symbol value representing the three selinux states. The only valid values are:  enforcing, permissive, or disabled.  Default is enforcing.
 * ```package``` - Adds a package to the install.  Generally not needed as the minimal set of packages that are installed by default will be enough to install the configuration management software.
-* ```run_list``` - Chef runlist items that will populate the first-boot.json file.  Can be an array or string value.
-* ```chef_environment``` - A string value representing the chef environment the system is part of.  Defaults to the '_default' environment.
 * ```repos``` - Add a new repo to the host.
 * ```stork``` - Url.  Override the stork server location.
 
@@ -76,7 +73,6 @@ Typical hosts will look like:
 ```ruby
 host "server.example.org" do
   template    "default"
-  chef        "default"
   pxemac      "00:11:22:33:44:55"
   layout      "home"
   distro      "centos"
@@ -102,11 +98,7 @@ host "server.example.org" do
   pre_snippet    "setup"
   post_snippet   "ntp"
   post_snippet   "resolv-conf"
-  post_snippet   "chef-bootstrap"
-  post_snippet   "chef-reconfigure"
   post_snippet   "notify"
-
-  run_list %w{ role[base] recipe[apache] }
 end
 ```
 
@@ -129,7 +121,6 @@ hosts=[
 hosts.each do |octet, mac|
   host "c0#{octet}.example.org" do
     template    "default"
-    chef        "default"
     distro      "centos"
     pxemac      mac
     layout      "home"
@@ -140,7 +131,6 @@ hosts.each do |octet, mac|
       ip        "192.168.10.#{octet}"
       network   "org"
     end
-    run_list %w{ role[node] }
   end
 end
 ```
@@ -463,48 +453,6 @@ firewall do
 end
 ```
 
-## Defining the chef resources
-
-### ```chef```
-
-#### Syntax:
-
-The syntax for the **chef** resource is as follows:
-
-```ruby
-chef "name" do
-  attribute "value"
-end
-```
-
-where
-
-* ```name``` is a unique name that can be used to define global resources that can be referenced from other resources by the defined name.
-* ```attribute``` is the attributes available for this resource
-
-#### Attributes:
-
-* ```version``` - The version of chef to use.
-* ```client_name``` - The admin client name.
-* ```client_key``` - The admin client key file.
-* ```validator_name``` - The validation client name.
-* ```validation_key``` - The validation key file.
-* ```encrypted_data_bag_secret``` - A string value of the data bag encryption key.
-
-#### Examples:
-
-```ruby
-chef "default" do
-  url "https://chef.example.org"
-  version "11.6.0"
-  client_name "root"
-  client_key "./specs/keys/snakeoil-root.pem"
-  validator_name "chef-validator"
-  validation_key "./specs/keys/snakeoil-validation.pem"
-  encrypted_data_bag_secret "9EE8rGyPB8mXARNrzSDal9TOAQ...e7/x2uPkqMS/tOU="
-end
-```
-
 ## Templates and Snippet Scripts
 
 Templates and snippets use the ERB templating system.  When the ERB files are rendered, binding are created to expose ruby the underlying ruby objects.  
@@ -533,7 +481,6 @@ In addition to the kickstart command generators, the following objects are expos
 Snippets expose the following objects to the template:
 
 * ```host``` - The current host.
-* ```chef``` - The chef object.
 * ```authorized_keys``` - A string containing all the public keys.
 * ```first_boot_content``` - A string representation of the json content that will make up the first_boot file.
 * ```nameservers``` - An array of all unique nameservers.

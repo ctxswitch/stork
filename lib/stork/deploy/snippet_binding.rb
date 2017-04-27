@@ -11,18 +11,8 @@ module Stork
         binding
       end
 
-      def chef
-        host.chef
-      end
-
       def authorized_keys
         File.read(Configuration[:authorized_keys_file])
-      end
-
-      def first_boot_content
-        run_list = {}
-        run_list['run_list'] = host.run_list
-        run_list.to_json
       end
 
       def nameservers
