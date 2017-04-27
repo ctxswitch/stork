@@ -2,7 +2,11 @@ language: ruby
 rvm:
   - 2.4.0
 # dist: trusty
-before_script: sh ./spec/scripts/kssetup.sh
+before_install:
+  - echo "Preparing for the install"
+
+before_script: 
+  - sh ./spec/scripts/kssetup.sh
 
 # notifications:
 #   hipchat: ac943dbb9ee5b4a2562d4476987a91@Stork
