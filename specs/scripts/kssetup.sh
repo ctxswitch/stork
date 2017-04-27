@@ -3,7 +3,6 @@ echo "Creating virtual environment: ksvalidator"
 virtualenv specs/ksvalidator
 echo "Activating!!!"
 . ./specs/ksvalidator/bin/activate
-
 echo "Installing packages"
 pip install -r ./specs/scripts/requirements.txt
 
