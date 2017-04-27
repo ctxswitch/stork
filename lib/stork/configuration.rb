@@ -27,7 +27,6 @@ module Stork
     default(:layouts_path) { relative_to_bundle_path('layouts') }
     default(:networks_path) { relative_to_bundle_path('networks') }
     default(:templates_path) { relative_to_bundle_path('templates') }
-    default(:chefs_path) { relative_to_bundle_path('chefs') }
     default(:distros_path) { relative_to_bundle_path('distros') }
     default(:public_path) { relative_to_bundle_path('public') }
     default(:client_name) { 'root' }

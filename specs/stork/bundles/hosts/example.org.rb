@@ -1,7 +1,6 @@
 # Config for example.org
 host "server.example.org" do
   template    "default"
-  chef        "default"
   pxemac      "00:11:22:33:44:55"
   layout      "home"
   distro      "centos"
@@ -27,12 +26,7 @@ host "server.example.org" do
   pre_snippet    "setup"
   post_snippet   "ntp"
   post_snippet   "resolv-conf"
-  post_snippet   "chef-bootstrap"
-  post_snippet   "chef-reconfigure"
   post_snippet   "notify"
-
-  run_list %w{ role[base] recipe[apache] }
-  chef_environment "testing"
 end
 
 hosts=[
@@ -51,7 +45,6 @@ hosts=[
 hosts.each do |octet, mac|
   host "c0#{octet}.example.org" do
     template    "default"
-    chef        "default"
     distro      "centos"
     pxemac      mac
     layout      "home"
@@ -62,6 +55,5 @@ hosts.each do |octet, mac|
       ip        "192.168.10.#{octet}"
       network   "org"
     end
-    run_list %w{ role[node] }
   end
 end

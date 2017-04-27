@@ -19,11 +19,6 @@ describe "Stork::Resource::Host" do
     Stork::Resource::Host.new.must_respond_to :template=
   end
 
-  it "must respond to the chef accessors" do
-    Stork::Resource::Host.new.must_respond_to :chef
-    Stork::Resource::Host.new.must_respond_to :chef=
-  end
-
   it "must respond to the pxemac accessors" do
     Stork::Resource::Host.new.must_respond_to :pxemac
     Stork::Resource::Host.new.must_respond_to :pxemac=
@@ -49,19 +44,19 @@ describe "Stork::Resource::Host" do
     Stork::Resource::Host.new.must_respond_to :distro=
   end
 
-  it "must respond to the run_list accessors" do
-    Stork::Resource::Host.new.must_respond_to :run_list
-    Stork::Resource::Host.new.must_respond_to :run_list=
-  end
-
-  it "must respond to the chef_environment accessors" do
-    Stork::Resource::Host.new.must_respond_to :chef_environment
-    Stork::Resource::Host.new.must_respond_to :chef_environment=
-  end
-
   it "must respond to the repos accessors" do
     Stork::Resource::Host.new.must_respond_to :repos
     Stork::Resource::Host.new.must_respond_to :repos=
+  end
+
+  it "must respond to the tags accessors" do
+    Stork::Resource::Host.new.must_respond_to :tags
+    Stork::Resource::Host.new.must_respond_to :tags=
+  end
+
+  it "must respond to the environments accessors" do
+    Stork::Resource::Host.new.must_respond_to :environments
+    Stork::Resource::Host.new.must_respond_to :environments=
   end
 
   it "must return a hash with hashify" do
@@ -69,9 +64,7 @@ describe "Stork::Resource::Host" do
     hash = {   
       'name' => 'server.example.org', 
       'distro' => 'centos', 
-      'template' => 'default', 
-      'chef' => 'default',
-      'chef_environment' => 'testing',
+      'template' => 'default',
       'layout' => {
         'partitions' => [
           { 
@@ -145,12 +138,9 @@ describe "Stork::Resource::Host" do
       'post_snippets' => [
         'ntp',
         'resolv-conf',
-        'chef-bootstrap',
-        'chef-reconfigure',
         'notify'
       ],
       'repos' => ['whamcloud-client'],
-      'run_list' => ['role[base]', 'recipe[apache]'], 
       'packages' => [
         '@core',
         'curl',
@@ -176,7 +166,9 @@ describe "Stork::Resource::Host" do
         'foo'
       ], 
       'timezone' => 'America/Los_Angeles', 
-      'selinux' => 'enforcing'
+      'selinux' => 'enforcing',
+      'tags' => [],
+      'environments' => []
     }
     host.hashify.must_equal hash
   end

@@ -17,10 +17,6 @@ describe "Stork::Collections" do
     Stork::Collections.new.must_respond_to :networks
   end
 
-  it "responds to the chefs method" do
-    Stork::Collections.new.must_respond_to :chefs
-  end
-
   it "responds to the distros method" do
     Stork::Collections.new.must_respond_to :distros
   end
