@@ -1,8 +1,8 @@
 language: ruby
 rvm:
   - 2.4.0
+# dist: trusty
+before_script: sh ./spec/scripts/kssetup.sh
 
-before_script: bundle exec rake ksvalidator:setup
-
-notifications:
-  hipchat: ac943dbb9ee5b4a2562d4476987a91@Stork
+# notifications:
+#   hipchat: ac943dbb9ee5b4a2562d4476987a91@Stork

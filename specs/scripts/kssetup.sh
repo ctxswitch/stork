@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+pushd specs
 echo "Starting setup"
 if [ "$TRAVIS" = "true" ] ; then
   pip install pycurl
@@ -26,3 +26,4 @@ else
   python setup.py install
 fi
 echo "Setup complete"
+popd # specs
