@@ -6,7 +6,5 @@ sudo: false
 dist: trusty
 
 before_script: 
-  - sh ./specs/scripts/kssetup.sh
+  - rake ksvalidator:setup
 
-# notifications:
-#   hipchat: ac943dbb9ee5b4a2562d4476987a91@Stork

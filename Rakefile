@@ -13,9 +13,7 @@ namespace :ksvalidator do
   desc 'Set up the validation directories and environment.'
   task :setup do
     spath = File.join(File.dirname(__FILE__), 'specs', 'scripts', 'kssetup.sh')
-    vpath = File.join(File.dirname(__FILE__), 'specs')
-    puts "Setting up in #{vpath}"
-    system("mkdir -p #{vpath} ; cd #{vpath} ; sh #{spath}")
+    system("sh #{spath}")
   end
 
   task :clean do

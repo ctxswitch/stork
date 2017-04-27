@@ -15,7 +15,6 @@ describe "Stork::Deploy::Kickstart" do
   %w{ RHEL5 RHEL6 RHEL7 }.each do |ver|
     it "should generate valid kickstart configurations for #{ver}" do
       ksvalidate  = "#{@path}/scripts/ksvalidate.sh"
-      testpath    = "#{@path}"
       kspath      = "#{@path}/tmp/output.ks"
       #template    = "#{@path}/stork/bundles/templates/default.ks.erb"
 
@@ -25,7 +24,7 @@ describe "Stork::Deploy::Kickstart" do
         file.write(ks.render)
       end
 
-      Open3.popen3("#{ksvalidate} #{testpath} #{kspath} #{ver}") do |stdin, stdout, stderr, wait_thr|
+      Open3.popen3("#{ksvalidate} #{kspath} #{ver}") do |stdin, stdout, stderr, wait_thr|
         exit_status = wait_thr.value.to_i
         output = (stdout.readlines + stderr.readlines).join
         assert_equal(0, exit_status, output)
