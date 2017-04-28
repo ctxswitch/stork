@@ -10,17 +10,14 @@ host "server.example.org" do
 
   interface "eth0" do
     bootproto :static
-    ip        "99.99.1.8"
-    # network   "org"
+    ip        "192.168.0.15"
+    network   "internal-one"
   end
 
   interface "eth1" do
     bootproto :static
     ip        "192.168.1.10"
-    netmask   "255.255.255.0"
-    gateway   "192.168.1.1"
-    nameserver "192.168.1.253"
-    nameserver "192.168.1.252"
+    network   "internal-two"
   end
 
   pre_snippet    "setup"
@@ -52,8 +49,8 @@ hosts.each do |octet, mac|
 
     interface "eth0" do
       bootproto :static
-      ip        "192.168.10.#{octet}"
-      network   "org"
+      ip        "192.168.0.#{octet}"
+      network   "internal-one"
     end
   end
 end

@@ -25,7 +25,7 @@ module Stork
       end
 
       def validate!
-
+        require_valid_ip :ip
       end
 
       def netmask

@@ -1,3 +1,5 @@
+require "ipaddr"
+
 module Stork
   module Resource
     class Base
@@ -22,6 +24,29 @@ module Stork
 
       def require_value(attr)
         fail SyntaxError, "#{attr} is required" if send(attr).nil?
+      end
+
+      def require_valid_ips(attr)
+        values = send(attr)
+        values.each do |value|
+          fail SyntaxError, "#{value} is not a valid address" unless is_valid_ip?(value)
+        end
+      end
+
+      def require_valid_ip(attr)
+        value = send(attr)
+        if value
+          fail SyntaxError, "#{value} is not a valid address" unless is_valid_ip?(value)
+        end
+      end
+
+      def is_valid_ip?(ipaddr)
+        begin
+          IPAddr.new ipaddr
+          true
+        rescue IPAddr::InvalidAddressError
+          false
+        end
       end
 
       def self.build(name = nil, options = {}, &block)

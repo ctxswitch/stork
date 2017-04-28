@@ -29,6 +29,62 @@ describe "Stork::Resource::Network" do
     Stork::Resource::Network.new("local").must_respond_to :search_paths=
   end
 
+  it "must error if the netmask given is invalid" do
+    proc {
+      Stork::Resource::Network.build "test" do
+        netmask '2555555.255.255.0'
+      end
+    }.must_raise(SyntaxError)
+
+    proc {
+      Stork::Resource::Network.build "test" do
+        netmask '255.255.255.foo'
+      end
+    }.must_raise(SyntaxError)
+
+    proc {
+      Stork::Resource::Network.build "test" do
+        netmask 'howdy.there.pilgrim'
+      end
+    }.must_raise(SyntaxError)
+  end
+
+  it "must error if the gateway is invalid" do
+    proc {
+      Stork::Resource::Network.build "test" do
+        gateway '10.1.1.1111'
+      end
+    }.must_raise(SyntaxError)
+
+    proc {
+      Stork::Resource::Network.build "test" do
+        gateway '10.1.1.blah'
+      end
+    }.must_raise(SyntaxError)
+
+    proc {
+      Stork::Resource::Network.build "test" do
+        gateway 'wow, this is a really cool gateway'
+      end
+    }.must_raise(SyntaxError)
+  end
+
+  it "must error if the nameserver are invalid" do
+    proc {
+      Stork::Resource::Network.build "test" do
+        nameserver 'superfly'
+        nameserver '8.8.8.8'
+      end
+    }.must_raise(SyntaxError)
+
+    proc {
+      Stork::Resource::Network.build "test" do
+        nameserver '8.8.8.8'
+        nameserver 'superfly'
+      end
+    }.must_raise(SyntaxError)
+  end
+
   it "should build" do
     net = Stork::Resource::Network.build("local") do
       netmask "255.255.255.0"

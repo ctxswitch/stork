@@ -118,19 +118,19 @@ describe "Stork::Resource::Host" do
       },
       'interfaces' => [
         { 
-          'ip' => '99.99.1.8',
+          'ip' => '192.168.0.15',
           'bootproto' => :static,
           'netmask' => '255.255.255.0',
-          'gateway' => nil,
-          'nameservers' => [],
-          'search_paths' => []
+          'gateway' => '192.168.0.1',
+          'nameservers' => ["192.168.0.2", "192.168.0.3"],
+          'search_paths' => ['example.org']
         },
         { 
           'ip' => '192.168.1.10',
           'bootproto' => :static,
           'netmask' => '255.255.255.0',
-          'gateway' => '192.168.1.1',
-          'nameservers' => ['192.168.1.253', '192.168.1.252'],
+          'gateway' => nil,
+          'nameservers' => [],
           'search_paths' => []
         }
       ],
