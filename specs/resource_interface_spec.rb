@@ -79,6 +79,27 @@ describe "Stork::Resource::Interface" do
     }.must_raise(SyntaxError)
   end
 
+  it "should error on invalid ip addresses" do
+    collection = Stork::Collections.new
+    proc {
+      Stork::Resource::Interface.build "eth0", collection: collection do
+        ip '1000.1000.1.1'
+      end
+    }.must_raise(SyntaxError)
+
+    proc {
+      Stork::Resource::Interface.build "eth0", collection: collection do
+        ip 'hey.there.buddy'
+      end
+    }.must_raise(SyntaxError)
+
+    proc {
+      Stork::Resource::Interface.build "eth0", collection: collection do
+        ip '1.1.1'
+      end
+    }.must_raise(SyntaxError)
+  end
+
   it "should have dhcp as the default for bootproto" do
     Stork::Resource::Interface.new('eth0').bootproto.must_equal :dhcp
   end

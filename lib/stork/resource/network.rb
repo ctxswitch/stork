@@ -1,3 +1,5 @@
+require "ipaddr"
+
 module Stork
   module Resource
     class Network < Base
@@ -13,7 +15,17 @@ module Stork
         @search_paths = Array.new
       end
 
+      def validate!
+        require_valid_ips :nameservers
+        require_valid_ip :gateway
+        require_valid_ip :netmask
+      end
+
       class NetworkDelegator < Stork::Resource::Delegator
+        def network(network)
+          delegated.network = network
+        end
+
         def netmask(netmask)
           delegated.netmask = netmask
         end
