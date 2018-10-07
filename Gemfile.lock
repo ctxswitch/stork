@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    stork (0.2.0.pre)
+    stork (0.3.0.pre)
       highline
       mixlib-config
       rest-client
