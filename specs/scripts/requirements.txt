@@ -3,6 +3,6 @@ ordered-set==2.0.2
 packaging==16.8
 pycurl==7.43.0
 pyparsing==2.2.0
-requests==2.13.0
+requests==2.21.0
 six==1.10.0
 urlgrabber==3.10.2
