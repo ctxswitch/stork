@@ -10,7 +10,4 @@ cd ./specs/ksvalidator
 git clone https://github.com/rhinstaller/pykickstart
 cd pykickstart
 python setup.py install
-
-which ksvalidator
-env
 echo "Setup complete"

@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.5.3
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+            sudo apt install python-virtualenv libcurl4-openssl-dev libssl-dev python-dev
+            rake ksvalidator:setup
+
+      # run tests!
+      - run:
+          name: run tests
+          command: |
+            rake
