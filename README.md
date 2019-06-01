@@ -1,7 +1,7 @@
 # Stork
-[![Build Status](https://travis-ci.org/rlyon/stork.png?branch=master)](https://travis-ci.org/rlyon/stork)
-[![Coverage Status](https://coveralls.io/repos/rlyon/stork/badge.png)](https://coveralls.io/r/rlyon/stork)
-[![Code Climate](https://codeclimate.com/github/rlyon/stork.png)](https://codeclimate.com/github/rlyon/stork)
+[![Build Status](https://travis-ci.org/ctxswitch/stork.png?branch=master)](https://travis-ci.org/ctxswitch/stork)
+[![Coverage Status](https://coveralls.io/repos/ctxswitch/stork/badge.png)](https://coveralls.io/r/ctxswitch/stork)
+[![Code Climate](https://codeclimate.com/github/ctxswitch/stork.png)](https://codeclimate.com/github/ctxswitch/stork)
 [![Gem Version](http://img.shields.io/gem/v/stork.svg)](https://rubygems.org/gems/stork)
 
 Stork is a autoinstall utility, kickstart generation tool and server for CentOS and Redhat systems.  It aims to fill the gap in the bare metal systems deployment that many of the other tools for cloud and virtual systems excel at.
