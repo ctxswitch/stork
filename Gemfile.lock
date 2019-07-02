@@ -72,7 +72,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.5)
     webrick (1.4.2)
-    yard (0.9.18)
+    yard (0.9.20)
 
 PLATFORMS
   ruby
